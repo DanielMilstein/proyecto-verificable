@@ -14,12 +14,21 @@ db = SQLAlchemy(app)
 
 
 class User(db.Model):
-	id = db.Column(db.Integer, primary_key=True)
-	username = db.Column(db.String(255))
-	email = db.Column(db.String(255))
+	rut = db.Column(db.String(10), primary_key=True)
 
-	def __repr__(self):
-		return f"User('{self.username}')"
+class bienRaiz(db.Model):
+	comuna = db.Column(db.Integer)
+	manzana = db.Column(db.Integer)
+	predio = db.Column(db.Integer)
+	rol = db.Column(db.String(20), primary_key=True)
+
+	def __init__(self, comuna, manzana, predio):
+		self.comuna = comuna
+		self.manzana = mazana
+		self.predio = predio
+		self.rol = f'{comuna}-{mazana}-{predio}'
+
+
 
 
 @app.route('/')
