@@ -1,0 +1,5 @@
+
+
+
+# docker run --name project -e MYSQL_ROOT_PASSWORD=verificables -e MYSQL_DATABASE=project_app_db -e MYSQL_USER=myuser -e MYSQL_PASSWORD=verificables -p 3306:3306 -d mysql
+# docker exec -it project mysql -umyuser -pverificables

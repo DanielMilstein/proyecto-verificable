@@ -22,7 +22,7 @@
 			{{ form.name.label }}<br>
 			{{ form.name(size=20) }}<br>
 		</p>
-
+		<input type="hidden" name="csrf_token" value = "{{ csrf_token() }}" />  
 		 <p>
 			{{ form.last_name.label }}<br>
 			{{ form.last_name(size=20) }}<br>
