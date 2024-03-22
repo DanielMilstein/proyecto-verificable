@@ -1,0 +1,49 @@
+<!-- templates/form.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>{{ title }}</title>
+</head>
+<body>
+	{% with messages = get_flashed_messages() %}
+	  {% if messages %}
+		<ul class="flashes">
+		{% for message in messages %}
+		  <li>{{ message }}</li>
+		{% endfor %}
+		</ul>
+	  {% endif %}
+	{% endwith %}
+	
+	<form action="" method="post">
+    {{ form.hidden_tag() }}
+    <p>
+        {{ form.numero_atencion.label }}<br>
+        {{ form.numero_atencion(size=20) }}<br>
+    </p>
+    <p>
+        {{ form.cne.label }}<br>
+        {{ form.cne(size=20) }}<br>
+    </p>
+    <p>
+        {{ form.rol.label }}<br>
+        {{ form.rol(size=20) }}<br>
+    </p>
+    <p>
+        {{ form.fojas.label }}<br>
+        {{ form.fojas(size=20) }}<br>
+    </p>
+    <p>
+        {{ form.fecha_inscripcion.label }}<br>
+        {{ form.fecha_inscripcion() }}<br> <!-- Assuming a date picker is used -->
+    </p>
+    <p>
+        {{ form.numero_inscripcion.label }}<br>
+        {{ form.numero_inscripcion(size=20) }}<br>
+    </p>
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+    <p>{{ form.submit() }}</p>
+</form>
+</body>
+</html>

@@ -26,4 +26,4 @@ def form():
 
 
         return redirect('/')
-    return render_template('forms/form.html', title='Form', form=form)
+    return render_template('form.html', title='Form', form=form)
