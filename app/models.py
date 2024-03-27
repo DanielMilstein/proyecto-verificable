@@ -1,7 +1,7 @@
-from app import app
-
+from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Column, Integer, String, Date, Float, Boolean
-db = SQLAlchemy(app)
+
+db = SQLAlchemy()
 
 
 
@@ -11,6 +11,9 @@ class persona(db.Model):
 
 	def __init__(self, rut):
 		self.rut = rut
+
+	def __repr__(self):
+		return f'{self.rut}'
 
 class bienRaiz(db.Model):
 	comuna = db.Column(db.Integer)
@@ -26,7 +29,7 @@ class bienRaiz(db.Model):
 
 
 class CNE(db.Model):
-	codigo_cne = db.Column(db.Integer)
+	codigo_cne = db.Column(db.Integer, primary_key=True)
 	nombre_cne = db.Column(db.String(30))
 
 	
@@ -36,7 +39,7 @@ class CNE(db.Model):
 
 
 class comuna(db.Model):
-	codigo_comuna = db.Column(db.Integer)
+	codigo_comuna = db.Column(db.Integer, primary_key=True)
 	nombre_comuna = db.Column(db.String(30))
 
 	def __init__(self, codigo_comuna, nombre_comuna):
@@ -105,7 +108,6 @@ class formulario(db.Model):
 		self.fecha_inscripcion = fecha_inscripcion
 		self. numero_inscripcion = numero_inscripcion
 
+	def __repr__(self):
+		return f'{self.numero_atencion}\n{self.cne}\n {self.rol}\n {self.fojas}\n {self.fecha_inscripcion}\n {self.numero_inscripcion}'
 
-
-
-db.create_all()

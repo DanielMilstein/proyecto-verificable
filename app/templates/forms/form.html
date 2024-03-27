@@ -16,7 +16,7 @@
 	  {% endif %}
 	{% endwith %}
 	
-	<form action="" method="post">
+	<form action="{{ url_for('pages.form') }}" method="post">
     {{ form.hidden_tag() }}
     <p>
         {{ form.numero_atencion.label }}<br>
