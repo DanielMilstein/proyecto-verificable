@@ -1,6 +1,6 @@
 from flask import render_template, Blueprint, request, redirect
 from app.forms import *
-from app.models import formulario, db, multipropietario, persona
+from app.models import *
 
 blueprint = Blueprint('pages', __name__)
 
@@ -29,6 +29,25 @@ def form():
             fecha_inscripcion=form.fecha_inscripcion.data,
             numero_inscripcion=form.numero_inscripcion.data
         )
+
+        bien_raiz = bienRaiz.query.filter_by(rol=form.rol.data).first()
+        if bien_raiz is None:
+            bien_raiz = bienRaiz(form.rol.data)
+            db.session.add(bien_raiz)
+        else:
+            pass
+
+        # persona = persona.query.filter_by(rut=form.rut.data).first()
+        # if persona is None:
+        #     persona = persona(form.rut.data)
+        #     db.session.add(persona)
+        # else:
+        #     pass
+
+        
+
+        
+        
         db.session.add(new_form)
         db.session.commit()
 

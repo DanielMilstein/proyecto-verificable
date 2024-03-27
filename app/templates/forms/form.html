@@ -4,6 +4,68 @@
 <head>
 	<meta charset="UTF-8">
 	<title>{{ title }}</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        #subFormsContainer {
+            margin-bottom: 20px;
+        }
+        .subform {
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .subform input[type="text"] {
+            padding: 8px;
+            margin: 5px 0;
+            width: calc(100% - 16px);
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .subform button {
+            background-color: #f44336;
+            color: white;
+            padding: 8px 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            float: right;
+        }
+        .subform button:hover {
+            background-color: #d73833;
+        }
+        form > button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 24px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        form > button:hover {
+            background-color: #45a049;
+        }
+        form > input[type="submit"] {
+            background-color: #008CBA;
+            color: white;
+            padding: 10px 24px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        form > input[type="submit"]:hover {
+            background-color: #007bb5;
+        }
+    </style>
 </head>
 <body>
 	{% with messages = get_flashed_messages() %}
@@ -36,12 +98,107 @@
     </p>
     <p>
         {{ form.fecha_inscripcion.label }}<br>
-        {{ form.fecha_inscripcion() }}<br> <!-- Assuming a date picker is used -->
+        {{ form.fecha_inscripcion() }}<br> 
     </p>
     <p>
         {{ form.numero_inscripcion.label }}<br>
         {{ form.numero_inscripcion(size=20) }}<br>
     </p>
+
+
+    <script>
+        // Function to add a new subform
+        function addAdquiriente(){
+            // Container where subforms will be added
+            var container = document.getElementById('adquirienteContainer');
+
+            // Create a new div for the subform
+            var subformDiv = document.createElement('div');
+            subformDiv.className = 'subform';
+            subformDiv.style.container = 'flex';
+
+            // Add your fields to the subform
+            // Example: Adding a simple text input
+
+            var input = document.createElement('input');
+            input.type = 'text';
+            input.name = 'adquirientesRut[]'; // Naming it as an array for the server to recognize multiple inputs
+            input.placeholder = 'Rut adquiriente';
+            subformDiv.appendChild(input);
+
+            var input2 = document.createElement('input');
+            input2.type = 'number';
+            input2.name = 'adquirientesPorcentaje[]'; // Naming it as an array for the server to recognize multiple inputs
+            input2.placeholder = 'Porcentaje de derechos';
+            subformDiv.appendChild(input2);
+
+            // Add a remove button for each subform
+            var removeButton = document.createElement('button');
+            removeButton.type = 'button';
+            removeButton.textContent = 'Remove';
+            removeButton.onclick = function() {
+                // Remove the subform when the remove button is clicked
+                container.removeChild(subformDiv);
+            };
+
+            subformDiv.appendChild(removeButton);
+
+            // Add the subform div to the container
+            container.appendChild(subformDiv);
+        }
+
+
+            function addEnajenante(){
+            // Container where subforms will be added
+            var container = document.getElementById('enajenanteContainer');
+
+            // Create a new div for the subform
+            var subformDiv = document.createElement('div');
+            subformDiv.className = 'subform';
+            subformDiv.style.container = 'flex';
+
+            // Add your fields to the subform
+            // Example: Adding a simple text input
+
+            var input = document.createElement('input');
+            input.type = 'text';
+            input.name = 'enajenantesRut[]'; // Naming it as an array for the server to recognize multiple inputs
+            input.placeholder = 'Rut adquiriente';
+            subformDiv.appendChild(input);
+
+            var input2 = document.createElement('input');
+            input2.type = 'number';
+            input2.name = 'enajenantesPorcentaje[]'; // Naming it as an array for the server to recognize multiple inputs
+            input2.placeholder = 'Porcentaje de derechos';
+            subformDiv.appendChild(input2);
+
+            // Add a remove button for each subform
+            var removeButton = document.createElement('button');
+            removeButton.type = 'button';
+            removeButton.textContent = 'Remove';
+            removeButton.onclick = function() {
+                // Remove the subform when the remove button is clicked
+                container.removeChild(subformDiv);
+            };
+
+            subformDiv.appendChild(removeButton);
+
+            // Add the subform div to the container
+            container.appendChild(subformDiv);
+        }
+    </script>
+
+    <div id="subFormsContainer" class="body"  >
+
+    <div id="adquirienteContainer"></div>
+
+    <button type="button" onclick="addAdquiriente()">Agregar adquiriente</button>
+
+    <div id="enajenanteContainer"></div>
+
+    <button type="button" onclick="addEnajenante()">Agregar enajenante</button>
+
+</div>
     {{ form.hidden_tag() }}
     <p>{{ form.submit() }}</p>
 </form>
