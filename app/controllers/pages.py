@@ -42,54 +42,54 @@ def form():
             numero_inscripcion=form.numero_inscripcion.data
         )
         db.session.add(new_form)
-        bien_raiz = bienRaiz.query.filter_by(rol=form.rol.data).first()
-        if bien_raiz is None:
-            bien_raiz = bienRaiz(form.rol.data)
-            db.session.add(bien_raiz)
-        else:
-            pass
+        # bien_raiz = bienRaiz.query.filter_by(rol=form.rol.data).first()
+        # if bien_raiz is None:
+        #     bien_raiz = bienRaiz(form.rol.data)
+        #     db.session.add(bien_raiz)
+        # else:
+        #     pass
 
 
-        adquirientesRut = request.form.getlist('adquirientesRut[]')
-        adquirientesPorcentaje = request.form.getlist('adquirientesPorcentaje[]')
-        try: 
-            enajenantesRut = request.form.getlist('enajenantesRut[]')
-            enajenantesPorcentaje = request.form.getlist('enajenantesPorcentaje[]')
-        except:
-            pass
+        # adquirientesRut = request.form.getlist('adquirientesRut[]')
+        # adquirientesPorcentaje = request.form.getlist('adquirientesPorcentaje[]')
+        # try: 
+        #     enajenantesRut = request.form.getlist('enajenantesRut[]')
+        #     enajenantesPorcentaje = request.form.getlist('enajenantesPorcentaje[]')
+        # except:
+        #     pass
 
 
-        for adquiriente in adquirientesRut:
-            adquiriente = persona.query.filter_by(rut=adquiriente).first()
-            if adquiriente is None:
-                adquiriente = persona(adquiriente)
-                db.session.add(adquiriente)
-            else:
-                pass
+        # for adquiriente in adquirientesRut:
+        #     adquiriente = persona.query.filter_by(rut=adquiriente).first()
+        #     if adquiriente is None:
+        #         adquiriente = persona(adquiriente)
+        #         db.session.add(adquiriente)
+        #     else:
+        #         pass
 
-            adquiriente = implicados(
-                rut=adquiriente,
-                porcentaje_derecho=adquirientesPorcentaje[adquirientesRut.index(adquiriente)],
-                adquiriente=True
-            )
-            db.session.add(adquiriente)
-            new_form.implicados.append(adquiriente)
+        #     adquiriente = implicados(
+        #         rut=adquiriente,
+        #         porcentaje_derecho=adquirientesPorcentaje[adquirientesRut.index(adquiriente)],
+        #         adquiriente=True
+        #     )
+        #     db.session.add(adquiriente)
+        #     new_form.implicados.append(adquiriente)
 
-        for enajenante in enajenantesRut:
-            enajenante = persona.query.filter_by(rut=enajenante).first()
-            if enajenante is None:
-                enajenante = persona(enajenante)
-                db.session.add(enajenante)
-            else:
-                pass
+        # for enajenante in enajenantesRut:
+        #     enajenante = persona.query.filter_by(rut=enajenante).first()
+        #     if enajenante is None:
+        #         enajenante = persona(enajenante)
+        #         db.session.add(enajenante)
+        #     else:
+        #         pass
 
-            enajenante = implicados(
-                rut=enajenante,
-                porcentaje_derecho=enajenantesPorcentaje[enajenantesRut.index(enajenante)],
-                adquiriente=False
-            )
-            db.session.add(enajenante)
-            new_form.implicados.append(enajenante)
+        #     enajenante = implicados(
+        #         rut=enajenante,
+        #         porcentaje_derecho=enajenantesPorcentaje[enajenantesRut.index(enajenante)],
+        #         adquiriente=False
+        #     )
+        #     db.session.add(enajenante)
+        #     new_form.implicados.append(enajenante)
  
 
             
