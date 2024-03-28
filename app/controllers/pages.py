@@ -1,4 +1,4 @@
-from flask import render_template, Blueprint, request, redirect
+from flask import render_template, Blueprint, request, redirect, flash
 from app.forms import *
 from app.models import *
 
@@ -11,9 +11,21 @@ blueprint = Blueprint('pages', __name__)
 ################
 
 
-@blueprint.route('/')
+@blueprint.route('/', methods=['GET', 'POST'])
 def home():
-    return "Hello World!"
+    if request.method == 'POST':
+        if 'upload_file' in request.files:
+            file = request.files['upload_file']
+            if file.filename == '':
+                flash('No selected file')
+                return redirect(request.url)
+            if file:
+                filename = secure_filename(file.filename)
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                # Redirect or respond as necessary
+                return 'File Uploaded Successfully'
+    return render_template('pages/home.html')
+
 
 @blueprint.route('/form', methods=['GET', 'POST'])
 def form():
@@ -29,7 +41,7 @@ def form():
             fecha_inscripcion=form.fecha_inscripcion.data,
             numero_inscripcion=form.numero_inscripcion.data
         )
-
+        db.session.add(new_form)
         bien_raiz = bienRaiz.query.filter_by(rol=form.rol.data).first()
         if bien_raiz is None:
             bien_raiz = bienRaiz(form.rol.data)
@@ -37,18 +49,51 @@ def form():
         else:
             pass
 
-        # persona = persona.query.filter_by(rut=form.rut.data).first()
-        # if persona is None:
-        #     persona = persona(form.rut.data)
-        #     db.session.add(persona)
-        # else:
-        #     pass
 
-        
+        adquirientesRut = request.form.getlist('adquirientesRut[]')
+        adquirientesPorcentaje = request.form.getlist('adquirientesPorcentaje[]')
+        try: 
+            enajenantesRut = request.form.getlist('enajenantesRut[]')
+            enajenantesPorcentaje = request.form.getlist('enajenantesPorcentaje[]')
+        except:
+            pass
 
+
+        for adquiriente in adquirientesRut:
+            adquiriente = persona.query.filter_by(rut=adquiriente).first()
+            if adquiriente is None:
+                adquiriente = persona(adquiriente)
+                db.session.add(adquiriente)
+            else:
+                pass
+
+            adquiriente = implicados(
+                rut=adquiriente,
+                porcentaje_derecho=adquirientesPorcentaje[adquirientesRut.index(adquiriente)],
+                adquiriente=True
+            )
+            db.session.add(adquiriente)
+            new_form.implicados.append(adquiriente)
+
+        for enajenante in enajenantesRut:
+            enajenante = persona.query.filter_by(rut=enajenante).first()
+            if enajenante is None:
+                enajenante = persona(enajenante)
+                db.session.add(enajenante)
+            else:
+                pass
+
+            enajenante = implicados(
+                rut=enajenante,
+                porcentaje_derecho=enajenantesPorcentaje[enajenantesRut.index(enajenante)],
+                adquiriente=False
+            )
+            db.session.add(enajenante)
+            new_form.implicados.append(enajenante)
+ 
+
+            
         
-        
-        db.session.add(new_form)
         db.session.commit()
 
 
