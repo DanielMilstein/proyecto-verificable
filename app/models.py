@@ -72,7 +72,7 @@ class implicados(db.Model):
 class propietario(db.Model):
 	multipropietario_id = db.Column(db.Integer, primary_key=True)
 	rut = db.Column(db.String(10), db.ForeignKey('persona.rut'))
-	rol = db.Column(db.String(20), db.ForeignKey('bienRaiz.rol'))
+	rol = db.Column(db.String(20), db.ForeignKey('bien_raiz.rol'))
 	porcentaje_derecho = db.Column(db.Float)
 
 	# bienes_raices = db.relationship('bienRaiz', back_populates='propietarios')
@@ -85,7 +85,7 @@ class propietario(db.Model):
 
 class multipropietario(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
-	rol = db.Column(db.String(20), db.ForeignKey('bienRaiz.rol') , primary_key=True)
+	rol = db.Column(db.String(20), db.ForeignKey('bien_raiz.rol') , primary_key=True)
 	fojas = db.Column(db.Integer)
 	fecha_inscripcion = db.Column(db.Date)
 	numero_inscripcion = db.Column(db.Integer)
@@ -118,8 +118,7 @@ class formulario(db.Model):
 	# implicados = db.relationship('implicados', back_populates='formulario')
 	# multipropietario = db.relationship('multipropietario', back_populates='formulario')
 
-	def __init__(self, numero_atencion, cne, rol, fojas, fecha_inscripcion, numero_inscripcion):
-		self.numero_atencion = numero_atencion
+	def __init__(self, cne, rol, fojas, fecha_inscripcion, numero_inscripcion):
 		self.cne = cne
 		self.rol = rol
 		self.fojas = fojas

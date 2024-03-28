@@ -91,16 +91,21 @@
 	<form action="{{ url_for('pages.form') }}" method="post">
     {{ form.hidden_tag() }}
     <p>
-        {{ form.numero_atencion.label }}<br>
-        {{ form.numero_atencion(size=20) }}<br>
-    </p>
-    <p>
         {{ form.cne.label }}<br>
         {{ form.cne(size=20) }}<br>
     </p>
     <p>
         {{ form.rol.label }}<br>
+        {% if form.rol.errors %}
+        <!-- Display errors for the triplet_field -->
+        {% for error in form.rol.errors %}
+            <span style="color: red;">{{ error }}</span><br>
+        {% endfor %}
+        {% endif %}
         {{ form.rol(size=20) }}<br>
+
+
+    
     </p>
     <p>
         {{ form.fojas.label }}<br>

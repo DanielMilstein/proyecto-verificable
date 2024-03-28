@@ -1,11 +1,28 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, IntegerField, DateField, FloatField, FieldList, FormField
+from wtforms import StringField, SubmitField, IntegerField, DateField, FloatField, FieldList, FormField, ValidationError
 from wtforms.validators import DataRequired, EqualTo, Length
+import re
+
+
+def rol_validator(form, field):
+	triplet_regex = re.compile(r'^\d+-\d+-\d+$')
+	if not triplet_regex.match(field.data):
+		raise ValidationError('El ROL debe tener el formato XXX-XXX-XXX')
+
+def rut_validator(form, field):
+	rut_regex = re.compile(r'^\d{7,8}-\d$')
+	if not rut_regex.match(field.data):
+		raise ValidationError('El RUT debe tener el formato XXXXXXXX-X')
+
+def porcentaje_validator(form, field):
+	if field.data < 0 or field.data > 100:
+		raise ValidationError('El porcentaje debe estar entre 0 y 100')
+
+
 
 class MyForm(FlaskForm):
-	numero_atencion = IntegerField('Número de Atención', validators=[DataRequired()])
 	cne = IntegerField('CNE', validators=[DataRequired()])
-	rol = StringField('ROL', validators=[DataRequired()])
+	rol = StringField('ROL', validators=[DataRequired(), rol_validator])
 	fojas = IntegerField('Fojas', validators=[DataRequired()])
 	fecha_inscripcion = DateField('Fecha de Inscripción', format='%Y-%m-%d', validators=[DataRequired()])
 	numero_inscripcion = IntegerField('Número de Inscripción', validators=[DataRequired()])

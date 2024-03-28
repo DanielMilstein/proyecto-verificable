@@ -32,9 +32,7 @@ def form():
     form = MyForm()
     if request.method == 'POST' and form.validate_on_submit():
 
-        # Save form data to the database
         new_form = formulario(
-            numero_atencion=form.numero_atencion.data,
             cne=form.cne.data,
             rol=form.rol.data,
             fojas=form.fojas.data,
@@ -42,54 +40,55 @@ def form():
             numero_inscripcion=form.numero_inscripcion.data
         )
         db.session.add(new_form)
-        # bien_raiz = bienRaiz.query.filter_by(rol=form.rol.data).first()
-        # if bien_raiz is None:
-        #     bien_raiz = bienRaiz(form.rol.data)
-        #     db.session.add(bien_raiz)
-        # else:
-        #     pass
+        flash('Formulario creado con éxito')
+        bien_raiz = bienRaiz.query.filter_by(rol=form.rol.data).first()
+        if bien_raiz is None:
+            bien_raiz = bienRaiz(form.rol.data)
+            db.session.add(bien_raiz)
+        else:
+            pass
 
 
-        # adquirientesRut = request.form.getlist('adquirientesRut[]')
-        # adquirientesPorcentaje = request.form.getlist('adquirientesPorcentaje[]')
-        # try: 
-        #     enajenantesRut = request.form.getlist('enajenantesRut[]')
-        #     enajenantesPorcentaje = request.form.getlist('enajenantesPorcentaje[]')
-        # except:
-        #     pass
+        adquirientesRut = request.form.getlist('adquirientesRut[]')
+        adquirientesPorcentaje = request.form.getlist('adquirientesPorcentaje[]')
+        try: 
+            enajenantesRut = request.form.getlist('enajenantesRut[]')
+            enajenantesPorcentaje = request.form.getlist('enajenantesPorcentaje[]')
+        except:
+            pass
 
 
-        # for adquiriente in adquirientesRut:
-        #     adquiriente = persona.query.filter_by(rut=adquiriente).first()
-        #     if adquiriente is None:
-        #         adquiriente = persona(adquiriente)
-        #         db.session.add(adquiriente)
-        #     else:
-        #         pass
+        for adquiriente in adquirientesRut:
+            adquirientePersona = persona.query.filter_by(rut=adquiriente).first()
+            if adquirientePersona is None:
+                adquirientePersona = persona(adquiriente)
+                db.session.add(adquirientePersona)
+            else:
+                pass
 
-        #     adquiriente = implicados(
-        #         rut=adquiriente,
-        #         porcentaje_derecho=adquirientesPorcentaje[adquirientesRut.index(adquiriente)],
-        #         adquiriente=True
-        #     )
-        #     db.session.add(adquiriente)
-        #     new_form.implicados.append(adquiriente)
+            # adquirienteImplicado = implicados(
+            #     rut=adquiriente,
+            #     porcentaje_derecho=adquirientesPorcentaje[adquirientesRut.index(adquiriente)],
+            #     adquiriente=True
+            # )
+            # db.session.add(adquirienteImplicado)
+            # new_form.implicados.append(adquirienteImplicado)
 
-        # for enajenante in enajenantesRut:
-        #     enajenante = persona.query.filter_by(rut=enajenante).first()
-        #     if enajenante is None:
-        #         enajenante = persona(enajenante)
-        #         db.session.add(enajenante)
-        #     else:
-        #         pass
+        for enajenante in enajenantesRut:
+            enajenantePersona = persona.query.filter_by(rut=enajenante).first()
+            if enajenantePersona is None:
+                enajenantePersona = persona(enajenante)
+                db.session.add(enajenantePersona)
+            else:
+                pass
 
-        #     enajenante = implicados(
+        #     enajenanteImplicado = implicados(
         #         rut=enajenante,
         #         porcentaje_derecho=enajenantesPorcentaje[enajenantesRut.index(enajenante)],
         #         adquiriente=False
         #     )
-        #     db.session.add(enajenante)
-        #     new_form.implicados.append(enajenante)
+        #     db.session.add(enajenanteImplicado)
+        #     new_form.implicados.append(enajenanteImplicado)
  
 
             
