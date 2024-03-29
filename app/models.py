@@ -51,12 +51,14 @@ class CNE(db.Model):
 class comuna(db.Model):
 	codigo_comuna = db.Column(db.Integer, primary_key=True)
 	nombre_comuna = db.Column(db.String(30))
+	codigo_region = db.Column(db.Integer)
+	nombre_region = db.Column(db.String(50))
 
-	# bienes_raices = db.relationship('bienRaiz', back_populates='comuna')
-
-	def __init__(self, codigo_comuna, nombre_comuna):
+	def __init__(self, codigo_comuna, nombre_comuna, codigo_region, nombre_region):
 		self.codigo_comuna = codigo_comuna
 		self.nombre_comuna = nombre_comuna
+		self.codigo_region = codigo_region
+		self.nombre_region = nombre_region
 
 
 class implicados(db.Model):
@@ -142,4 +144,3 @@ class formulario(db.Model):
 
 	def __repr__(self):
 		return f'{self.numero_atencion}\n{self.cne}\n {self.rol}\n {self.fojas}\n {self.fecha_inscripcion}\n {self.numero_inscripcion}'
-
