@@ -88,4 +88,10 @@ ENV/
 # Rope project settings
 .ropeproject
 
+.DS_STORE
+app/.DS_Store
 app/src/.DS_Store
+
+regionesComunas.xlsx
+
+migrations/
