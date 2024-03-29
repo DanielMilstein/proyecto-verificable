@@ -2,12 +2,16 @@ import logging
 
 from flask import Flask, request as req
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 from app.controllers.pages import blueprint as pages_blueprint
 from config.config import Config
 from app.models import db
+from app.seeder import seed_database
+
+migrate = Migrate()
 
 
-def create_app(config_filename):
+def create_app(config_filename='config'):
     app = Flask(__name__, template_folder='src/views')
     app.config.from_object(Config)
 
@@ -18,10 +22,13 @@ def create_app(config_filename):
     # app.logger.setLevel(logging.NOTSET)
     
     db.init_app(app)
+    migrate.init_app(app, db)
+
 
 
     with app.app_context():
         db.create_all()
+        seed_database()
 
     @app.after_request
     def log_response(resp):
