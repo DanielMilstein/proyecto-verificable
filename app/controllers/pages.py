@@ -30,6 +30,12 @@ def home():
 @blueprint.route('/form-F2890', methods=['GET', 'POST'])
 def form():
     form = MyForm()
+
+    cnes = CNE.query.all()
+    comunas = comuna.query.all()
+
+    # form.cne.choices = [(c.codigo_cne, c.codigo_cne) for c in cnes]
+
     if request.method == 'POST' and form.validate_on_submit():
 
 
