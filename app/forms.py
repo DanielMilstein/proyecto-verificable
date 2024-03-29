@@ -23,7 +23,7 @@ def porcentaje_validator(form, field):
 
 
 class MyForm(FlaskForm):
-	cne = QuerySelectField(query_factory=lambda: CNE.query.all(), get_label='codigo_cne')
+	cne = QuerySelectField(query_factory=lambda: CNE.query.all(), get_label='nombre_cne')
 	rol = StringField('ROL', validators=[DataRequired(), rol_validator])
 	fojas = IntegerField('Fojas', validators=[DataRequired()])
 	fecha_inscripcion = DateField('Fecha de Inscripción', format='%Y-%m-%d', validators=[DataRequired()])
