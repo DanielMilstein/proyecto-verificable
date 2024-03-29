@@ -9,6 +9,9 @@ db = SQLAlchemy()
 class persona(db.Model):
 	rut = db.Column(db.String(10), primary_key=True)
 
+	# implicados = db.relationship('implicados', back_populates='persona')
+	# propietarios = db.relationship('propietario', back_populates='persona')
+
 
 	def __init__(self, rut):
 		self.rut = rut
@@ -17,16 +20,17 @@ class persona(db.Model):
 		return f'{self.rut}'
 
 class bienRaiz(db.Model):
-	comuna = db.Column(db.Integer)
+	comune = db.Column(db.Integer, db.ForeignKey('comuna.codigo_comuna'))
 	manzana = db.Column(db.Integer)
 	predio = db.Column(db.Integer)
 	rol = db.Column(db.String(20), primary_key=True)
 
-	# propietarios = db.relationship('propietario', back_populates='bienRaiz')
+	# comuna = db.relationship('comuna', back_populates='bienes_raices')
+	# multipropietario = db.relationship('multipropietario', back_populates='bienRaiz')
 
 	def __init__(self, rol):
 		rolList = rol.split('-')
-		self.comuna = rolList[0]
+		self.comune = rolList[0]
 		self.manzana = rolList[1]
 		self.predio = rolList[2]
 		self.rol = rol
@@ -37,7 +41,8 @@ class CNE(db.Model):
 	codigo_cne = db.Column(db.Integer, primary_key=True)
 	nombre_cne = db.Column(db.String(30))
 
-	
+	# formulario = db.relationship('formulario', back_populates='cene')
+
 	def __init__(self, codigo_cne, nombre_cne):
 		self.codigo_cne = codigo_cne
 		self.nombre_cne = nombre_cne
@@ -46,6 +51,8 @@ class CNE(db.Model):
 class comuna(db.Model):
 	codigo_comuna = db.Column(db.Integer, primary_key=True)
 	nombre_comuna = db.Column(db.String(30))
+
+	# bienes_raices = db.relationship('bienRaiz', back_populates='comuna')
 
 	def __init__(self, codigo_comuna, nombre_comuna):
 		self.codigo_comuna = codigo_comuna
@@ -58,11 +65,12 @@ class implicados(db.Model):
 	rut = db.Column(db.String(10), db.ForeignKey('persona.rut'))
 	adquiriente = db.Column(db.Boolean)
 	porcentaje_derecho = db.Column(db.Float)
+
 	# persona = db.relationship('persona', back_populates='implicados')
+	# formulario = db.relationship('formulario', back_populates='implicados')
 
 
-	def __init__(self, id, numero_atencion, rut, adquiriente, porcentaje_derecho):
-		self.id = id
+	def __init__(self, numero_atencion, rut, adquiriente, porcentaje_derecho):
 		self.numero_atencion = numero_atencion
 		self.rut = rut
 		self.adquiriente = adquiriente
@@ -70,12 +78,14 @@ class implicados(db.Model):
 
 
 class propietario(db.Model):
-	multipropietario_id = db.Column(db.Integer, primary_key=True)
+	propietario_id = db.Column(db.Integer, primary_key=True)
+	multipropietario_id = db.Column(db.Integer, db.ForeignKey('multipropietario.id'))
 	rut = db.Column(db.String(10), db.ForeignKey('persona.rut'))
-	rol = db.Column(db.String(20), db.ForeignKey('bien_raiz.rol'))
 	porcentaje_derecho = db.Column(db.Float)
 
-	# bienes_raices = db.relationship('bienRaiz', back_populates='propietarios')
+	
+	# persona = db.relationship('persona', back_populates='propietarios')
+	# multipropietario = db.relationship('multipropietario', back_populates='propietarios')
 
 
 	def __init__(self, rut, multipropietario_id, porcentaje_derecho):
@@ -92,6 +102,8 @@ class multipropietario(db.Model):
 	ano_vigencia_inicial = db.Column(db.Integer)
 	ano_vigencia_final = db.Column(db.Integer)
 
+
+	# bienRaiz = db.relationship('bienRaiz', back_populates='multipropietario')
 	# propietarios = db.relationship('propietario', back_populates='multipropietario')
 
 	def __init__(self, id, rol, fojas, fecha_inscripcion, numero_inscripcion, ano_vigencia_inicial, ano_vigencia_final):
@@ -109,14 +121,16 @@ class multipropietario(db.Model):
 
 class formulario(db.Model):
 	numero_atencion = db.Column(db.Integer, primary_key=True)
-	cne = db.Column(db.Integer)
-	rol = db.Column(db.String(20))
+	cne = db.Column(db.Integer, db.ForeignKey('cne.codigo_cne'))
+	rol = db.Column(db.String(20), db.ForeignKey('bien_raiz.rol'))
 	fojas = db.Column(db.Integer)
 	fecha_inscripcion = db.Column(db.Date)
 	numero_inscripcion = db.Column(db.Integer)
 
+
+	# bienRaiz = db.relationship('bienRaiz', back_populates='formulario')
 	# implicados = db.relationship('implicados', back_populates='formulario')
-	# multipropietario = db.relationship('multipropietario', back_populates='formulario')
+	# cene = db.relationship('CNE', back_populates='formulario')
 
 	def __init__(self, cne, rol, fojas, fecha_inscripcion, numero_inscripcion):
 		self.cne = cne

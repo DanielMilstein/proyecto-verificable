@@ -32,6 +32,34 @@ def form():
     form = MyForm()
     if request.method == 'POST' and form.validate_on_submit():
 
+
+        cne_record = CNE.query.filter_by(codigo_cne=form.cne.data).first()
+
+        if cne_record is None:
+            cne_record = CNE(form.cne.data, '')
+            db.session.add(cne_record)
+            db.session.commit()
+        else:
+            pass
+
+        comuna_record = comuna.query.filter_by(codigo_comuna=form.rol.data.split('-')[0]).first()
+
+        if comuna_record is None:
+            comuna_record = comuna(form.rol.data.split('-')[0], '')
+            db.session.add(comuna_record)
+            db.session.commit()
+        else:
+            pass
+
+        bien_raiz = bienRaiz.query.filter_by(rol=form.rol.data).first()
+        if bien_raiz is None:
+            bien_raiz = bienRaiz(form.rol.data)
+            db.session.add(bien_raiz)
+        else:
+            pass
+
+
+
         new_form = formulario(
             cne=form.cne.data,
             rol=form.rol.data,
@@ -39,14 +67,8 @@ def form():
             fecha_inscripcion=form.fecha_inscripcion.data,
             numero_inscripcion=form.numero_inscripcion.data
         )
-        db.session.add(new_form)
-        flash('Formulario creado con éxito')
-        bien_raiz = bienRaiz.query.filter_by(rol=form.rol.data).first()
-        if bien_raiz is None:
-            bien_raiz = bienRaiz(form.rol.data)
-            db.session.add(bien_raiz)
-        else:
-            pass
+        db.session.add(new_form)            
+
 
 
         adquirientesRut = request.form.getlist('adquirientesRut[]')
@@ -63,15 +85,17 @@ def form():
             if adquirientePersona is None:
                 adquirientePersona = persona(adquiriente)
                 db.session.add(adquirientePersona)
+                db.session.commit()
             else:
                 pass
 
-            # adquirienteImplicado = implicados(
-            #     rut=adquiriente,
-            #     porcentaje_derecho=adquirientesPorcentaje[adquirientesRut.index(adquiriente)],
-            #     adquiriente=True
-            # )
-            # db.session.add(adquirienteImplicado)
+            adquirienteImplicado = implicados(
+                rut=adquiriente,
+                numero_atencion=new_form.numero_atencion,
+                porcentaje_derecho=adquirientesPorcentaje[adquirientesRut.index(adquiriente)],
+                adquiriente=True
+            )
+            db.session.add(adquirienteImplicado)
             # new_form.implicados.append(adquirienteImplicado)
 
         for enajenante in enajenantesRut:
@@ -79,16 +103,18 @@ def form():
             if enajenantePersona is None:
                 enajenantePersona = persona(enajenante)
                 db.session.add(enajenantePersona)
+                db.session.commit() 
             else:
                 pass
 
-        #     enajenanteImplicado = implicados(
-        #         rut=enajenante,
-        #         porcentaje_derecho=enajenantesPorcentaje[enajenantesRut.index(enajenante)],
-        #         adquiriente=False
-        #     )
-        #     db.session.add(enajenanteImplicado)
-        #     new_form.implicados.append(enajenanteImplicado)
+            enajenanteImplicado = implicados(
+                rut=enajenante,
+                numero_atencion=new_form.numero_atencion,
+                porcentaje_derecho=enajenantesPorcentaje[enajenantesRut.index(enajenante)],
+                adquiriente=False
+            )
+            db.session.add(enajenanteImplicado)
+            # new_form.implicados.append(enajenanteImplicado)
  
 
             
