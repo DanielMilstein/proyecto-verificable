@@ -23,7 +23,7 @@ def home():
             if file:
                 filename = secure_filename(file.filename)
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-                # Redirect or respond as necessary
+
                 return 'File Uploaded Successfully'
     return render_template('home.html')
 
@@ -35,13 +35,9 @@ def form():
     cnes = CNE.query.all()
     comunas = comuna.query.all()
 
-    # form.cne.choices = [(c.codigo_cne, c.codigo_cne) for c in cnes]
-
     if request.method == 'POST' and form.validate_on_submit():
 
 
-
-        # print(form.cne.data)
         cne_record = CNE.query.filter_by(codigo_cne=str(form.cne.data)).first()
         
 
@@ -52,18 +48,12 @@ def form():
         else:
             pass
 
-        # comuna_record = comuna.query.filter_by(codigo_comuna=form.rol.data.split('-')[0]).first()
 
-        # if comuna_record is None:
-        #     comuna_record = comuna(form.rol.data.split('-')[0], '')
-        #     db.session.add(comuna_record)
-        #     db.session.commit()
-        # else:
-        #     pass
-
-        bien_raiz = bienRaiz.query.filter_by(rol=form.rol.data).first()
+        rol_search = f'{form.comuna.data}-{form.manzana.data}-{form.predio.data}'
+        print(rol_search)
+        bien_raiz = bienRaiz.query.filter_by(rol=rol_search).first()
         if bien_raiz is None:
-            bien_raiz = bienRaiz(form.rol.data)
+            bien_raiz = bienRaiz(form.comuna.data, form.manzana.data, form.predio.data)
             db.session.add(bien_raiz)
         else:
             pass
@@ -72,7 +62,7 @@ def form():
 
         new_form = formulario(
             cne=form.cne.data,
-            rol=form.rol.data,
+            rol=bien_raiz.rol,
             fojas=form.fojas.data,
             fecha_inscripcion=form.fecha_inscripcion.data,
             numero_inscripcion=form.numero_inscripcion.data
@@ -143,7 +133,7 @@ def form_list():
 
 
 
-    return render_template('forms/form_list.html', title='Form List', forms=forms)
+    return render_template('form-list/form-list.html', title='Form List', forms=forms)
 
 
 @blueprint.route('/autocomplete')

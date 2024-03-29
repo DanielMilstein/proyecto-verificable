@@ -34,7 +34,7 @@ class bienRaiz(db.Model):
 		self.manzana = rolList[1]
 		self.predio = rolList[2]
 		self.rol = rol
-		
+
 	def __init__(self, comuna, manzana, predio):
 		self.comuna = comuna
 		self.manzana = manzana
@@ -69,6 +69,8 @@ class comuna(db.Model):
 		self.codigo_region = codigo_region
 		self.nombre_region = nombre_region
 
+	def __repr__(self):
+		return f'{self.codigo_comuna}'
 
 class implicados(db.Model):
 	id = db.Column(db.Integer, primary_key=True)

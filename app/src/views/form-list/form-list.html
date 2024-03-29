@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>List of Forms</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h2>Lista de formularios F2890</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Numero de atención</th>
+                <th>CNE</th>
+                <th>Rol</th>
+                <th>Fojas</th>
+                <th>Fecha de inscripción</th>
+                <th>Numero de inscripción</th>
+                <!-- Add other fields as necessary -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for form in forms %}
+            <tr>
+                <td>{{ form.numero_atencion }}</td>
+                <td>{{ form.cne }}</td>
+                <td>{{ form.rol }}</td>
+                <td>{{ form.fojas }}</td>
+                <td>{{ form.fecha_inscripcion }}</td>
+                <td>{{ form.numero_inscripcion }}</td>
+                <!-- Display other form fields as needed -->
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
