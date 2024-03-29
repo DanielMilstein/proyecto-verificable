@@ -20,7 +20,7 @@ class persona(db.Model):
 		return f'{self.rut}'
 
 class bienRaiz(db.Model):
-	comune = db.Column(db.Integer, db.ForeignKey('comuna.codigo_comuna'))
+	comuna = db.Column(db.Integer, db.ForeignKey('comuna.codigo_comuna'))
 	manzana = db.Column(db.Integer)
 	predio = db.Column(db.Integer)
 	rol = db.Column(db.String(20), primary_key=True)
@@ -30,10 +30,16 @@ class bienRaiz(db.Model):
 
 	def __init__(self, rol):
 		rolList = rol.split('-')
-		self.comune = rolList[0]
+		self.comuna = rolList[0]
 		self.manzana = rolList[1]
 		self.predio = rolList[2]
 		self.rol = rol
+		
+	def __init__(self, comuna, manzana, predio):
+		self.comuna = comuna
+		self.manzana = manzana
+		self.predio = predio
+		self.rol = f'{comuna}-{manzana}-{predio}'
 		
 
 
@@ -46,6 +52,9 @@ class CNE(db.Model):
 	def __init__(self, codigo_cne, nombre_cne):
 		self.codigo_cne = codigo_cne
 		self.nombre_cne = nombre_cne
+
+	def __repr__(self):
+		return f'{self.codigo_cne}'
 
 
 class comuna(db.Model):

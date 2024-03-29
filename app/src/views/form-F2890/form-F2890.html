@@ -11,6 +11,9 @@
             padding: 20px;
             background-color: #f9f9f9;
         }
+        .select2-container {
+        width: 100% !important; /* Example: Set width to 100% of the parent element */
+    }
         form {
             background-color: #fff;
             padding: 20px;
@@ -73,6 +76,15 @@
             margin-bottom: 10px;
         }
     </style>
+<!-- Include Select2 CSS -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+
+<!-- Include jQuery (required by Select2) -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<!-- Include Select2 JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+
 </head>
 <body>
 	{% with messages = get_flashed_messages() %}
@@ -95,14 +107,36 @@
         {{ form.cne }}<br>
     </p>
     <p>
-        {{ form.rol.label }}<br>
-        {% if form.rol.errors %}
-        <!-- Display errors for the triplet_field -->
-        {% for error in form.rol.errors %}
-            <span style="color: red;">{{ error }}</span><br>
-        {% endfor %}
-        {% endif %}
-        {{ form.rol(size=20) }}<br>
+
+        {{ form.comuna.label }} <br>
+        <select id="mySelect2" name="comuna" ></select><br>
+        <script>
+            $(document).ready(function() {
+                $('#mySelect2').select2({
+                    ajax: {
+                        url: '/autocomplete', // Flask route from Step 2
+                        dataType: 'json',
+                        delay: 250, // Wait 250ms before triggering the request
+                        processResults: function (data) {
+                            // Transform the data into the format expected by Select2
+                            return {
+                                results: data.results
+                            };
+                        },
+                        cache: true
+                    },
+                    placeholder: 'Comuna',
+                    minimumInputLength: 1, // Minimum number of characters before searching
+                });
+            });
+            </script>
+            
+
+        {{ form.manzana.label }}<br>
+        {{ form.manzana }}<br>
+
+        {{ form.predio.label }}<br>
+        {{ form.predio }}<br>
 
 
     

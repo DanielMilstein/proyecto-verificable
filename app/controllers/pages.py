@@ -1,6 +1,7 @@
-from flask import render_template, Blueprint, request, redirect, flash
+from flask import render_template, Blueprint, request, redirect, flash, jsonify
 from app.forms import *
 from app.models import *
+
 
 blueprint = Blueprint('pages', __name__)
 
@@ -39,7 +40,10 @@ def form():
     if request.method == 'POST' and form.validate_on_submit():
 
 
-        cne_record = CNE.query.filter_by(codigo_cne=form.cne.data).first()
+
+        # print(form.cne.data)
+        cne_record = CNE.query.filter_by(codigo_cne=str(form.cne.data)).first()
+        
 
         if cne_record is None:
             cne_record = CNE(form.cne.data, '')
@@ -48,14 +52,14 @@ def form():
         else:
             pass
 
-        comuna_record = comuna.query.filter_by(codigo_comuna=form.rol.data.split('-')[0]).first()
+        # comuna_record = comuna.query.filter_by(codigo_comuna=form.rol.data.split('-')[0]).first()
 
-        if comuna_record is None:
-            comuna_record = comuna(form.rol.data.split('-')[0], '')
-            db.session.add(comuna_record)
-            db.session.commit()
-        else:
-            pass
+        # if comuna_record is None:
+        #     comuna_record = comuna(form.rol.data.split('-')[0], '')
+        #     db.session.add(comuna_record)
+        #     db.session.commit()
+        # else:
+        #     pass
 
         bien_raiz = bienRaiz.query.filter_by(rol=form.rol.data).first()
         if bien_raiz is None:
@@ -140,3 +144,12 @@ def form_list():
 
 
     return render_template('forms/form_list.html', title='Form List', forms=forms)
+
+
+@blueprint.route('/autocomplete')
+def autocomplete():
+    search = request.args.get('q', '')
+    # Query your database for search suggestions based on the `search` term
+    # This is a simplified example; adapt it to your actual data source
+    suggestions = [{'id': item.codigo_comuna, 'text': item.nombre_comuna} for item in comuna.query.filter(comuna.nombre_comuna.contains(search)).all()]
+    return jsonify(results=suggestions)
