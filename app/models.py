@@ -81,6 +81,7 @@ class propietario(db.Model):
 	propietario_id = db.Column(db.Integer, primary_key=True)
 	multipropietario_id = db.Column(db.Integer, db.ForeignKey('multipropietario.id'))
 	rut = db.Column(db.String(10), db.ForeignKey('persona.rut'))
+	rol = db.Column(db.String(20), db.ForeignKey('bien_raiz.rol'))
 	porcentaje_derecho = db.Column(db.Float)
 
 	

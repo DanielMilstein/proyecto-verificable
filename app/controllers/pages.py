@@ -24,10 +24,10 @@ def home():
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
                 # Redirect or respond as necessary
                 return 'File Uploaded Successfully'
-    return render_template('pages/home.html')
+    return render_template('home.html')
 
 
-@blueprint.route('/form', methods=['GET', 'POST'])
+@blueprint.route('/form-F2890', methods=['GET', 'POST'])
 def form():
     form = MyForm()
     if request.method == 'POST' and form.validate_on_submit():
@@ -123,7 +123,7 @@ def form():
 
 
         return redirect('/')
-    return render_template('forms/form.html', title='Form', form=form)
+    return render_template('form-F2890/form-F2890.html', title='Form', form=form)
 
 
 @blueprint.route('/form_list', methods=['GET', 'POST'])

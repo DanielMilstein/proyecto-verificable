@@ -8,8 +8,10 @@ from app.models import db
 
 
 def create_app(config_filename):
-    app = Flask(__name__)
+    app = Flask(__name__, template_folder='src/views')
     app.config.from_object(Config)
+
+    #app.static_folder = 'src/css'
 
     app.register_blueprint(pages_blueprint)
     app.secret_key = b'_53oi3uri34fve34fq9pifpff;apl'
