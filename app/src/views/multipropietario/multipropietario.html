@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>View with Table and Inputs</title>
+<style>
+    body {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 20px;
+    }
+    .container {
+    max-width: 1300px;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .input-group {
+    display: flex;
+    margin-bottom: 10px;
+    }
+    .input-group label {
+    flex: 0 0 100px;
+    text-align: right;
+    padding-right: 10px;
+    line-height: 30px;
+    }
+    .input-group input,
+    .input-group select {
+    flex: 1;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+    }
+    table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    }
+    td, th {
+    border: 1px solid #ddd;
+    padding: 8px;
+    }
+
+    tr:nth-child(even){background-color: #f2f2f2;}
+
+    tr:hover {background-color: #ddd;}
+
+    th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #008CBA;
+    color: white;
+    }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <form>
+        <div class="input-group">
+            <label for="comuna">Comuna:</label>
+            <select id="comuna" name="comuna">
+              <!-- Options go here -->
+              <option value="comuna1">Comuna 1</option>
+              <option value="comuna2">Comuna 2</option>
+              <!-- Add more options as needed -->
+            </select>
+        </div>
+        <div class="input-group">
+        <label for="manzana">Manzana:</label>
+        <input type="number" id="manzana" name="manzana">
+        </div>
+        <div class="input-group">
+        <label for="predio">Predio:</label>
+        <input type="number" id="predio" name="predio">
+        </div>
+        <div class="input-group">
+        <label for="año">Año:</label>
+        <input type="number" id="año" name="año" min="1900" max="2100" step="1" placeholder="2024">
+        </div>
+        <button type="submit">Buscar</button>
+    </form>
+    <h2>Propietarios:</h2>
+    <!-- Your form inputs here -->
+
+    {% if propietarios_info %}
+    <table>
+        <thead>
+            <tr>
+            <th>Nombre Propietario</th>
+            <th>Rut/Run</th>
+            <th>% derecho</th>
+            <th>Comuna</th>
+            <th>Manzana</th>
+            <th>Predio</th>
+            <th>Año Vigencia Inicial</th>
+            <th>Año Vigencia Final</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for propietario_info in propietarios_info %}
+            <tr>
+            <td>{{ propietario_info.nombre_propietario }}</td>
+            <td>{{ propietario_info.rut_run }}</td>
+            <td>{{ propietario_info.porcentaje_derecho }}</td>
+            <td>{{ propietario_info.comuna }}</td>
+            <td>{{ propietario_info.manzana }}</td>
+            <td>{{ propietario_info.predio }}</td>
+            <td>{{ propietario_info.año_vigencia_inicial }}</td>
+            <td>{{ propietario_info.año_vigencia_final }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>No search results available.</p>
+    {% endif %}
+</div>
+
+</body>
+</html>

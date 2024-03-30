@@ -143,3 +143,49 @@ def autocomplete():
     # This is a simplified example; adapt it to your actual data source
     suggestions = [{'id': item.codigo_comuna, 'text': item.nombre_comuna} for item in comuna.query.filter(comuna.nombre_comuna.contains(search)).all()]
     return jsonify(results=suggestions)
+
+
+
+@blueprint.route('/buscar_multipropietarios', methods=['GET','POST'])
+def search_multipropietarios():
+    # Get inputs from the form
+    año = request.form.get('año')
+    comuna_name = request.form.get('comuna')
+    manzana = request.form.get('manzana')
+    predio = request.form.get('predio')
+
+    # Check if any of the inputs are None
+    if None in (año, comuna_name, manzana, predio):
+        # If any input is None, render the template without performing the search
+        return render_template('/multipropietario/multipropietario.html', propietarios_info=None)
+    
+    
+    # Find comuna based on comuna_name
+    comuna_obj = comuna.query.filter_by(nombre_comuna=comuna_name).first()
+    comuna_codigo = comuna_obj.codigo_comuna
+
+    # Query multipropietario table based on the given inputs
+    query = multipropietario.query.filter(
+        multipropietario.ano_vigencia_inicial <= año,
+        (multipropietario.ano_vigencia_final >= año) | (multipropietario.ano_vigencia_final == None),
+        multipropietario.rol.like(f'%{comuna_codigo}/{manzana}/{predio}%')
+    )
+    multipropietarios = query.all()
+
+    # Retrieve extra information from propietario table using multipropietario_id's
+    propietarios_info = []
+    for mp in multipropietarios:
+        propietarios = propietario.query.filter_by(multipropietario_id=mp.id).all()
+        for prop in propietarios:
+            propietarios_info.append({
+                'nombre_propietario': 'Random Name',  # You can generate random names here
+                'rut_run': prop.rut,
+                'porcentaje_derecho': prop.porcentaje_derecho,
+                'comuna': comuna_name,
+                'manzana': manzana,
+                'predio': predio,
+                'año_vigencia_inicial': mp.ano_vigencia_inicial,
+                'año_vigencia_final': mp.ano_vigencia_final
+            })
+
+    return render_template('/multipropietario/multipropietario.html', propietarios_info=propietarios_info)
