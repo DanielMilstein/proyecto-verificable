@@ -59,6 +59,14 @@
     color: white;
     }
     </style>
+    <!-- Include Select2 CSS -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+
+<!-- Include jQuery (required by Select2) -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<!-- Include Select2 JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 </head>
 <body>
 
@@ -66,13 +74,31 @@
     <form>
         <div class="input-group">
             <label for="comuna">Comuna:</label>
-            <select id="comuna" name="comuna">
-              <!-- Options go here -->
-              <option value="comuna1">Comuna 1</option>
-              <option value="comuna2">Comuna 2</option>
-              <!-- Add more options as needed -->
-            </select>
+            <br><select id="comuna" name="comuna" ></select></br>
+            <script>
+                $(document).ready(function() {
+                    $('#comuna').select2({
+                        ajax: {
+                            url: '/autocomplete', // Flask route from Step 2
+                            dataType: 'json',
+                            delay: 250, // Wait 250ms before triggering the request
+                            processResults: function (data) {
+                                // Transform the data into the format expected by Select2
+                                return {
+                                    results: data.results
+                                };
+                            },
+                            cache: true
+                        },
+                        placeholder: 'Comuna',
+                        minimumInputLength: 1, // Minimum number of characters before searching
+                    });
+                });
+            </script>
         </div>
+        
+        
+        
         <div class="input-group">
         <label for="manzana">Manzana:</label>
         <input type="number" id="manzana" name="manzana">
