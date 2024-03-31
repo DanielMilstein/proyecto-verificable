@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, IntegerField, DateField, FloatField, FieldList, FormField, ValidationError, SelectField
 from wtforms_sqlalchemy.fields import QuerySelectField
 from wtforms.validators import DataRequired, EqualTo, Length
-from app.models import CNE, comuna
+from app.models import CNE, Comuna
 import re
 
 
@@ -24,7 +24,7 @@ def porcentaje_validator(form, field):
 
 class MyForm(FlaskForm):
 	cne = QuerySelectField(query_factory=lambda: CNE.query.all(), get_label='nombre_cne')
-	comuna = QuerySelectField(query_factory=lambda: comuna.query.all(), get_label='nombre_comuna')
+	comuna = QuerySelectField(query_factory=lambda: Comuna.query.all(), get_label='nombre_comuna')
 	manzana = IntegerField('Manzana', validators=[DataRequired()])
 	predio = IntegerField('Predio', validators=[DataRequired()])
 	# rol = StringField('ROL', validators=[DataRequired(), rol_validator])

@@ -1,6 +1,6 @@
 from openpyxl import load_workbook
 from . import db
-from .models import CNE, comuna
+from .models import CNE, Comuna
 
 NO_COMUNAS = 0
 NUMERO_FORMULARIOS = 2
@@ -21,7 +21,7 @@ def retrieve_comunas_list():
     # Iterate through "comunas" sheet
     for id_comuna, descripcion, id_region in comunas_sheet.iter_rows(min_row=2, values_only=True):
         nombre_region = region_id_name_mapping.get(id_region, '')
-        comunas_list.append(comuna(codigo_comuna=id_comuna, nombre_comuna=descripcion, codigo_region=id_region, nombre_region=nombre_region))
+        comunas_list.append(Comuna(codigo_comuna=id_comuna, nombre_comuna=descripcion, codigo_region=id_region, nombre_region=nombre_region))
     
     return comunas_list
 
@@ -40,7 +40,7 @@ def seed_database():
     global NO_COMUNAS
     global NUMERO_FORMULARIOS
     
-    if db.session.query(comuna).count() == NO_COMUNAS:
+    if db.session.query(Comuna).count() == NO_COMUNAS:
         print("Seeding database with comunas...")
 
         comunas_list = retrieve_comunas_list()
