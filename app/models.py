@@ -12,13 +12,13 @@ class BienRaiz(db.Model):
     comuna = db.Column(db.Integer, db.ForeignKey('comuna.codigo_comuna'))
     manzana = db.Column(db.Integer)
     predio = db.Column(db.Integer)
-    rol = db.Column(db.String(20), primary_key=True)
+    rol = db.Column(db.Integer, primary_key=True, autoincrement=True)
 
-    def __init__(self, comuna, manzana, predio):
+    def __init__(self, comuna, manzana, predio, rol):
         self.comuna = comuna
         self.manzana = manzana
         self.predio = predio
-        self.rol = f'{comuna}-{manzana}-{predio}'
+        self.rol = rol
 
 class Comuna(db.Model):
     codigo_comuna = db.Column(db.Integer, primary_key=True)
@@ -54,8 +54,8 @@ class Implicados(db.Model):
         self.porcentaje_derecho = porcentaje_derecho
 
 class Propietario(db.Model):
-    propietario_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    multipropietario_id = db.Column(db.Integer, db.ForeignKey('multipropietario.id'), nullable=False)
+    propietario_id = db.Column(db.Integer, primary_key=True, autoincrement=True, nullable=False)
+    multipropietario_id = db.Column(db.Integer, db.ForeignKey('multipropietario.id'))
     rut = db.Column(db.String(10), db.ForeignKey('persona.rut'))
     porcentaje_derecho = db.Column(db.Float, nullable=True)
 
@@ -66,7 +66,7 @@ class Propietario(db.Model):
 
 class Multipropietario(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    rol = db.Column(db.String(20), db.ForeignKey('bien_raiz.rol'), primary_key=True)
+    rol = db.Column(db.Integer, db.ForeignKey('bien_raiz.rol'))
     fojas = db.Column(db.Integer, nullable=True)
     fecha_inscripcion = db.Column(db.Date, nullable=True)
     numero_inscripcion = db.Column(db.Integer, nullable=True)
@@ -85,7 +85,7 @@ class Multipropietario(db.Model):
 class Formulario(db.Model):
     numero_atencion = db.Column(db.Integer, primary_key=True, autoincrement=True)
     cne = db.Column(db.Integer, db.ForeignKey('cne.codigo_cne'))
-    rol = db.Column(db.String(20), db.ForeignKey('bien_raiz.rol'))
+    rol = db.Column(db.Integer, db.ForeignKey('bien_raiz.rol'))
     fojas = db.Column(db.Integer, nullable=True)
     fecha_inscripcion = db.Column(db.Date, nullable=True)
     numero_inscripcion = db.Column(db.Integer, nullable=True)
