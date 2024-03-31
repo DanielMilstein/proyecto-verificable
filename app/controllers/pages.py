@@ -149,61 +149,49 @@ def autocomplete():
 @blueprint.route('/buscar_multipropietarios', methods=['GET','POST'])
 def search_multipropietarios():
     if request.method == 'POST':
-        # For POST requests, use request.form to access form data
         año = request.form.get('año')
         comuna_codigo = request.form.get('comuna')
         manzana = request.form.get('manzana')
         predio = request.form.get('predio')
     elif request.method == 'GET':
-        # For GET requests, use request.args to access query parameters
         año = request.args.get('año')
         comuna_codigo = request.args.get('comuna')
         manzana = request.args.get('manzana')
         predio = request.args.get('predio')
 
-    print(año, comuna_codigo, manzana, predio)
 
-    # Check if any of the inputs are None
     if None in (año, comuna_codigo, manzana, predio):
-        # If any input is None, render the template without performing the search
         return render_template('/multipropietario/multipropietario.html', propietarios_info=None)
 
-    # Continue with the rest of your code to process the form data
-
-    # Find comuna based on comuna_name
     comuna_obj = Comuna.query.filter_by(codigo_comuna=comuna_codigo).first()
     comuna_name = comuna_obj.nombre_comuna
 
-    # Find the bien_raiz ID based on the provided inputs
     bien_raiz_id = BienRaiz.query.filter(
         BienRaiz.comuna == int(comuna_codigo),
         BienRaiz.manzana == int(manzana),
         BienRaiz.predio == int(predio)
     ).with_entities(BienRaiz.rol).scalar()
     
-    print(bien_raiz_id)
-    # Query multipropietario table based on the given inputs
     query = Multipropietario.query.filter(
         Multipropietario.ano_vigencia_inicial <= año,
         (Multipropietario.ano_vigencia_final >= año) | (Multipropietario.ano_vigencia_final == None),
-        Multipropietario.rol.like(f'%{comuna_codigo}/{manzana}/{predio}%')
+        Multipropietario.rol.like(bien_raiz_id)
     )
     multipropietarios = query.all()
-    print(multipropietarios)
-    # Retrieve extra information from propietario table using multipropietario_id's
+   
     propietarios_info = []
-    for mp in multipropietarios:
-        propietarios = Propietario.query.filter_by(multipropietario_id=mp.id).all()
-        for prop in propietarios:
+    for multi_ppropietario in multipropietarios:
+        propietarios = Propietario.query.filter_by(multipropietario_id=multi_ppropietario.id).all()
+        for propietario in propietarios:
             propietarios_info.append({
                 'nombre_propietario': 'Random Name',  # You can generate random names here
-                'rut_run': prop.rut,
-                'porcentaje_derecho': prop.porcentaje_derecho,
+                'rut_run': propietario.rut,
+                'porcentaje_derecho': propietario.porcentaje_derecho,
                 'comuna': comuna_name,
                 'manzana': manzana,
                 'predio': predio,
-                'año_vigencia_inicial': mp.ano_vigencia_inicial,
-                'año_vigencia_final': mp.ano_vigencia_final
+                'año_vigencia_inicial': multi_ppropietario.ano_vigencia_inicial,
+                'año_vigencia_final': multi_ppropietario.ano_vigencia_final
             })
 
     return render_template('/multipropietario/multipropietario.html', propietarios_info=propietarios_info)
