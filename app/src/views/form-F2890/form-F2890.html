@@ -12,7 +12,7 @@
             background-color: #f9f9f9;
         }
         .select2-container {
-        width: 100% !important; /* Example: Set width to 100% of the parent element */
+        width: 100% !important; 
     }
         form {
             background-color: #fff;
@@ -34,7 +34,7 @@
             margin: 5px 0 15px 0;
             border-radius: 4px;
             border: 1px solid #ccc;
-            box-sizing: border-box; /* So padding doesn't increase the width */
+            box-sizing: border-box; 
         }
         button[type="button"] {
             background-color: #4CAF50;
@@ -112,13 +112,15 @@
         <select id="mySelect2" name="comuna" ></select><br>
         <script>
             $(document).ready(function() {
+                const ajax_delay = 250;
+                const min_length = 1;
                 $('#mySelect2').select2({
                     ajax: {
-                        url: '/autocomplete', // Flask route from Step 2
+                        url: '/autocomplete', 
                         dataType: 'json',
-                        delay: 250, // Wait 250ms before triggering the request
+                        delay: ajax_delay, 
                         processResults: function (data) {
-                            // Transform the data into the format expected by Select2
+                            
                             return {
                                 results: data.results
                             };
@@ -126,7 +128,7 @@
                         cache: true
                     },
                     placeholder: 'Comuna',
-                    minimumInputLength: 1, // Minimum number of characters before searching
+                    minimumInputLength: min_length,
                 });
             });
             </script>
@@ -156,83 +158,77 @@
 
 
     <script>
-        // Function to add a new subform
+
         function addAdquiriente(){
-            // Container where subforms will be added
+
             var container = document.getElementById('adquirienteContainer');
 
-            // Create a new div for the subform
             var subformDiv = document.createElement('div');
             subformDiv.className = 'subform';
             subformDiv.style.container = 'flex';
 
-            // Add your fields to the subform
-            // Example: Adding a simple text input
+
 
             var input = document.createElement('input');
             input.type = 'text';
-            input.name = 'adquirientesRut[]'; // Naming it as an array for the server to recognize multiple inputs
+            input.name = 'adquirientesRut[]'; 
             input.placeholder = 'Rut adquiriente';
             subformDiv.appendChild(input);
 
             var input2 = document.createElement('input');
             input2.type = 'number';
-            input2.name = 'adquirientesPorcentaje[]'; // Naming it as an array for the server to recognize multiple inputs
+            input2.name = 'adquirientesPorcentaje[]'; 
             input2.placeholder = 'Porcentaje de derechos';
             subformDiv.appendChild(input2);
 
-            // Add a remove button for each subform
+
             var removeButton = document.createElement('button');
             removeButton.type = 'button';
             removeButton.textContent = 'Remove';
             removeButton.onclick = function() {
-                // Remove the subform when the remove button is clicked
+                
                 container.removeChild(subformDiv);
             };
 
             subformDiv.appendChild(removeButton);
 
-            // Add the subform div to the container
+
             container.appendChild(subformDiv);
         }
 
 
             function addEnajenante(){
-            // Container where subforms will be added
             var container = document.getElementById('enajenanteContainer');
 
-            // Create a new div for the subform
             var subformDiv = document.createElement('div');
             subformDiv.className = 'subform';
             subformDiv.style.container = 'flex';
 
-            // Add your fields to the subform
-            // Example: Adding a simple text input
 
             var input = document.createElement('input');
             input.type = 'text';
-            input.name = 'enajenantesRut[]'; // Naming it as an array for the server to recognize multiple inputs
+            input.name = 'enajenantesRut[]';
             input.placeholder = 'Rut adquiriente';
             subformDiv.appendChild(input);
 
             var input2 = document.createElement('input');
             input2.type = 'number';
-            input2.name = 'enajenantesPorcentaje[]'; // Naming it as an array for the server to recognize multiple inputs
+            input2.name = 'enajenantesPorcentaje[]'; 
             input2.placeholder = 'Porcentaje de derechos';
             subformDiv.appendChild(input2);
 
-            // Add a remove button for each subform
+
             var removeButton = document.createElement('button');
             removeButton.type = 'button';
             removeButton.textContent = 'Remove';
             removeButton.onclick = function() {
-                // Remove the subform when the remove button is clicked
+                
                 container.removeChild(subformDiv);
             };
 
             subformDiv.appendChild(removeButton);
 
-            // Add the subform div to the container
+           
             container.appendChild(subformDiv);
         }
     </script>

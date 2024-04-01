@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>List of Forms</title>
+    <title>Lista de formularios</title>
     <style>
         table {
             width: 100%;
@@ -28,19 +28,17 @@
                 <th>Fojas</th>
                 <th>Fecha de inscripción</th>
                 <th>Numero de inscripción</th>
-                <!-- Add other fields as necessary -->
             </tr>
         </thead>
         <tbody>
             {% for form in forms %}
             <tr>
                 <td>{{ form.numero_atencion }}</td>
-                <td>{{ form.cne }}</td>
+                <td>{{ form.nombre_cne }}</td>
                 <td>{{ form.rol }}</td>
                 <td>{{ form.fojas }}</td>
                 <td>{{ form.fecha_inscripcion }}</td>
                 <td>{{ form.numero_inscripcion }}</td>
-                <!-- Display other form fields as needed -->
             </tr>
             {% endfor %}
         </tbody>

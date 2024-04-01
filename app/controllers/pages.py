@@ -96,7 +96,7 @@ def form():
                 adquiriente=True
             )
             db.session.add(adquirienteImplicado)
-            # new_form.implicados.append(adquirienteImplicado)
+
 
         for enajenante in enajenantesRut:
             enajenantePersona = Persona.query.filter_by(rut=enajenante).first()
@@ -114,7 +114,7 @@ def form():
                 adquiriente=False
             )
             db.session.add(enajenanteImplicado)
-            # new_form.implicados.append(enajenanteImplicado)
+
  
 
             
@@ -126,10 +126,12 @@ def form():
     return render_template('form-F2890/form-F2890.html', title='Form', form=form)
 
 
-@blueprint.route('/form_list', methods=['GET', 'POST'])
+@blueprint.route('/form-list', methods=['GET', 'POST'])
 def form_list():
-    # List all the forms in the database
     forms = Formulario.query.all()
+    for form in forms:
+        nombre_cne = CNE.query.filter_by(codigo_cne=form.cne).first().nombre_cne
+        form.nombre_cne = nombre_cne
 
 
 
@@ -139,8 +141,6 @@ def form_list():
 @blueprint.route('/autocomplete')
 def autocomplete():
     search = request.args.get('q', '')
-    # Query your database for search suggestions based on the `search` term
-    # This is a simplified example; adapt it to your actual data source
     suggestions = [{'id': item.codigo_comuna, 'text': item.nombre_comuna} for item in Comuna.query.filter(Comuna.nombre_comuna.contains(search)).all()]
     return jsonify(results=suggestions)
 
@@ -184,7 +184,7 @@ def search_multipropietarios():
         propietarios = Propietario.query.filter_by(multipropietario_id=multi_ppropietario.id).all()
         for propietario in propietarios:
             propietarios_info.append({
-                'nombre_propietario': 'Random Name',  # You can generate random names here
+                'nombre_propietario': 'Random Name', 
                 'rut_run': propietario.rut,
                 'porcentaje_derecho': propietario.porcentaje_derecho,
                 'comuna': comuna_name,

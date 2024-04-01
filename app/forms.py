@@ -27,7 +27,6 @@ class MyForm(FlaskForm):
 	comuna = QuerySelectField(query_factory=lambda: Comuna.query.all(), get_label='nombre_comuna')
 	manzana = IntegerField('Manzana', validators=[DataRequired()])
 	predio = IntegerField('Predio', validators=[DataRequired()])
-	# rol = StringField('ROL', validators=[DataRequired(), rol_validator])
 	fojas = IntegerField('Fojas', validators=[DataRequired()])
 	fecha_inscripcion = DateField('Fecha de Inscripción', format='%Y-%m-%d', validators=[DataRequired()])
 	numero_inscripcion = IntegerField('Número de Inscripción', validators=[DataRequired()])

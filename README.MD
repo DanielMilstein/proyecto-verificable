@@ -13,7 +13,7 @@ VALUES
  (2, 1, 25, '2023-05-15', 1001, 2020, 2028), 
  (3, 1, 40, '2023-05-15', 1001, 2000, 2030);
 
-And lastly, the middle table to lnik the 'multipropietarios' to actual people:
+And lastly, the middle table to link the 'multipropietarios' to actual people:
 -- For the first propiedad
 NSERT INTO propietario (rut, multipropietario_id, porcentaje_derecho)  
 VALUES  

@@ -15,11 +15,11 @@ def create_app(config_filename='config'):
     app = Flask(__name__, template_folder='src/views')
     app.config.from_object(Config)
 
-    #app.static_folder = 'src/css'
+
 
     app.register_blueprint(pages_blueprint)
     app.secret_key = b'_53oi3uri34fve34fq9pifpff;apl'
-    # app.logger.setLevel(logging.NOTSET)
+
     
     db.init_app(app)
     migrate.init_app(app, db)
