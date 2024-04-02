@@ -11,6 +11,15 @@
         padding: 20px;
         }
 
+        .container {
+        max-width: 1300px;
+        margin: 0 auto;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
         table {
         width: 100%;
         border-collapse: collapse;
@@ -35,30 +44,34 @@
     </style>
 </head>
 <body>
-    <h2>Lista de formularios F2890</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>Numero de atención</th>
-                <th>CNE</th>
-                <th>Rol</th>
-                <th>Fojas</th>
-                <th>Fecha de inscripción</th>
-                <th>Numero de inscripción</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for form in forms %}
-            <tr>
-                <td>{{ form.numero_atencion }}</td>
-                <td>{{ form.nombre_cne }}</td>
-                <td>{{ form.rol }}</td>
-                <td>{{ form.fojas }}</td>
-                <td>{{ form.fecha_inscripcion.strftime("%d/%m/%Y") }}</td>
-                <td>{{ form.numero_inscripcion }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <div class="container">
+        <h2>Lista de formularios F2890</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Numero de atención</th>
+                    <th>CNE</th>
+                    <th>Rol</th>
+                    <th>Fojas</th>
+                    <th>Fecha de inscripción</th>
+                    <th>Numero de inscripción</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for form in forms %}
+                <tr>
+                    <td>{{ form.numero_atencion }}</td>
+                    <td>{{ form.nombre_cne }}</td>
+                    <td>{{ form.rol }}</td>
+                    <td>{{ form.fojas }}</td>
+                    <td>{{ form.fecha_inscripcion.strftime("%d/%m/%Y") }}</td>
+                    <td>{{ form.numero_inscripcion }}</td>
+                    <td><a href="/"> Ver detalle </a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </body>
 </html>
