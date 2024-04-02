@@ -69,6 +69,7 @@ class Multipropietario(db.Model):
     rol = db.Column(db.Integer, db.ForeignKey('bien_raiz.rol'))
     fojas = db.Column(db.Integer, nullable=True)
     fecha_inscripcion = db.Column(db.Date, nullable=True)
+    ano_inscripcion = db.Column(db.Integer, nullable=True, default=db.func.year(fecha_inscripcion))
     numero_inscripcion = db.Column(db.Integer, nullable=True)
     ano_vigencia_inicial = db.Column(db.Integer, nullable=True)
     ano_vigencia_final = db.Column(db.Integer, nullable=True)
