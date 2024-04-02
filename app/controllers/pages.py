@@ -147,6 +147,20 @@ def autocomplete():
     return jsonify(results=suggestions)
 
 
+@blueprint.route('/form-F2890/<int:numero_atencion>')
+def form_detail(numero_atencion):
+    formulario = Formulario.query.filter_by(numero_atencion=numero_atencion).first()
+
+    cne = CNE.query.filter_by(codigo_cne=formulario.cne).first()
+
+    adquirientes = Implicados.query.filter_by(numero_atencion=numero_atencion, adquiriente=1).all()
+    enajenantes = Implicados.query.filter_by(numero_atencion=numero_atencion, adquiriente=0).all()
+
+    if formulario:
+        return render_template('form-list/form-detail.html', form=formulario, cne=cne, adquirientes=adquirientes, enajenantes=enajenantes)
+    else:
+        return render_template('404.html'), 404
+
 
 @blueprint.route('/buscar_multipropietarios', methods=['GET','POST'])
 def search_multipropietarios():
