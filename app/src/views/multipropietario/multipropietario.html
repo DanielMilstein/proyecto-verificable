@@ -126,6 +126,9 @@
             <th>Comuna</th>
             <th>Manzana</th>
             <th>Predio</th>
+            <th>Fecha de Inscripción</th>
+            <th>Año de Inscripción</th>
+            <th>Número de inscripción</th>
             <th>Año Vigencia Inicial</th>
             <th>Año Vigencia Final</th>
             </tr>
@@ -133,15 +136,26 @@
         <tbody>
             {% for propietario_info in propietarios_info %}
             <tr>
-            <td>{{ propietario_info.nombre_propietario }}</td>
-            <td>{{ propietario_info.rut_run }}</td>
-            <td>{{ propietario_info.porcentaje_derecho }}</td>
-            <td>{{ propietario_info.comuna }}</td>
-            <td>{{ propietario_info.manzana }}</td>
-            <td>{{ propietario_info.predio }}</td>
-            <td>{{ propietario_info.año_vigencia_inicial }}</td>
-            <td>{{ propietario_info.año_vigencia_final }}</td>
-            </tr>
+                <td>{{ propietario_info.nombre_propietario if propietario_info.nombre_propietario else '-' }}</td>
+                <td>{{ propietario_info.rut_run if propietario_info.rut_run else '-' }}</td>
+                <td>{{ propietario_info.porcentaje_derecho if propietario_info.porcentaje_derecho else '-' }}</td>
+                <td>{{ propietario_info.comuna if propietario_info.comuna else '-' }}</td>
+                <td>{{ propietario_info.manzana if propietario_info.manzana else '-' }}</td>
+                <td>{{ propietario_info.predio if propietario_info.predio else '-' }}</td>
+                <td>{{ propietario_info.fecha_inscripcion.strftime("%d/%m/%Y") if propietario_info.fecha_inscripcion else '-' }}</td>
+                <td>
+                    {% if propietario_info.ano_inscripcion %}
+                        {{ propietario_info.ano_inscripcion }}
+                    {% elif propietario_info.fecha_inscripcion %}
+                        {{ propietario_info.fecha_inscripcion.strftime("%Y") }}
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+                <td>{{ propietario_info.numero_inscripcion if propietario_info.numero_inscripcion else '-' }}</td>
+                <td>{{ propietario_info.año_vigencia_inicial if propietario_info.año_vigencia_inicial else '-' }}</td>
+                <td>{{ propietario_info.año_vigencia_final if propietario_info.año_vigencia_final else '-' }}</td>
+            </tr>            
             {% endfor %}
         </tbody>
     </table>

@@ -196,8 +196,8 @@ def search_multipropietarios():
     multipropietarios = query.all()
    
     propietarios_info = []
-    for multi_ppropietario in multipropietarios:
-        propietarios = Propietario.query.filter_by(multipropietario_id=multi_ppropietario.id).all()
+    for multi_propietario in multipropietarios:
+        propietarios = Propietario.query.filter_by(multipropietario_id=multi_propietario.id).all()
         for propietario in propietarios:
             propietarios_info.append({
                 'nombre_propietario': 'Random Name', 
@@ -206,8 +206,11 @@ def search_multipropietarios():
                 'comuna': comuna_name,
                 'manzana': manzana,
                 'predio': predio,
-                'año_vigencia_inicial': multi_ppropietario.ano_vigencia_inicial,
-                'año_vigencia_final': multi_ppropietario.ano_vigencia_final
+                'fecha_inscripcion': multi_propietario.fecha_inscripcion,
+                'ano_inscripcion': multi_propietario.ano_inscripcion,
+                'numero_inscripcion': multi_propietario.numero_inscripcion,
+                'año_vigencia_inicial': multi_propietario.ano_vigencia_inicial,
+                'año_vigencia_final': multi_propietario.ano_vigencia_final
             })
 
     return render_template('/multipropietario/multipropietario.html', propietarios_info=propietarios_info)
