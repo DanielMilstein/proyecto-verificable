@@ -175,8 +175,9 @@ def search_multipropietarios():
         manzana = request.args.get('manzana')
         predio = request.args.get('predio')
 
-
     if None in (año, comuna_codigo, manzana, predio):
+        return render_template('/multipropietario/multipropietario.html', propietarios_info=None)
+    elif '' in (año, comuna_codigo, manzana, predio):
         return render_template('/multipropietario/multipropietario.html', propietarios_info=None)
 
     comuna_obj = Comuna.query.filter_by(codigo_comuna=comuna_codigo).first()
@@ -187,6 +188,9 @@ def search_multipropietarios():
         BienRaiz.manzana == int(manzana),
         BienRaiz.predio == int(predio)
     ).with_entities(BienRaiz.rol).scalar()
+    
+    if not bien_raiz_id:
+        return render_template('/multipropietario/multipropietario.html', propietarios_info=None)
     
     query = Multipropietario.query.filter(
         Multipropietario.ano_vigencia_inicial <= año,
