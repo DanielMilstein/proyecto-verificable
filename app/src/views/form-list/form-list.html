@@ -10,7 +10,7 @@
         margin: 0;
         padding: 20px;
         }
-        
+
         table {
         width: 100%;
         border-collapse: collapse;
@@ -54,7 +54,7 @@
                 <td>{{ form.nombre_cne }}</td>
                 <td>{{ form.rol }}</td>
                 <td>{{ form.fojas }}</td>
-                <td>{{ form.fecha_inscripcion }}</td>
+                <td>{{ form.fecha_inscripcion.strftime("%d/%m/%Y") }}</td>
                 <td>{{ form.numero_inscripcion }}</td>
             </tr>
             {% endfor %}
