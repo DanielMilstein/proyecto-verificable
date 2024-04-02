@@ -38,8 +38,7 @@ def form():
     if request.method == 'POST' and form.validate_on_submit():
 
 
-        cne_record = CNE.query.filter_by(codigo_cne=str(form.cne.data)).first()
-        
+        cne_record = CNE.query.filter_by(codigo_cne=str(form.cne.data.codigo_cne)).first()
 
         if cne_record is None:
             cne_record = CNE(form.cne.data, '')
@@ -49,19 +48,22 @@ def form():
             pass
 
 
-        rol_search = f'{form.comuna.data}-{form.manzana.data}-{form.predio.data}'
-        print(rol_search)
-        bien_raiz = BienRaiz.query.filter_by(rol=rol_search).first()
-        if bien_raiz is None:
+        existing_bien_raiz = BienRaiz.query.filter_by(
+            comuna=form.comuna.data.codigo_comuna,
+            manzana=form.manzana.data,
+            predio=form.predio.data
+        ).first()
+
+        if existing_bien_raiz is None:
             bien_raiz = BienRaiz(form.comuna.data, form.manzana.data, form.predio.data)
             db.session.add(bien_raiz)
         else:
-            pass
+            bien_raiz = existing_bien_raiz
 
 
 
         new_form = Formulario(
-            cne=form.cne.data,
+            cne=form.cne.data.codigo_cne,
             rol=bien_raiz.rol,
             fojas=form.fojas.data,
             fecha_inscripcion=form.fecha_inscripcion.data,
