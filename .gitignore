@@ -92,6 +92,5 @@ ENV/
 app/.DS_Store
 app/src/.DS_Store
 
-regionesComunas.xlsx
 
 migrations/
