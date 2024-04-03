@@ -151,15 +151,31 @@ def autocomplete():
 def form_detail(numero_atencion):
     formulario = Formulario.query.filter_by(numero_atencion=numero_atencion).first()
 
+    bien_raiz = BienRaiz.query.filter_by(rol=formulario.rol).first()
+    comuna = Comuna.query.filter_by(codigo_comuna=bien_raiz.comuna).first()
+
     cne = CNE.query.filter_by(codigo_cne=formulario.cne).first()
 
     adquirientes = Implicados.query.filter_by(numero_atencion=numero_atencion, adquiriente=1).all()
     enajenantes = Implicados.query.filter_by(numero_atencion=numero_atencion, adquiriente=0).all()
 
+    form_details = {
+        'numero_atencion': formulario.numero_atencion,
+        'fojas': formulario.fojas,
+        'fecha_inscripcion': formulario.fecha_inscripcion,
+        'numero_inscripcion': formulario.numero_inscripcion,
+        'bien_raiz': bien_raiz,
+        'nombre_comuna': comuna.nombre_comuna,
+        'cne': cne,
+        'adquirientes': adquirientes,
+        'enajenantes': enajenantes
+    }
+
     if formulario:
-        return render_template('form-list/form-detail.html', form=formulario, cne=cne, adquirientes=adquirientes, enajenantes=enajenantes)
+        return render_template('form-list/form-detail.html', form_details=form_details)
     else:
         return render_template('404.html'), 404
+
 
 
 @blueprint.route('/buscar_multipropietarios', methods=['GET','POST'])

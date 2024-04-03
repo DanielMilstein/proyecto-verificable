@@ -41,6 +41,15 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
+        .flex-container {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .flex-container p{
+            margin-right: 20px;
+        }
+
 
         form {
             background-color: #fff;
@@ -112,23 +121,27 @@
 </head>
 <body>
     <div class="container">
-        <h2>Formulario F2890 - Nº de atención {{ form.numero_atencion }}</h2>
-        <p><b>CNE:</b> {{ cne.nombre_cne }} ({{ cne.codigo_cne }})</p>
-        <p><b>Rol:</b> {{ form.rol }}</p>
-        <p><b>Fojas:</b> {{ form.fojas }}</p>
-        <p><b>Fecha de inscripción:</b> {{ form.fecha_inscripcion.strftime("%d/%m/%Y") }}</p>
-        <p><b>Número de inscripción:</b> {{ form.numero_inscripcion }}</p>
+        <h2>Formulario F2890 - Nº de atención {{ form_details.numero_atencion }}</h2>
+        <p><b>CNE:</b> {{ form_details.cne.nombre_cne }} ({{ form_details.cne.codigo_cne }})</p>
+        <div class="flex-container">
+            <p><b>Comuna:</b> {{ form_details.nombre_comuna }}</p>
+            <p><b>Manzana:</b> {{ form_details.bien_raiz.manzana }}</p>
+            <p><b>Predio:</b> {{ form_details.bien_raiz.predio }}</p>
+        </div>
+        <p><b>Fojas:</b> {{ form_details.fojas }}</p>
+        <p><b>Fecha de inscripción:</b> {{ form_details.fecha_inscripcion.strftime("%d/%m/%Y") if form_details.fecha_inscripcion else '-'}}</p>
+        <p><b>Número de inscripción:</b> {{ form_details.numero_inscripcion }}</p>
 
         <h3>Adquirientes:</h3>
         <ul>
-        {% for adquiriente in adquirientes %}
+        {% for adquiriente in form_details.adquirientes %}
             <li>{{ adquiriente.rut }} - {{ adquiriente.porcentaje_derecho }}</li>
         {% endfor %}
         </ul>
 
         <h3>Enajenantes:</h3>
         <ul>
-        {% for enajenante in enajenantes %}
+        {% for enajenante in form_details.enajenantes %}
             <li>{{ enajenante.rut }} - {{ enajenante.porcentaje_derecho }}</li>
         {% endfor %}
         </ul>
