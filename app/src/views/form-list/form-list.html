@@ -3,45 +3,104 @@
 <head>
     <meta charset="UTF-8">
     <title>Lista de formularios</title>
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+    </script>
     <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .goback-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #008CBA;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .goback-btn:hover {
+            background-color: #005f77;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
+            margin-top: 20px;
         }
-        th, td {
+        td, th {
             border: 1px solid #ddd;
             padding: 8px;
         }
-        th {
+
+        tr:nth-child(even){
             background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #ddd;
+        }
+
+        th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: left;
+            background-color: #008CBA;
+            color: white;
         }
     </style>
 </head>
 <body>
-    <h2>Lista de formularios F2890</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>Numero de atención</th>
-                <th>CNE</th>
-                <th>Rol</th>
-                <th>Fojas</th>
-                <th>Fecha de inscripción</th>
-                <th>Numero de inscripción</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for form in forms %}
-            <tr>
-                <td>{{ form.numero_atencion }}</td>
-                <td>{{ form.nombre_cne }}</td>
-                <td>{{ form.rol }}</td>
-                <td>{{ form.fojas }}</td>
-                <td>{{ form.fecha_inscripcion }}</td>
-                <td>{{ form.numero_inscripcion }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <button class="goback-btn" onclick="goBack()">Volver atrás</button>
+    <div class="container">
+        <h2>Lista de formularios F2890</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Numero de atención</th>
+                    <th>CNE</th>
+                    <th>Rol</th>
+                    <th>Fojas</th>
+                    <th>Fecha de inscripción</th>
+                    <th>Numero de inscripción</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for form in forms %}
+                    {% if form.rol is not none %}   
+                    <tr>
+                        <td>{{ form.numero_atencion }}</td>
+                        <td>{{ form.nombre_cne }}</td>
+                        <td>{{ form.rol }}</td>
+                        <td>{{ form.fojas }}</td>
+                        <td>{{ form.fecha_inscripcion.strftime("%d/%m/%Y") }}</td>
+                        <td>{{ form.numero_inscripcion }}</td>
+                        <td><a href="{{ url_for('pages.form_detail', numero_atencion=form.numero_atencion) }}"> Ver detalle </a></td>
+                    </tr>
+                    {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </body>
 </html>

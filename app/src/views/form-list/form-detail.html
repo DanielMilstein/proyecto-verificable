@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalle del formulario F2890</title>
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+
+        .goback-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #008CBA;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .goback-btn:hover {
+            background-color: #005f77;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .flex-container {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .flex-container p{
+            margin-right: 20px;
+        }
+
+
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        form p, form div {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="text"], input[type="number"], input[type="date"], input[type="submit"], button {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0 15px 0;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+        button[type="button"] {
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button[type="button"]:hover {
+            background-color: #45a049;
+        }
+
+        button.remove-button {
+            background-color: #f44336;
+        }
+
+        button.remove-button:hover{
+            background-color: #d32f2f;
+        }
+        .subform {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .subform input[type="text"], .subform input[type="number"] {
+            flex-grow: 1;
+        }
+        input[type="submit"] {
+            background-color: #008CBA;
+            color: white;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #007bb5;
+        }
+        .flashes {
+            list-style-type: none;
+            padding: 0;
+        }
+        .flashes li {
+            color: red;
+            margin-bottom: 10px;
+        }
+        .subform-container {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Formulario F2890 - Nº de atención {{ form_details.numero_atencion }}</h2>
+        <p><b>CNE:</b> {{ form_details.cne.nombre_cne }} ({{ form_details.cne.codigo_cne }})</p>
+        <div class="flex-container">
+            <p><b>Comuna:</b> {{ form_details.nombre_comuna if form_details.nombre_comuna else '-' }}</p>
+            <p><b>Manzana:</b> {{ form_details.bien_raiz.manzana if form_details.bien_raiz.manzana else '-' }}</p>
+            <p><b>Predio:</b> {{ form_details.bien_raiz.predio if form_details.bien_raiz.predio else '-' }}</p>
+        </div>
+        <p><b>Fojas:</b> {{ form_details.fojas if form_details.fojas else '-' }}</p>
+        <p><b>Fecha de inscripción:</b> {{ form_details.fecha_inscripcion.strftime("%d/%m/%Y") if form_details.fecha_inscripcion else '-' }}</p>
+        <p><b>Número de inscripción:</b> {{ form_details.numero_inscripcion if form_details.numero_inscripcion else '-' }}</p>
+    
+        <h3>Adquirientes:</h3>
+        <ul>
+            {% for adquiriente in form_details.adquirientes %}
+                <li>{{ adquiriente.rut }} - {{ adquiriente.porcentaje_derecho if adquiriente.porcentaje_derecho else 'Porcentaje de derecho no pudo ser clarificado.' }}</li>
+            {% else %}
+                <li>-</li>
+            {% endfor %}
+        </ul>
+
+        <h3>Enajenantes:</h3>
+        <ul>
+            {% for enajenante in form_details.enajenantes %}
+                <li>{{ enajenante.rut }} - {{ enajenante.porcentaje_derecho if enajenante.porcentaje_derecho else 'Porcentaje de derecho no pudo ser clarificado.' }}</li>
+            {% else %}
+                <li>-</li>
+            {% endfor %}
+        </ul>
+
+    </div>
+    
+    
+    <button class="goback-btn" onclick="goBack()">Volver atrás</button>
+
+</body>
+</html>

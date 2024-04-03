@@ -39,8 +39,7 @@ def form():
     if request.method == 'POST' and form.validate_on_submit():
 
 
-        cne_record = CNE.query.filter_by(codigo_cne=str(form.cne.data)).first()
-        
+        cne_record = CNE.query.filter_by(codigo_cne=str(form.cne.data.codigo_cne)).first()
 
         if cne_record is None:
             cne_record = CNE(form.cne.data, '')
@@ -50,19 +49,22 @@ def form():
             pass
 
 
-        rol_search = f'{form.comuna.data}-{form.manzana.data}-{form.predio.data}'
-        print(rol_search)
-        bien_raiz = BienRaiz.query.filter_by(rol=rol_search).first()
-        if bien_raiz is None:
-            bien_raiz = BienRaiz(form.comuna.data, form.manzana.data, form.predio.data)
-            db.session.add(bien_raiz)
-        else:
-            pass
+        existing_bien_raiz = BienRaiz.query.filter_by(
+            comuna=form.comuna.data.codigo_comuna,
+            manzana=form.manzana.data,
+            predio=form.predio.data
+        ).first()
 
+        if existing_bien_raiz is None:
+            bien_raiz = BienRaiz(form.comuna.data.codigo_comuna, form.manzana.data, form.predio.data)
+            db.session.add(bien_raiz)
+            db.session.commit()
+        else:
+            bien_raiz = existing_bien_raiz
 
 
         new_form = Formulario(
-            cne=form.cne.data,
+            cne=form.cne.data.codigo_cne,
             rol=bien_raiz.rol,
             fojas=form.fojas.data,
             fecha_inscripcion=form.fecha_inscripcion.data,
@@ -146,6 +148,36 @@ def autocomplete():
     return jsonify(results=suggestions)
 
 
+@blueprint.route('/form-F2890/<int:numero_atencion>')
+def form_detail(numero_atencion):
+    formulario = Formulario.query.filter_by(numero_atencion=numero_atencion).first()
+
+    bien_raiz = BienRaiz.query.filter_by(rol=formulario.rol).first()
+    comuna = Comuna.query.filter_by(codigo_comuna=bien_raiz.comuna).first()
+
+    cne = CNE.query.filter_by(codigo_cne=formulario.cne).first()
+
+    adquirientes = Implicados.query.filter_by(numero_atencion=numero_atencion, adquiriente=1).all()
+    enajenantes = Implicados.query.filter_by(numero_atencion=numero_atencion, adquiriente=0).all()
+
+    form_details = {
+        'numero_atencion': formulario.numero_atencion,
+        'fojas': formulario.fojas,
+        'fecha_inscripcion': formulario.fecha_inscripcion,
+        'numero_inscripcion': formulario.numero_inscripcion,
+        'bien_raiz': bien_raiz,
+        'nombre_comuna': comuna.nombre_comuna,
+        'cne': cne,
+        'adquirientes': adquirientes,
+        'enajenantes': enajenantes
+    }
+
+    if formulario:
+        return render_template('form-list/form-detail.html', form_details=form_details)
+    else:
+        return render_template('404.html'), 404
+
+
 
 @blueprint.route('/buscar_multipropietarios', methods=['GET','POST'])
 def search_multipropietarios():
@@ -160,8 +192,9 @@ def search_multipropietarios():
         manzana = request.args.get('manzana')
         predio = request.args.get('predio')
 
-
     if None in (año, comuna_codigo, manzana, predio):
+        return render_template('/multipropietario/multipropietario.html', propietarios_info=None)
+    elif '' in (año, comuna_codigo, manzana, predio):
         return render_template('/multipropietario/multipropietario.html', propietarios_info=None)
 
     comuna_obj = Comuna.query.filter_by(codigo_comuna=comuna_codigo).first()
@@ -173,6 +206,9 @@ def search_multipropietarios():
         BienRaiz.predio == int(predio)
     ).with_entities(BienRaiz.rol).scalar()
     
+    if not bien_raiz_id:
+        return render_template('/multipropietario/multipropietario.html', propietarios_info=None)
+    
     query = Multipropietario.query.filter(
         Multipropietario.ano_vigencia_inicial <= año,
         (Multipropietario.ano_vigencia_final >= año) | (Multipropietario.ano_vigencia_final == None),
@@ -181,8 +217,8 @@ def search_multipropietarios():
     multipropietarios = query.all()
    
     propietarios_info = []
-    for multi_ppropietario in multipropietarios:
-        propietarios = Propietario.query.filter_by(multipropietario_id=multi_ppropietario.id).all()
+    for multi_propietario in multipropietarios:
+        propietarios = Propietario.query.filter_by(multipropietario_id=multi_propietario.id).all()
         for propietario in propietarios:
             propietarios_info.append({
                 'nombre_propietario': 'Random Name', 
@@ -191,8 +227,11 @@ def search_multipropietarios():
                 'comuna': comuna_name,
                 'manzana': manzana,
                 'predio': predio,
-                'año_vigencia_inicial': multi_ppropietario.ano_vigencia_inicial,
-                'año_vigencia_final': multi_ppropietario.ano_vigencia_final
+                'fecha_inscripcion': multi_propietario.fecha_inscripcion,
+                'ano_inscripcion': multi_propietario.ano_inscripcion,
+                'numero_inscripcion': multi_propietario.numero_inscripcion,
+                'año_vigencia_inicial': multi_propietario.ano_vigencia_inicial,
+                'año_vigencia_final': multi_propietario.ano_vigencia_final
             })
 
     return render_template('/multipropietario/multipropietario.html', propietarios_info=propietarios_info)

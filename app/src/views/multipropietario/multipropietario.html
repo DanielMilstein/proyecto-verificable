@@ -3,61 +3,86 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>View with Table and Inputs</title>
+<title>Multipropietario table</title>
+<script>
+    function goBack() {
+        window.history.back();
+    }
+</script>
 <style>
     body {
-    font-family: Arial, Helvetica, sans-serif;
-    background-color: #f4f4f4;
-    margin: 0;
-    padding: 20px;
+        font-family: Arial, Helvetica, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 20px;
     }
     .container {
-    max-width: 1300px;
-    margin: 0 auto;
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        max-width: 1300px;
+        margin: 0 auto;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
     .input-group {
-    display: flex;
-    margin-bottom: 10px;
+        display: flex;
+        margin-bottom: 10px;
     }
     .input-group label {
-    flex: 0 0 100px;
-    text-align: right;
-    padding-right: 10px;
-    line-height: 30px;
+        flex: 0 0 100px;
+        text-align: right;
+        padding-right: 10px;
+        line-height: 30px;
     }
     .input-group input,
     .input-group select {
-    flex: 1;
-    padding: 5px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    outline: none;
+        flex: 1;
+        padding: 5px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        outline: none;
     }
     table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
     }
     td, th {
-    border: 1px solid #ddd;
-    padding: 8px;
+        border: 1px solid #ddd;
+        padding: 8px;
     }
 
-    tr:nth-child(even){background-color: #f2f2f2;}
+    tr:nth-child(even){
+        background-color: #f2f2f2;
+    }
 
-    tr:hover {background-color: #ddd;}
+    tr:hover {
+        background-color: #ddd;
+    }
 
     th {
-    padding-top: 12px;
-    padding-bottom: 12px;
-    text-align: left;
-    background-color: #008CBA;
-    color: white;
+        padding-top: 12px;
+        padding-bottom: 12px;
+        text-align: left;
+        background-color: #008CBA;
+        color: white;
     }
+    .goback-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #008CBA;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .goback-btn:hover {
+            background-color: #005f77;
+        }
     </style>
     <!-- Include Select2 CSS -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
@@ -69,86 +94,98 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 </head>
 <body>
-
-<div class="container">
-    <form>
-        <div class="input-group">
-            <label for="comuna">Comuna:</label>
-            <br><select id="comuna" name="comuna" ></select></br>
-            <script>
-                $(document).ready(function() {
-                    $('#comuna').select2({
-                        ajax: {
-                            url: '/autocomplete', // Flask route from Step 2
-                            dataType: 'json',
-                            delay: 250, // Wait 250ms before triggering the request
-                            processResults: function (data) {
-                                // Transform the data into the format expected by Select2
-                                return {
-                                    results: data.results
-                                };
+    <div class="container">
+        <form>
+            <div class="input-group">
+                <label for="comuna">Comuna:</label>
+                <br><select id="comuna" name="comuna" ></select></br>
+                <script>
+                    $(document).ready(function() {
+                        $('#comuna').select2({
+                            ajax: {
+                                url: '/autocomplete', // Flask route from Step 2
+                                dataType: 'json',
+                                delay: 250, // Wait 250ms before triggering the request
+                                processResults: function (data) {
+                                    // Transform the data into the format expected by Select2
+                                    return {
+                                        results: data.results
+                                    };
+                                },
+                                cache: true
                             },
-                            cache: true
-                        },
-                        placeholder: 'Comuna',
-                        minimumInputLength: 1, // Minimum number of characters before searching
+                            placeholder: 'Comuna',
+                            minimumInputLength: 1, // Minimum number of characters before searching
+                        });
                     });
-                });
-            </script>
-        </div>
-        
-        
-        
-        <div class="input-group">
-        <label for="manzana">Manzana:</label>
-        <input type="number" id="manzana" name="manzana">
-        </div>
-        <div class="input-group">
-        <label for="predio">Predio:</label>
-        <input type="number" id="predio" name="predio">
-        </div>
-        <div class="input-group">
-        <label for="año">Año:</label>
-        <input type="number" id="año" name="año" min="1900" max="2100" step="1" placeholder="2024">
-        </div>
-        <button type="submit">Buscar</button>
-    </form>
-    <h2>Propietarios:</h2>
-    <!-- Your form inputs here -->
+                </script>
+            </div>
+             
+            <div class="input-group">
+            <label for="manzana">Manzana:</label>
+            <input type="number" id="manzana" name="manzana" min="0">
+            </div>
 
-    {% if propietarios_info %}
-    <table>
-        <thead>
-            <tr>
-            <th>Nombre Propietario</th>
-            <th>Rut/Run</th>
-            <th>% derecho</th>
-            <th>Comuna</th>
-            <th>Manzana</th>
-            <th>Predio</th>
-            <th>Año Vigencia Inicial</th>
-            <th>Año Vigencia Final</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for propietario_info in propietarios_info %}
-            <tr>
-            <td>{{ propietario_info.nombre_propietario }}</td>
-            <td>{{ propietario_info.rut_run }}</td>
-            <td>{{ propietario_info.porcentaje_derecho }}</td>
-            <td>{{ propietario_info.comuna }}</td>
-            <td>{{ propietario_info.manzana }}</td>
-            <td>{{ propietario_info.predio }}</td>
-            <td>{{ propietario_info.año_vigencia_inicial }}</td>
-            <td>{{ propietario_info.año_vigencia_final }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    {% else %}
-    <p>No hay resultados para la búsqueda actual. Intente nuevamente.</p>
-    {% endif %}
-</div>
+            <div class="input-group">
+            <label for="predio">Predio:</label>
+            <input type="number" id="predio" name="predio" min="0" step="1">
+            </div>
 
+            <div class="input-group">
+            <label for="año">Año:</label>
+            <input type="number" id="año" name="año" min="1900" max="2100" step="1" placeholder="2024">
+            </div>
+            <button type="submit">Buscar</button>
+        </form>
+
+        <h2>Propietarios:</h2>
+        {% if propietarios_info %}
+        <table>
+            <thead>
+                <tr>
+                <th>Nombre Propietario</th>
+                <th>Run/Rut</th>
+                <th>% derecho</th>
+                <th>Comuna</th>
+                <th>Manzana</th>
+                <th>Predio</th>
+                <th>Fecha de Inscripción</th>
+                <th>Año de Inscripción</th>
+                <th>Número de inscripción</th>
+                <th>Año Vigencia Inicial</th>
+                <th>Año Vigencia Final</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for propietario_info in propietarios_info %}
+                <tr>
+                    <td>{{ propietario_info.nombre_propietario if propietario_info.nombre_propietario else '-' }}</td>
+                    <td>{{ propietario_info.rut_run if propietario_info.rut_run else '-' }}</td>
+                    <td>{{ propietario_info.porcentaje_derecho if propietario_info.porcentaje_derecho else '-' }}</td>
+                    <td>{{ propietario_info.comuna if propietario_info.comuna else '-' }}</td>
+                    <td>{{ propietario_info.manzana if propietario_info.manzana else '-' }}</td>
+                    <td>{{ propietario_info.predio if propietario_info.predio else '-' }}</td>
+                    <td>{{ propietario_info.fecha_inscripcion.strftime("%d/%m/%Y") if propietario_info.fecha_inscripcion else '-' }}</td>
+                    <td>
+                        {% if propietario_info.ano_inscripcion %}
+                            {{ propietario_info.ano_inscripcion }}
+                        {% elif propietario_info.fecha_inscripcion %}
+                            {{ propietario_info.fecha_inscripcion.strftime("%Y") }}
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                    <td>{{ propietario_info.numero_inscripcion if propietario_info.numero_inscripcion else '-' }}</td>
+                    <td>{{ propietario_info.año_vigencia_inicial if propietario_info.año_vigencia_inicial else '-' }}</td>
+                    <td>{{ propietario_info.año_vigencia_final if propietario_info.año_vigencia_final else '-' }}</td>
+                </tr>            
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>No hay resultados para la búsqueda actual. Intente nuevamente.</p>
+        {% endif %}
+    </div>
+    <button class="goback-btn" onclick="goBack()">Volver atrás</button>
 </body>
 </html>

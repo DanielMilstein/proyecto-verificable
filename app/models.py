@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 
 class Persona(db.Model):
-    rut = db.Column(db.String(10), primary_key=True)
+    rut = db.Column(db.String(13), primary_key=True)
 
     def __init__(self, rut):
         self.rut = rut
@@ -12,13 +12,13 @@ class BienRaiz(db.Model):
     comuna = db.Column(db.Integer, db.ForeignKey('comuna.codigo_comuna'))
     manzana = db.Column(db.Integer)
     predio = db.Column(db.Integer)
-    rol = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    rol = db.Column(db.String(30), primary_key=True)
 
-    def __init__(self, comuna, manzana, predio, rol):
+    def __init__(self, comuna, manzana, predio):
         self.comuna = comuna
         self.manzana = manzana
         self.predio = predio
-        self.rol = rol
+        self.rol = f'{comuna}-{manzana}-{predio}'
 
 class Comuna(db.Model):
     codigo_comuna = db.Column(db.Integer, primary_key=True)
@@ -43,7 +43,7 @@ class CNE(db.Model):
 class Implicados(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     numero_atencion = db.Column(db.Integer, db.ForeignKey('formulario.numero_atencion'))
-    rut = db.Column(db.String(10), db.ForeignKey('persona.rut'))
+    rut = db.Column(db.String(13), db.ForeignKey('persona.rut'))
     adquiriente = db.Column(db.Boolean)
     porcentaje_derecho = db.Column(db.Float)
 
@@ -56,7 +56,7 @@ class Implicados(db.Model):
 class Propietario(db.Model):
     propietario_id = db.Column(db.Integer, primary_key=True, autoincrement=True, nullable=False)
     multipropietario_id = db.Column(db.Integer, db.ForeignKey('multipropietario.id'))
-    rut = db.Column(db.String(10), db.ForeignKey('persona.rut'))
+    rut = db.Column(db.String(13), db.ForeignKey('persona.rut'))
     porcentaje_derecho = db.Column(db.Float, nullable=True)
 
     def __init__(self, rut, multipropietario_id, porcentaje_derecho):
@@ -66,26 +66,28 @@ class Propietario(db.Model):
 
 class Multipropietario(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    rol = db.Column(db.Integer, db.ForeignKey('bien_raiz.rol'))
+    rol = db.Column(db.String(30), db.ForeignKey('bien_raiz.rol'))
     fojas = db.Column(db.Integer, nullable=True)
     fecha_inscripcion = db.Column(db.Date, nullable=True)
+    ano_inscripcion = db.Column(db.Integer, nullable=True)
     numero_inscripcion = db.Column(db.Integer, nullable=True)
     ano_vigencia_inicial = db.Column(db.Integer, nullable=True)
     ano_vigencia_final = db.Column(db.Integer, nullable=True)
 
-    def __init__(self, id, rol, fojas, fecha_inscripcion, numero_inscripcion, ano_vigencia_inicial, ano_vigencia_final):
+    def __init__(self, id, rol, fojas, fecha_inscripcion, numero_inscripcion, ano_inscripcion , ano_vigencia_inicial, ano_vigencia_final):
         self.id = id
         self.rol = rol
         self.fojas = fojas
         self.fecha_inscripcion = fecha_inscripcion
         self.numero_inscripcion = numero_inscripcion
+        self.ano_inscripcion = ano_inscripcion
         self.ano_vigencia_inicial = ano_vigencia_inicial
         self.ano_vigencia_final = ano_vigencia_final
 
 class Formulario(db.Model):
     numero_atencion = db.Column(db.Integer, primary_key=True, autoincrement=True)
     cne = db.Column(db.Integer, db.ForeignKey('cne.codigo_cne'))
-    rol = db.Column(db.Integer, db.ForeignKey('bien_raiz.rol'))
+    rol = db.Column(db.String(30), db.ForeignKey('bien_raiz.rol'))
     fojas = db.Column(db.Integer, nullable=True)
     fecha_inscripcion = db.Column(db.Date, nullable=True)
     numero_inscripcion = db.Column(db.Integer, nullable=True)
