@@ -3,6 +3,7 @@ from wtforms import StringField, SubmitField, IntegerField, DateField, FloatFiel
 from wtforms_sqlalchemy.fields import QuerySelectField
 from wtforms.validators import DataRequired, EqualTo, Length
 from app.models import CNE, Comuna
+from datetime import date
 import re
 
 
@@ -25,6 +26,10 @@ def porcentaje_validator(form, field):
 def positive_integer_validator(form, field):
     if field.data <= 0:
         raise ValidationError('Este campo debe ser mayor que 0')
+	
+def validate_past_date(form, field):
+    if field.data >= date.today():
+        raise ValidationError('La fecha debe ser anterior a hoy.')
 
 
 class MyForm(FlaskForm):
@@ -33,7 +38,7 @@ class MyForm(FlaskForm):
     manzana = IntegerField('Manzana', validators=[DataRequired(), positive_integer_validator])
     predio = IntegerField('Predio', validators=[DataRequired(), positive_integer_validator])
     fojas = IntegerField('Fojas', validators=[DataRequired(), positive_integer_validator])
-    fecha_inscripcion = DateField('Fecha de Inscripción', format='%Y-%m-%d', validators=[DataRequired()])
+    fecha_inscripcion = DateField('Fecha de Inscripción', format='%Y-%m-%d', validators=[DataRequired(), validate_past_date])
     numero_inscripcion = IntegerField('Número de Inscripción', validators=[DataRequired(), positive_integer_validator])
     
     submit = SubmitField('Enviar')
