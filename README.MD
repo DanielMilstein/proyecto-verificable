@@ -23,19 +23,19 @@ Primero que nada, necesitamos crear las personas que serán dueñas de la propie
 <br>La tabla persona aceptará los ruts con puntos entremedio (ej: 12.345.678-9), pero sólo mediante el ingreso manual de los datos mediante la consola de MySQL; en cualquier otro caso, se descartará,. Es decir, que al usar la aplicación, se espera que los ruts se ingresen sin puntos entremedio.
 ### 2. Bien raíz
 Luego, debemos crear el bien raíz en cuestión.<br>
-`INSERT INTO bien_raiz (comuna, manzana, predio) VALUES (1,1,1);`
+`INSERT INTO bien_raiz (comuna, manzana, predio, rol) VALUES (1,1,1 "1,1,1");`
 
 ### 3. Multi propietario
 Ahora es momento de ingresar filas a la tabla multi propietario, que junta al concepto de propiedad con un rol determinado.
 
 	`INSERT INTO multipropietario(
-		id, rol, fojas, fecha_inscripcion, numero_inscripcion, 
+		id, rol, fojas, fecha_inscripcion, numero_inscripcion, ano_inscripcion,
 		ano_vigencia_inicial, ano_vigencia_final
 	) 
 	VALUES 
-		(1, 1, 10, '2023-05-15', 1001, 2023, 2028), 
-		(2, 1, 25, '2023-05-15', 1001, 2020, 2028), 
-		(3, 1, 40, '2023-05-15', 1001, 2000, 2030);`
+		(1, "1-1-1", 10, '2023-05-15', 1001, 1900, 2023, 2028), 
+		(2, "1-1-1", 25, '2023-05-15', 1001, 1900, 2020, 2028), 
+		(3, "1-1-1", 40, '2023-05-15', 1001, 1900, 2000, 2030);`
 
 Donde el 'rol' debe ser de la propiedad ingresada anteriormente:
 	`SELECT * FROM bien_raiz WHERE manzana=1 AND predio=1 AND comuna=1
@@ -44,6 +44,6 @@ Notar cómo ingresamos el atributo 'id' manualmente. Esto es porque nos facilita
 ### 4. Propietario
 Finalmente, ingresamos filas a la tabla Propietario, la cuál se encarga de unir a las personas propietarias con sus propiedades (es una tabla intermedia ; relación N x N). 
 
-	`INSERT INTO propietario (rut, multipropietario_id, porcentaje_derecho) VALUES  ('05498732-1', 3, 25), ('12345678-9', 1, 25),  ('18765432-1', 2, 50);`
+	`INSERT INTO propietario (rut, multipropietario_id, porcentaje_derecho) VALUES  ('5498732-1', 3, 25), ('12345678-9', 1, 25),  ('18765432-1', 2, 50);`
 
 Donde el 'rut' deben ser los mismos que fueron ingresados durante el paso 1, y los multipropietario_id los mismo que ingresamos en el paso 3.
