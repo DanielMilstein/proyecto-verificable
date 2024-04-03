@@ -1,6 +1,7 @@
 from flask import render_template, Blueprint, request, redirect, flash, jsonify
 from app.forms import *
 from app.models import *
+import json
 
 
 blueprint = Blueprint('pages', __name__)
@@ -195,3 +196,102 @@ def search_multipropietarios():
             })
 
     return render_template('/multipropietario/multipropietario.html', propietarios_info=propietarios_info)
+
+@blueprint.route('/json-interpreter', methods=['POST'])
+def json_interpreter():
+    if 'upload_file' not in request.files:
+        return jsonify({'error': 'No file part'})
+
+    file = request.files['upload_file']
+
+    if file.filename == '':
+        return jsonify({'error': 'No selected file'})
+
+    if file and file.filename.endswith('.json'):
+        try:
+            json_data = json.loads(file.read())
+            error_list_when_uploading_json = []  
+            
+            for form_data in json_data.get('F2890', []):
+                try:
+                    cne_code = form_data.get('CNE')
+                    
+                    
+                    if cne_code not in [8, 99]:
+                        error_list_when_uploading_json.append(f"Invalid CNE code: {cne_code}")
+                        continue 
+                    
+                    
+                    comuna_code = form_data.get('bienRaiz', {}).get('comuna')
+                    comuna = Comuna.query.filter_by(codigo_comuna=comuna_code).first()
+                    if not comuna:
+                        error_list_when_uploading_json.append(f'Comuna with code {comuna_code} not found')
+                        continue  
+                    
+                    bien_raiz_data = form_data.get('bienRaiz', {})
+                    manzana = bien_raiz_data.get('manzana', '')
+                    predio = bien_raiz_data.get('predio', '')
+                    rol_search = f'{comuna_code}-{manzana}-{predio}'
+                    bien_raiz = BienRaiz.query.filter_by(rol=rol_search).first()
+                    if not bien_raiz:
+                        bien_raiz = BienRaiz(comuna=comuna_code, manzana=manzana, predio=predio)
+                        db.session.add(bien_raiz)
+
+
+                    new_form = Formulario(
+                        cne=cne_code,
+                        rol=bien_raiz.rol,
+                        fojas=form_data.get('fojas', ''),
+                        fecha_inscripcion=form_data.get('fechaInscripcion', None),
+                        numero_inscripcion=form_data.get('nroInscripcion', None)
+                    )
+                    db.session.add(new_form)
+
+
+                    for adquirente_data in form_data.get('adquirentes', []):
+                        rut = adquirente_data.get('RUNRUT')
+                        porcentaje_derecho = adquirente_data.get('porcDerecho')
+                        adquiriente = Persona.query.filter_by(rut=rut).first()
+                        if not adquiriente:
+                            adquiriente = Persona(rut=rut)
+                            db.session.add(adquiriente)
+                        adquiriente_implicado = Implicados(
+                            numero_atencion=new_form.numero_atencion,
+                            rut=rut,
+                            adquiriente=True,
+                            porcentaje_derecho=porcentaje_derecho
+                        )
+                        db.session.add(adquiriente_implicado)
+
+
+                    for enajenante_data in form_data.get('enajenantes', []):
+                        rut = enajenante_data.get('RUNRUT')
+                        porcentaje_derecho = enajenante_data.get('porcDerecho')
+                        enajenante = Persona.query.filter_by(rut=rut).first()
+                        if not enajenante:
+                            enajenante = Persona(rut=rut)
+                            db.session.add(enajenante)
+                        enajenante_implicado = Implicados(
+                            numero_atencion=new_form.numero_atencion,
+                            rut=rut,
+                            adquiriente=False,
+                            porcentaje_derecho=porcentaje_derecho
+                        )
+                        db.session.add(enajenante_implicado)
+
+                    db.session.commit()
+
+                except Exception as e:
+                    db.session.rollback()
+                    error_list_when_uploading_json.append(f"Error processing form data: {e}")
+            
+            if error_list_when_uploading_json:
+                return jsonify({'success': False, 'errors': error_list_when_uploading_json})
+            else:
+                return jsonify({'success': True})
+        
+        except json.JSONDecodeError as e:
+            return jsonify({'error': f'Invalid JSON format: {e}'})
+
+    else:
+        return jsonify({'error': 'Invalid file type'})
