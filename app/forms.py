@@ -17,20 +17,24 @@ def rut_validator(form, field):
 		raise ValidationError('El RUT debe tener el formato XXXXXXXX-X')
 
 def porcentaje_validator(form, field):
+	if not field.data:
+		raise ValidationError('El porcentaje debe tomar una valor númerico.')
 	if field.data < 0 or field.data > 100:
 		raise ValidationError('El porcentaje debe estar entre 0 y 100')
 
+def positive_integer_validator(form, field):
+    if field.data <= 0:
+        raise ValidationError('Este campo debe ser mayor que 0')
 
 
 class MyForm(FlaskForm):
-	cne = QuerySelectField(query_factory=lambda: CNE.query.all(), get_label='nombre_cne')
-	comuna = QuerySelectField(query_factory=lambda: Comuna.query.all(), get_label='nombre_comuna')
-	manzana = IntegerField('Manzana', validators=[DataRequired()])
-	predio = IntegerField('Predio', validators=[DataRequired()])
-	fojas = IntegerField('Fojas', validators=[DataRequired()])
-	fecha_inscripcion = DateField('Fecha de Inscripción', format='%Y-%m-%d', validators=[DataRequired()])
-	numero_inscripcion = IntegerField('Número de Inscripción', validators=[DataRequired()])
-	
-	submit = SubmitField('Enviar')
-
+    cne = QuerySelectField(query_factory=lambda: CNE.query.all(), get_label='nombre_cne')
+    comuna = QuerySelectField(query_factory=lambda: Comuna.query.all(), get_label='nombre_comuna')
+    manzana = IntegerField('Manzana', validators=[DataRequired(), positive_integer_validator])
+    predio = IntegerField('Predio', validators=[DataRequired(), positive_integer_validator])
+    fojas = IntegerField('Fojas', validators=[DataRequired(), positive_integer_validator])
+    fecha_inscripcion = DateField('Fecha de Inscripción', format='%Y-%m-%d', validators=[DataRequired()])
+    numero_inscripcion = IntegerField('Número de Inscripción', validators=[DataRequired(), positive_integer_validator])
+    
+    submit = SubmitField('Enviar')
 
