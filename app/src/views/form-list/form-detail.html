@@ -124,28 +124,35 @@
         <h2>Formulario F2890 - Nº de atención {{ form_details.numero_atencion }}</h2>
         <p><b>CNE:</b> {{ form_details.cne.nombre_cne }} ({{ form_details.cne.codigo_cne }})</p>
         <div class="flex-container">
-            <p><b>Comuna:</b> {{ form_details.nombre_comuna }}</p>
-            <p><b>Manzana:</b> {{ form_details.bien_raiz.manzana }}</p>
-            <p><b>Predio:</b> {{ form_details.bien_raiz.predio }}</p>
+            <p><b>Comuna:</b> {{ form_details.nombre_comuna if form_details.nombre_comuna else '-' }}</p>
+            <p><b>Manzana:</b> {{ form_details.bien_raiz.manzana if form_details.bien_raiz.manzana else '-' }}</p>
+            <p><b>Predio:</b> {{ form_details.bien_raiz.predio if form_details.bien_raiz.predio else '-' }}</p>
         </div>
-        <p><b>Fojas:</b> {{ form_details.fojas }}</p>
-        <p><b>Fecha de inscripción:</b> {{ form_details.fecha_inscripcion.strftime("%d/%m/%Y") if form_details.fecha_inscripcion else '-'}}</p>
-        <p><b>Número de inscripción:</b> {{ form_details.numero_inscripcion }}</p>
-
+        <p><b>Fojas:</b> {{ form_details.fojas if form_details.fojas else '-' }}</p>
+        <p><b>Fecha de inscripción:</b> {{ form_details.fecha_inscripcion.strftime("%d/%m/%Y") if form_details.fecha_inscripcion else '-' }}</p>
+        <p><b>Número de inscripción:</b> {{ form_details.numero_inscripcion if form_details.numero_inscripcion else '-' }}</p>
+    
         <h3>Adquirientes:</h3>
         <ul>
-        {% for adquiriente in form_details.adquirientes %}
-            <li>{{ adquiriente.rut }} - {{ adquiriente.porcentaje_derecho }}</li>
-        {% endfor %}
+            {% for adquiriente in form_details.adquirientes %}
+                <li>{{ adquiriente.rut }} - {{ adquiriente.porcentaje_derecho if adquiriente.porcentaje_derecho else 'Porcentaje de derecho no pudo ser clarificado.' }}</li>
+            {% else %}
+                <li>-</li>
+            {% endfor %}
         </ul>
 
         <h3>Enajenantes:</h3>
         <ul>
-        {% for enajenante in form_details.enajenantes %}
-            <li>{{ enajenante.rut }} - {{ enajenante.porcentaje_derecho }}</li>
-        {% endfor %}
+            {% for enajenante in form_details.enajenantes %}
+                <li>{{ enajenante.rut }} - {{ enajenante.porcentaje_derecho if enajenante.porcentaje_derecho else 'Porcentaje de derecho no pudo ser clarificado.' }}</li>
+            {% else %}
+                <li>-</li>
+            {% endfor %}
         </ul>
+
     </div>
+    
+    
     <button class="goback-btn" onclick="goBack()">Volver atrás</button>
 
 </body>
