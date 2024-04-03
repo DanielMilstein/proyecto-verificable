@@ -87,15 +87,17 @@
             </thead>
             <tbody>
                 {% for form in forms %}
-                <tr>
-                    <td>{{ form.numero_atencion }}</td>
-                    <td>{{ form.nombre_cne }}</td>
-                    <td>{{ form.rol }}</td>
-                    <td>{{ form.fojas }}</td>
-                    <td>{{ form.fecha_inscripcion.strftime("%d/%m/%Y") }}</td>
-                    <td>{{ form.numero_inscripcion }}</td>
-                    <td><a href="{{ url_for('pages.form_detail', numero_atencion=form.numero_atencion) }}"> Ver detalle </a></td>
-                </tr>
+                    {% if form.rol is not none %}   
+                    <tr>
+                        <td>{{ form.numero_atencion }}</td>
+                        <td>{{ form.nombre_cne }}</td>
+                        <td>{{ form.rol }}</td>
+                        <td>{{ form.fojas }}</td>
+                        <td>{{ form.fecha_inscripcion.strftime("%d/%m/%Y") }}</td>
+                        <td>{{ form.numero_inscripcion }}</td>
+                        <td><a href="{{ url_for('pages.form_detail', numero_atencion=form.numero_atencion) }}"> Ver detalle </a></td>
+                    </tr>
+                    {% endif %}
                 {% endfor %}
             </tbody>
         </table>
