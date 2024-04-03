@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 
 class Persona(db.Model):
-    rut = db.Column(db.String(10), primary_key=True)
+    rut = db.Column(db.String(13), primary_key=True)
 
     def __init__(self, rut):
         self.rut = rut
@@ -42,7 +42,7 @@ class CNE(db.Model):
 class Implicados(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     numero_atencion = db.Column(db.Integer, db.ForeignKey('formulario.numero_atencion'))
-    rut = db.Column(db.String(10), db.ForeignKey('persona.rut'))
+    rut = db.Column(db.String(13), db.ForeignKey('persona.rut'))
     adquiriente = db.Column(db.Boolean)
     porcentaje_derecho = db.Column(db.Float)
 
@@ -55,7 +55,7 @@ class Implicados(db.Model):
 class Propietario(db.Model):
     propietario_id = db.Column(db.Integer, primary_key=True, autoincrement=True, nullable=False)
     multipropietario_id = db.Column(db.Integer, db.ForeignKey('multipropietario.id'))
-    rut = db.Column(db.String(10), db.ForeignKey('persona.rut'))
+    rut = db.Column(db.String(13), db.ForeignKey('persona.rut'))
     porcentaje_derecho = db.Column(db.Float, nullable=True)
 
     def __init__(self, rut, multipropietario_id, porcentaje_derecho):
