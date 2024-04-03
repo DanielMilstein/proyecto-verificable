@@ -10,6 +10,23 @@
             padding: 20px;
             background-color: #f9f9f9;
         }
+        .goback-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #008CBA;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .goback-btn:hover {
+            background-color: #005f77;
+        }
+
         .select2-container {
             width: 150% !important;
             padding-top: 7px;
@@ -101,153 +118,161 @@
 
 </head>
 <body>
-{% with messages = get_flashed_messages() %}
-    {% if messages %}
-        <ul class="flashes">
-            {% for message in messages %}
-                <li>{{ message }}</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
-{% endwith %}
 
-<h1>Formulario F2890</h1>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul class="flashes">
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
 
-<form action="{{ url_for('pages.form') }}" method="post">
-    {{ form.hidden_tag() }}
+    <h1>Formulario F2890</h1>
+    <form action="{{ url_for('pages.form') }}" method="post">
+        {{ form.hidden_tag() }}
 
-    <p>
-        {{ form.cne.label }}<br>
-        {{ form.cne }}<br>
-    </p>
+        <p>
+            {{ form.cne.label }}<br>
+            {{ form.cne }}<br>
+        </p>
 
-    <div class="flex-container">
-        <div class="subform-container">
-            <label>{{ form.comuna.label }}</label>
-            <select id="mySelect2" name="comuna"></select>
-            <script>
-                $(document).ready(function() {
-                    const ajax_delay = 250;
-                    const min_length = 1;
-                    $('#mySelect2').select2({
-                        ajax: {
-                            url: '/autocomplete',
-                            dataType: 'json',
-                            delay: ajax_delay,
-                            processResults: function (data) {
-                                return {
-                                    results: data.results
-                                };
+        <div class="flex-container">
+            <div class="subform-container">
+                <label>{{ form.comuna.label }}</label>
+                <select id="mySelect2" name="comuna"></select>
+                <script>
+                    $(document).ready(function() {
+                        const ajax_delay = 250;
+                        const min_length = 1;
+                        $('#mySelect2').select2({
+                            ajax: {
+                                url: '/autocomplete',
+                                dataType: 'json',
+                                delay: ajax_delay,
+                                processResults: function (data) {
+                                    return {
+                                        results: data.results
+                                    };
+                                },
+                                cache: true
                             },
-                            cache: true
-                        },
-                        placeholder: 'Comuna',
-                        minimumInputLength: min_length,
+                            placeholder: 'Comuna',
+                            minimumInputLength: min_length,
+                        });
                     });
-                });
-            </script>
+                </script>
+            </div>
+        
+            <div>
+                {{ form.manzana.label }}
+                {{ form.manzana }}
+            </div>
+
+            <div>
+                {{ form.predio.label }}
+                {{ form.predio }}
+            </div>
+
+            <div>
+                {{ form.fojas.label }}
+                {{ form.fojas(size=20) }}
+            </div>
+
+            <div>
+                {{ form.fecha_inscripcion.label }}
+                {{ form.fecha_inscripcion() }}
+            </div>
+
+            <div>
+                {{ form.numero_inscripcion.label }}
+                {{ form.numero_inscripcion(size=20) }} 
+            </div>
         </div>
-    
-        <div>
-            {{ form.manzana.label }}
-            {{ form.manzana }}
+        <div class="subform-container">
+            <h2>Añadir adquiriente</h2>
+            <div id="adquirienteContainer"></div>
+            <button type="button" onclick="addAdquiriente()">Agregar adquiriente</button>
         </div>
 
-        <div>
-            {{ form.predio.label }}
-            {{ form.predio }}
+        <div class="subform-container">
+            <h2>Añadir enajenante</h2>
+            <div id="enajenanteContainer"></div>
+            <button type="button" onclick="addEnajenante()">Agregar enajenante</button>
         </div>
 
-        <div>
-            {{ form.fojas.label }}
-            {{ form.fojas(size=20) }}
-        </div>
+        <p>{{ form.submit() }}</p>
+    </form>
 
-        <div>
-            {{ form.fecha_inscripcion.label }}
-            {{ form.fecha_inscripcion() }}
-        </div>
+    <script>
+        function addAdquiriente() {
+            var container = document.getElementById('adquirienteContainer');
+            var subformDiv = document.createElement('div');
+            subformDiv.className = 'subform';
 
-        <div>
-            {{ form.numero_inscripcion.label }}
-            {{ form.numero_inscripcion(size=20) }} 
-        </div>
-    </div>
-    <div class="subform-container">
-        <h2>Añadir adquiriente</h2>
-        <div id="adquirienteContainer"></div>
-        <button type="button" onclick="addAdquiriente()">Agregar adquiriente</button>
-    </div>
+            var input = document.createElement('input');
+            input.type = 'text';
+            input.name = 'adquirientesRut[]';
+            input.placeholder = 'RUT (Ej: 12345678-9)';
+            input.maxLength = 10;
+            subformDiv.appendChild(input);
 
-    <div class="subform-container">
-        <h2>Añadir enajenante</h2>
-        <div id="enajenanteContainer"></div>
-        <button type="button" onclick="addEnajenante()">Agregar enajenante</button>
-    </div>
+            var input2 = document.createElement('input');
+            input2.type = 'number';
+            input2.name = 'adquirientesPorcentaje[]';
+            input2.min = 0;  
+            input2.max = 100;  
+            input2.required = true;  
+            input2.placeholder = 'Porcentaje de derechos (Ej: 55)';
+            subformDiv.appendChild(input2);
 
-    <p>{{ form.submit() }}</p>
-</form>
+            var removeButton = document.createElement('button');
+            removeButton.type = 'button';
+            removeButton.className = 'remove-button';
+            removeButton.textContent = 'Remove';
+            removeButton.onclick = function() {
+                container.removeChild(subformDiv);
+            };
+            subformDiv.appendChild(removeButton);
 
-<script>
-    function addAdquiriente() {
-        var container = document.getElementById('adquirienteContainer');
-        var subformDiv = document.createElement('div');
-        subformDiv.className = 'subform';
+            container.appendChild(subformDiv);
+        }
 
-        var input = document.createElement('input');
-        input.type = 'text';
-        input.name = 'adquirientesRut[]';
-        input.placeholder = 'RUT (Ej: 12345678-9)';
-        input.maxLength = 10;
-        subformDiv.appendChild(input);
+        function addEnajenante() {
+            var container = document.getElementById('enajenanteContainer');
+            var subformDiv = document.createElement('div');
+            subformDiv.className = 'subform';
 
-        var input2 = document.createElement('input');
-        input2.type = 'number';
-        input2.name = 'adquirientesPorcentaje[]';
-        input2.placeholder = 'Porcentaje de derechos (Ej: 55)';
-        subformDiv.appendChild(input2);
+            var input = document.createElement('input');
+            input.type = 'text';
+            input.name = 'enajenantesRut[]';
+            input.placeholder = 'RUT (Ej: 12345678-9)';
+            input.maxLength = 10;
+            subformDiv.appendChild(input);
 
-        var removeButton = document.createElement('button');
-        removeButton.type = 'button';
-        removeButton.className = 'remove-button';
-        removeButton.textContent = 'Remove';
-        removeButton.onclick = function() {
-            container.removeChild(subformDiv);
-        };
-        subformDiv.appendChild(removeButton);
+            var input2 = document.createElement('input');
+            input2.type = 'number';
+            input2.name = 'enajenantesPorcentaje[]';
+            input2.min = 0;  
+            input2.max = 100;  
+            input2.required = true;  
+            input2.placeholder = 'Porcentaje de derechos (Ej: 55)';
+            subformDiv.appendChild(input2);
 
-        container.appendChild(subformDiv);
-    }
+            var removeButton = document.createElement('button');
+            removeButton.type = 'button';
+            removeButton.className = 'remove-button';
+            removeButton.textContent = 'Remove';
+            removeButton.onclick = function() {
+                container.removeChild(subformDiv);
+            };
+            subformDiv.appendChild(removeButton);
 
-    function addEnajenante() {
-        var container = document.getElementById('enajenanteContainer');
-        var subformDiv = document.createElement('div');
-        subformDiv.className = 'subform';
+            container.appendChild(subformDiv);
+        }
+    </script>
 
-        var input = document.createElement('input');
-        input.type = 'text';
-        input.name = 'enajenantesRut[]';
-        input.placeholder = 'RUT (Ej: 12345678-9)';
-        input.maxLength = 10;
-        subformDiv.appendChild(input);
-
-        var input2 = document.createElement('input');
-        input2.type = 'number';
-        input2.name = 'enajenantesPorcentaje[]';
-        input2.placeholder = 'Porcentaje de derechos (Ej: 55)';
-        subformDiv.appendChild(input2);
-
-        var removeButton = document.createElement('button');
-        removeButton.type = 'button';
-        removeButton.className = 'remove-button';
-        removeButton.textContent = 'Remove';
-        removeButton.onclick = function() {
-            container.removeChild(subformDiv);
-        };
-        subformDiv.appendChild(removeButton);
-
-        container.appendChild(subformDiv);
-    }
-</script>
+    <a class="goback-btn" href='/'>Volver al menú principal</button>   
 </body>
 </html>
