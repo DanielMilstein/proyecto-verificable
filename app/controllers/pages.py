@@ -275,6 +275,7 @@ def json_interpreter():
                     if not bien_raiz:
                         bien_raiz = BienRaiz(comuna=comuna_code, manzana=manzana, predio=predio)
                         db.session.add(bien_raiz)
+                        db.session.commit()
 
 
                     new_form = Formulario(
@@ -285,6 +286,7 @@ def json_interpreter():
                         numero_inscripcion=form_data.get('nroInscripcion', None)
                     )
                     db.session.add(new_form)
+                    db.session.commit()
 
 
                     for adquirente_data in form_data.get('adquirentes', []):
@@ -294,6 +296,7 @@ def json_interpreter():
                         if not adquiriente:
                             adquiriente = Persona(rut=rut)
                             db.session.add(adquiriente)
+                            db.session.commit()
                         adquiriente_implicado = Implicados(
                             numero_atencion=new_form.numero_atencion,
                             rut=rut,
@@ -310,6 +313,8 @@ def json_interpreter():
                         if not enajenante:
                             enajenante = Persona(rut=rut)
                             db.session.add(enajenante)
+                            db.session.commit()
+
                         enajenante_implicado = Implicados(
                             numero_atencion=new_form.numero_atencion,
                             rut=rut,
