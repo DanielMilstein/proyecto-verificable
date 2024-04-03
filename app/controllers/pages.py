@@ -55,11 +55,11 @@ def form():
         ).first()
 
         if existing_bien_raiz is None:
-            bien_raiz = BienRaiz(form.comuna.data, form.manzana.data, form.predio.data)
+            bien_raiz = BienRaiz(form.comuna.data.codigo_comuna, form.manzana.data, form.predio.data)
             db.session.add(bien_raiz)
+            db.session.commit()
         else:
             bien_raiz = existing_bien_raiz
-
 
 
         new_form = Formulario(

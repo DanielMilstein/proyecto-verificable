@@ -14,11 +14,10 @@ class BienRaiz(db.Model):
     predio = db.Column(db.Integer)
     rol = db.Column(db.Integer, primary_key=True, autoincrement=True)
 
-    def __init__(self, comuna, manzana, predio, rol):
+    def __init__(self, comuna, manzana, predio,):
         self.comuna = comuna
         self.manzana = manzana
         self.predio = predio
-        self.rol = rol
 
 class Comuna(db.Model):
     codigo_comuna = db.Column(db.Integer, primary_key=True)
