@@ -259,33 +259,39 @@ def json_interpreter():
                     
                     if cne_code not in [8, 99]:
                         errors.append(f"Invalid CNE code: {cne_code}")
-                        continue  
-                    
-                    
-                    comuna_code = form_data.get('bienRaiz', {}).get('comuna')
-                    comuna = Comuna.query.filter_by(codigo_comuna=comuna_code).first()
-                    if not comuna:
-                        errors.append(f'Comuna with code {comuna_code} not found')
-                        continue  
+                        #Form format isn't valid.
+                        break
+                                        
                     
                     bien_raiz_data = form_data.get('bienRaiz', {})
                     comuna_code = bien_raiz_data.get('comuna')
+                    comuna = Comuna.query.filter_by(codigo_comuna=comuna_code).first()
+                    if not comuna:
+                        errors.append(f'Comuna with code {comuna_code} not found')
+                        comuna = None
+                        comuna_code = None
+                        continue  
+
                     manzana = bien_raiz_data.get('manzana', '')
                     predio = bien_raiz_data.get('predio', '')
-                    rol_search = f'{comuna_code}-{manzana}-{predio}'
+                    rol_template = f'{comuna_code}-{manzana}-{predio}'
 
-                    
-                    bien_raiz = BienRaiz(comuna=comuna_code, manzana=manzana, predio=predio)
+                    bien_raiz = BienRaiz.query.filter_by(rol=rol_template).first()
+                    if not bien_raiz:
+                        bien_raiz = BienRaiz(comuna=comuna_code, manzana=manzana, predio=predio)
+                        db.session.add(bien_raiz)
+                        db.session.commit()
 
                    
                     new_form = Formulario(
                         cne=cne_code,
-                        rol=rol_search,
+                        rol=bien_raiz.rol,
                         fojas=form_data.get('fojas', ''),
                         fecha_inscripcion=form_data.get('fechaInscripcion', None),
                         numero_inscripcion=form_data.get('nroInscripcion', None)
                     )
                     db.session.add(new_form)
+                    db.session.commit()
 
                     for adquirente_data in form_data.get('adquirentes', []):
                         rut = adquirente_data.get('RUNRUT')
@@ -294,6 +300,7 @@ def json_interpreter():
                         if not adquiriente:
                             adquiriente = Persona(rut=rut)
                             db.session.add(adquiriente)
+                            db.session.commit()
                         adquiriente_implicado = Implicados(
                             numero_atencion=new_form.numero_atencion,
                             rut=rut,
@@ -309,6 +316,7 @@ def json_interpreter():
                         if not enajenante:
                             enajenante = Persona(rut=rut)
                             db.session.add(enajenante)
+                            db.session.commit()
                         enajenante_implicado = Implicados(
                             numero_atencion=new_form.numero_atencion,
                             rut=rut,
@@ -317,6 +325,10 @@ def json_interpreter():
                         )
                         db.session.add(enajenante_implicado)
 
+                    db.session.commit()
+                    success_messages.append(f"Form data processed successfully: {form_data}")
+                    """
+                    Not required yet.
                     multipropietario_data = form_data.get('multipropietario', {})
                     rol = multipropietario_data.get('rol', '')
                     fojas = multipropietario_data.get('fojas', None)
@@ -336,9 +348,8 @@ def json_interpreter():
                         ano_vigencia_final=ano_vigencia_final
                     )
                     db.session.add(multipropietario)
-
-                    db.session.commit()
-                    success_messages.append(f"Form data processed successfully: {form_data}")
+                    """
+                    
                     
                 except Exception as e:
                     db.session.rollback()
