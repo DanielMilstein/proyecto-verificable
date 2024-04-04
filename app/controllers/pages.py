@@ -260,7 +260,7 @@ def json_interpreter():
                     if cne_code not in [8, 99]:
                         errors.append(f"Invalid CNE code: {cne_code}")
                         #Form format isn't valid.
-                        break
+                        continue
                                         
                     
                     bien_raiz_data = form_data.get('bienRaiz', {})
