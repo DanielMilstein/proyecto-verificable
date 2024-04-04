@@ -249,7 +249,8 @@ def json_interpreter():
     if file and file.filename.endswith('.json'):
         try:
             json_data = json.loads(file.read())
-            error_list_when_uploading_json = []  
+            errors = []  
+            success_messages = []  
             
             for form_data in json_data.get('F2890', []):
                 try:
@@ -257,37 +258,34 @@ def json_interpreter():
                     
                     
                     if cne_code not in [8, 99]:
-                        error_list_when_uploading_json.append(f"Invalid CNE code: {cne_code}")
-                        continue 
+                        errors.append(f"Invalid CNE code: {cne_code}")
+                        continue  
                     
                     
                     comuna_code = form_data.get('bienRaiz', {}).get('comuna')
                     comuna = Comuna.query.filter_by(codigo_comuna=comuna_code).first()
                     if not comuna:
-                        error_list_when_uploading_json.append(f'Comuna with code {comuna_code} not found')
+                        errors.append(f'Comuna with code {comuna_code} not found')
                         continue  
                     
                     bien_raiz_data = form_data.get('bienRaiz', {})
+                    comuna_code = bien_raiz_data.get('comuna')
                     manzana = bien_raiz_data.get('manzana', '')
                     predio = bien_raiz_data.get('predio', '')
                     rol_search = f'{comuna_code}-{manzana}-{predio}'
-                    bien_raiz = BienRaiz.query.filter_by(rol=rol_search).first()
-                    if not bien_raiz:
-                        bien_raiz = BienRaiz(comuna=comuna_code, manzana=manzana, predio=predio)
-                        db.session.add(bien_raiz)
-                        db.session.commit()
 
+                    
+                    bien_raiz = BienRaiz(comuna=comuna_code, manzana=manzana, predio=predio)
 
+                   
                     new_form = Formulario(
                         cne=cne_code,
-                        rol=bien_raiz.rol,
+                        rol=rol_search,
                         fojas=form_data.get('fojas', ''),
                         fecha_inscripcion=form_data.get('fechaInscripcion', None),
                         numero_inscripcion=form_data.get('nroInscripcion', None)
                     )
                     db.session.add(new_form)
-                    db.session.commit()
-
 
                     for adquirente_data in form_data.get('adquirentes', []):
                         rut = adquirente_data.get('RUNRUT')
@@ -296,7 +294,6 @@ def json_interpreter():
                         if not adquiriente:
                             adquiriente = Persona(rut=rut)
                             db.session.add(adquiriente)
-                            db.session.commit()
                         adquiriente_implicado = Implicados(
                             numero_atencion=new_form.numero_atencion,
                             rut=rut,
@@ -305,7 +302,6 @@ def json_interpreter():
                         )
                         db.session.add(adquiriente_implicado)
 
-
                     for enajenante_data in form_data.get('enajenantes', []):
                         rut = enajenante_data.get('RUNRUT')
                         porcentaje_derecho = enajenante_data.get('porcDerecho')
@@ -313,8 +309,6 @@ def json_interpreter():
                         if not enajenante:
                             enajenante = Persona(rut=rut)
                             db.session.add(enajenante)
-                            db.session.commit()
-
                         enajenante_implicado = Implicados(
                             numero_atencion=new_form.numero_atencion,
                             rut=rut,
@@ -323,16 +317,34 @@ def json_interpreter():
                         )
                         db.session.add(enajenante_implicado)
 
-                    db.session.commit()
+                    multipropietario_data = form_data.get('multipropietario', {})
+                    rol = multipropietario_data.get('rol', '')
+                    fojas = multipropietario_data.get('fojas', None)
+                    fecha_inscripcion = multipropietario_data.get('fecha_inscripcion', None)
+                    numero_inscripcion = multipropietario_data.get('nroInscripcion', None)
+                    ano_inscripcion = multipropietario_data.get('ano_inscripcion', None)
+                    ano_vigencia_inicial = multipropietario_data.get('ano_vigencia_inicial', None)
+                    ano_vigencia_final = multipropietario_data.get('ano_vigencia_final', None)
 
+                    multipropietario = Multipropietario(
+                        rol=rol,
+                        fojas=fojas,
+                        fecha_inscripcion=fecha_inscripcion,
+                        numero_inscripcion=numero_inscripcion,
+                        ano_inscripcion=ano_inscripcion,
+                        ano_vigencia_inicial=ano_vigencia_inicial,
+                        ano_vigencia_final=ano_vigencia_final
+                    )
+                    db.session.add(multipropietario)
+
+                    db.session.commit()
+                    success_messages.append(f"Form data processed successfully: {form_data}")
+                    
                 except Exception as e:
                     db.session.rollback()
-                    error_list_when_uploading_json.append(f"Error processing form data: {e}")
+                    errors.append(f"Error processing form data: {e}")
             
-            if error_list_when_uploading_json:
-                return jsonify({'success': False, 'errors': error_list_when_uploading_json})
-            else:
-                return jsonify({'success': True})
+            return render_template('json-interpreter/json-interpreter.html', success=True, success_messages=success_messages, errors=errors)
         
         except json.JSONDecodeError as e:
             return jsonify({'error': f'Invalid JSON format: {e}'})

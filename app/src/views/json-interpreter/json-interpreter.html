@@ -1,1 +1,35 @@
-<h1>json interpreter html file</h1>>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON Interpreter</title>
+</head>
+<body>
+    <div id="output">
+        {% if success %}
+            <div>
+                <p>JSON data processed successfully:</p>
+                
+                {% for message in success_messages %}
+                    <p>{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% if errors %}
+            <div>
+                <p>Errors encountered during processing:</p>
+                
+                {% for error in errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    <form action="/" method="get">
+        <button type="submit">Back to Home</button>
+    </form>
+</body>
+</html>
