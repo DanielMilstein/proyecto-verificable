@@ -29,14 +29,9 @@
         {% if success %}
             <div>
                 <p>JSON data processed successfully:</p>
-                
-                {% for message in success_messages %}
-                    <p>{{ message }}</p>
-                {% endfor %}
+            
             </div>
-        {% endif %}
-
-        {% if errors %}
+        {% else %}
             <div>
                 <p>Errors encountered during processing:</p>
                 
@@ -45,6 +40,7 @@
                 {% endfor %}
             </div>
         {% endif %}
+
     </div>
 
     <button class="goback-btn" onclick="goBack()">Volver atrás</button>
