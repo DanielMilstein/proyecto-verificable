@@ -1,6 +1,7 @@
 from flask import render_template, Blueprint, request, redirect, flash, jsonify
 from app.forms import *
 from app.models import *
+from app.controllers.functions import *
 import json
 
 
@@ -123,6 +124,7 @@ def form():
             
         
         db.session.commit()
+        refresh_multipropietario()
 
 
         return redirect('/')
@@ -137,7 +139,7 @@ def form_list():
         form.nombre_cne = nombre_cne
 
 
-
+    refresh_multipropietario()
     return render_template('form-list/form-list.html', title='Form List', forms=forms)
 
 
@@ -327,6 +329,7 @@ def json_interpreter():
 
                     db.session.commit()
                     success_messages.append(f"Form data processed successfully: {form_data}")
+                    refresh_multipropietario()
                     """
                     Not required yet.
                     multipropietario_data = form_data.get('multipropietario', {})

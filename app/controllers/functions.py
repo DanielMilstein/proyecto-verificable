@@ -9,22 +9,30 @@ import json
 def refresh_multipropietario():
     Multipropietario.query.delete()
     
-    formularios = Formulario.query.all()
+    formularios = Formulario.query.order_by(Formulario.fecha_inscripcion).all()
 
     for formulario in formularios:
-        formularios_mismo_rol = Formulario.query.filter_by(rol = formulario.rol).all().order_by(Formulario.fecha_inscripcion)
+        formularios_mismo_rol = Formulario.query.filter_by(rol = formulario.rol).order_by(Formulario.fecha_inscripcion).all()
 
-        vigencia_inicial = 0
+        vigencia_inicial = formulario.fecha_inscripcion.year
         vigencia_final = 0
 
         if formularios_mismo_rol:
             for form in formularios_mismo_rol:
                 if form.fecha_inscripcion.year < formulario.fecha_inscripcion.year:
-                    formulario.ano_vigencia_inicial = form.fecha_inscripcion.year
-                elif form.fecha_inscripcion.year > formulario.fecha_inscripcion.year:
-                    formulario.ano_vigencia_final = form.fecha_inscripcion.year
+                    # Search form in multipropietario and set vigencia final
+                    Multipropietario.query.filter_by(numero_inscripcion = form.numero_inscripcion).update(dict(ano_vigencia_final = formulario.fecha_inscripcion.year-1))
+                elif form.fecha_inscripcion.year == formulario.fecha_inscripcion.year:
+                    # Check if adquirientes are the same (with numero inscripcion?)
+                    if form.numero_inscripcion != formulario.numero_inscripcion:
+                        # Search form in multipropietario and set vigencia final
+                        Multipropietario.query.filter_by(numero_inscripcion = form.numero_inscripcion).delete()
+                elif vigencia_final == 0:
+                    vigencia_final = form.fecha_inscripcion.year-1
 
 
+        print(f'Vigencia inicial: {vigencia_inicial}')
+        print(f'Vigencia final: {vigencia_final}')
         nueva_entrada = Multipropietario(
             rol = formulario.rol,
             fojas = formulario.fojas,
@@ -38,4 +46,3 @@ def refresh_multipropietario():
 
         db.session.add(nueva_entrada)
         db.session.commit()
-        

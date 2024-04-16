@@ -74,8 +74,7 @@ class Multipropietario(db.Model):
     ano_vigencia_inicial = db.Column(db.Integer, nullable=True)
     ano_vigencia_final = db.Column(db.Integer, nullable=True)
 
-    def __init__(self, id, rol, fojas, fecha_inscripcion, numero_inscripcion, ano_inscripcion , ano_vigencia_inicial, ano_vigencia_final):
-        self.id = id
+    def __init__(self, rol, fojas, fecha_inscripcion, numero_inscripcion, ano_inscripcion , ano_vigencia_inicial, ano_vigencia_final):
         self.rol = rol
         self.fojas = fojas
         self.fecha_inscripcion = fecha_inscripcion
