@@ -21,7 +21,8 @@ def refresh_multipropietario():
             for form in formularios_mismo_rol:
                 if form.fecha_inscripcion.year < formulario.fecha_inscripcion.year:
                     # Search form in multipropietario and set vigencia final
-                    Multipropietario.query.filter_by(numero_inscripcion = form.numero_inscripcion).update(dict(ano_vigencia_final = formulario.fecha_inscripcion.year-1))
+                    if formulario.fecha_inscripcion.year < vigencia_final:
+                        Multipropietario.query.filter_by(numero_inscripcion = form.numero_inscripcion).update(dict(ano_vigencia_final = formulario.fecha_inscripcion.year-1))
                 elif form.fecha_inscripcion.year == formulario.fecha_inscripcion.year:
                     # Check if adquirientes are the same (with numero inscripcion?)
                     if form.numero_inscripcion != formulario.numero_inscripcion:
