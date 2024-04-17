@@ -27,8 +27,16 @@ def refresh_multipropietario():
                     if form.numero_inscripcion != formulario.numero_inscripcion:
                         # Search form in multipropietario and set vigencia final
                         Multipropietario.query.filter_by(numero_inscripcion = form.numero_inscripcion).delete()
-                elif vigencia_final == 0:
-                    vigencia_final = form.fecha_inscripcion.year-1
+                elif form.fecha_inscripcion.year > formulario.fecha_inscripcion.year:
+                    if vigencia_final == 0:
+                        vigencia_final = max(form.fecha_inscripcion.year-1, formulario.fecha_inscripcion.year)
+                    else:
+                        if form.fecha_inscripcion.year-1 < vigencia_final:
+                            vigencia_final = form.fecha_inscripcion.year-1
+
+        
+                    
+                        
 
 
         print(f'Vigencia inicial: {vigencia_inicial}')
