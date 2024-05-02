@@ -36,12 +36,6 @@ def refresh_multipropietario():
                             vigencia_final = form.fecha_inscripcion.year-1
 
         
-                    
-                        
-
-
-        print(f'Vigencia inicial: {vigencia_inicial}')
-        print(f'Vigencia final: {vigencia_final}')
         nueva_entrada = Multipropietario(
             rol = formulario.rol,
             fojas = formulario.fojas,
