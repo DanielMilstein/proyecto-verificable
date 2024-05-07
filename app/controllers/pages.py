@@ -1,7 +1,7 @@
 from flask import render_template, Blueprint, request, redirect, flash, jsonify
-from app.forms import *
-from app.models import *
-from app.controllers.functions import *
+from app.forms import MyForm
+from app.models import CNE, Comuna, BienRaiz, Formulario, Implicados, Persona, Multipropietario, Propietario
+from app.controllers.functions import refresh_multipropietario
 import json
 
 
@@ -75,49 +75,49 @@ def form():
 
 
 
-        adquirientesRut = request.form.getlist('adquirientesRut[]')
-        adquirientesPorcentaje = request.form.getlist('adquirientesPorcentaje[]')
+        adquirientes_rut = request.form.getlist('adquirientesRut[]')
+        adquirientes_porcentaje = request.form.getlist('adquirientesPorcentaje[]')
         try: 
-            enajenantesRut = request.form.getlist('enajenantesRut[]')
-            enajenantesPorcentaje = request.form.getlist('enajenantesPorcentaje[]')
+            enajenantes_rut = request.form.getlist('enajenantesRut[]')
+            enajenantes_porcentaje = request.form.getlist('enajenantesPorcentaje[]')
         except:
             pass
 
 
-        for adquiriente in adquirientesRut:
-            adquirientePersona = Persona.query.filter_by(rut=adquiriente).first()
-            if adquirientePersona is None:
-                adquirientePersona = Persona(adquiriente)
-                db.session.add(adquirientePersona)
+        for adquiriente in adquirientes_rut:
+            adquiriente_persona = Persona.query.filter_by(rut=adquiriente).first()
+            if adquiriente_persona is None:
+                adquiriente_persona = Persona(adquiriente)
+                db.session.add(adquiriente_persona)
                 db.session.commit()
             else:
                 pass
 
-            adquirienteImplicado = Implicados(
+            adquiriente_implicado = Implicados(
                 rut=adquiriente,
                 numero_atencion=new_form.numero_atencion,
-                porcentaje_derecho=adquirientesPorcentaje[adquirientesRut.index(adquiriente)],
+                porcentaje_derecho=adquirientes_porcentaje[adquirientes_rut.index(adquiriente)],
                 adquiriente=True
             )
-            db.session.add(adquirienteImplicado)
+            db.session.add(adquiriente_implicado)
 
 
-        for enajenante in enajenantesRut:
-            enajenantePersona = Persona.query.filter_by(rut=enajenante).first()
-            if enajenantePersona is None:
-                enajenantePersona = Persona(enajenante)
-                db.session.add(enajenantePersona)
+        for enajenante in enajenantes_rut:
+            enajenante_persona = Persona.query.filter_by(rut=enajenante).first()
+            if enajenante_persona is None:
+                enajenante_persona = Persona(enajenante)
+                db.session.add(enajenante_persona)
                 db.session.commit() 
             else:
                 pass
 
-            enajenanteImplicado = Implicados(
+            enajenante_implicado = Implicados(
                 rut=enajenante,
                 numero_atencion=new_form.numero_atencion,
-                porcentaje_derecho=enajenantesPorcentaje[enajenantesRut.index(enajenante)],
+                porcentaje_derecho=enajenantes_porcentaje[enajenantes_rut.index(enajenante)],
                 adquiriente=False
             )
-            db.session.add(enajenanteImplicado)
+            db.session.add(enajenante_implicado)
 
  
 

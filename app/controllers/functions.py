@@ -1,12 +1,11 @@
 from flask import render_template, Blueprint, request, redirect, flash, jsonify
-from app.forms import *
-from app.models import *
+from app.forms import MyForm
+from app.models import db, Formulario, Implicados, Multipropietario, Propietario
 import json
 
 
-
-
 def refresh_multipropietario():
+    Propietario.query.delete()
     Multipropietario.query.delete()
     
     formularios = Formulario.query.order_by(Formulario.fecha_inscripcion).all()
@@ -27,7 +26,10 @@ def refresh_multipropietario():
                     # Check if adquirientes are the same (with numero inscripcion?)
                     if form.numero_inscripcion != formulario.numero_inscripcion:
                         # Search form in multipropietario and set vigencia final
-                        Multipropietario.query.filter_by(numero_inscripcion = form.numero_inscripcion).delete()
+                        find_multipropietario = Multipropietario.query.filter_by(numero_inscripcion = form.numero_inscripcion).first()
+                        if find_multipropietario:
+                            Propietario.query.filter_by(multipropietario_id = test_multipropietario.id).delete()
+                            Multipropietario.query.filter_by(numero_inscripcion = form.numero_inscripcion).delete()
                 elif form.fecha_inscripcion.year > formulario.fecha_inscripcion.year:
                     if vigencia_final == 0:
                         vigencia_final = max(form.fecha_inscripcion.year-1, formulario.fecha_inscripcion.year)
@@ -35,7 +37,6 @@ def refresh_multipropietario():
                         if form.fecha_inscripcion.year-1 < vigencia_final:
                             vigencia_final = form.fecha_inscripcion.year-1
 
-        
         nueva_entrada = Multipropietario(
             rol = formulario.rol,
             fojas = formulario.fojas,
@@ -48,4 +49,20 @@ def refresh_multipropietario():
         )
 
         db.session.add(nueva_entrada)
+        db.session.commit()
+
+        for implicado in Implicados.query.filter_by(numero_atencion = formulario.numero_atencion).all():
+            add_propietario(implicado, nueva_entrada)
+
+
+
+
+def add_propietario(implicado, multipropietario):
+    if implicado.adquiriente:
+        propietario = Propietario(
+            rut = implicado.rut,
+            multipropietario_id = multipropietario.id,
+            porcentaje_derecho = implicado.porcentaje_derecho
+        )
+        db.session.add(propietario)
         db.session.commit()
