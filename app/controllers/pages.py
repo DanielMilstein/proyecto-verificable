@@ -1,6 +1,7 @@
 from flask import render_template, Blueprint, request, redirect, flash, jsonify
 from app.forms import *
 from app.models import *
+from .algoritmo_multipropietario.insert_multipropietario import AlgoritmoMultipropietario
 import json
 
 
@@ -118,15 +119,45 @@ def form():
             )
             db.session.add(enajenanteImplicado)
 
- 
+        enajenantes = []
+        adquirientes = []
 
-            
-        
+        # Initialize adquirientes list with dictionaries
+        for rut, porcentaje in zip(adquirientesRut, adquirientesPorcentaje):
+            adquirientes.append({'rut': rut, 'pctje_derecho': porcentaje})
+
+        # Initialize enajenantes list with dictionaries
+        for rut, porcentaje in zip(enajenantesRut, enajenantesPorcentaje):
+            enajenantes.append({'rut': rut, 'pctje_derecho': porcentaje})
+
+
+        form_data = {
+            'cne': form.cne.data.codigo_cne,
+            'rol': bien_raiz.rol,
+            'fecha_inscripcion': form.fecha_inscripcion.data,
+            'nro_inscripcion': form.numero_inscripcion.data,
+            'fojas': form.fojas.data,
+            'enajenantes':enajenantes,
+            'adquirientes': adquirientes
+
+        }
+
+        upload_to_multipropietario(form_data)
+
         db.session.commit()
-
 
         return redirect('/')
     return render_template('form-F2890/form-F2890.html', title='Form', form=form)
+
+def upload_to_multipropietario(form_data):
+    multipropietario = AlgoritmoMultipropietario()
+    # Call the method to insert into 'multipropietario'
+    success = multipropietario.insert_into_multipropietario(form_data)
+
+    if success:
+        print("Data inserted into 'multipropietario' successfully.")
+    else:
+        print("Failed to insert data into 'multipropietario'.")
 
 
 @blueprint.route('/form-list', methods=['GET', 'POST'])
