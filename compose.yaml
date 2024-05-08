@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  sii-mysql-db:
+    image: mysql:8.0
+    environment:
+      - MYSQL_ROOT_PASSWORD=verificables
+      - MYSQL_DATABASE=project_app_db
+      - MYSQL_USER=myuser
+      - MYSQL_PASSWORD=verificables
+    ports:
+      - 3306:3306
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      retries: 10
+
+  sii-flask-app:
+    build: .
+    ports:
+      - 5000:5000
+    depends_on:
+      sii-mysql-db:
+        condition: service_healthy
