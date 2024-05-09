@@ -184,19 +184,19 @@ def form_detail(numero_atencion):
 @blueprint.route('/buscar_multipropietarios', methods=['GET','POST'])
 def search_multipropietarios():
     if request.method == 'POST':
-        año = request.form.get('año')
+        year = request.form.get('año')
         comuna_codigo = request.form.get('comuna')
         manzana = request.form.get('manzana')
         predio = request.form.get('predio')
     elif request.method == 'GET':
-        año = request.args.get('año')
+        year = request.args.get('año')
         comuna_codigo = request.args.get('comuna')
         manzana = request.args.get('manzana')
         predio = request.args.get('predio')
 
-    if None in (año, comuna_codigo, manzana, predio):
+    if None in (year, comuna_codigo, manzana, predio):
         return render_template('/multipropietario/multipropietario.html', propietarios_info=None)
-    elif '' in (año, comuna_codigo, manzana, predio):
+    elif '' in (year, comuna_codigo, manzana, predio):
         return render_template('/multipropietario/multipropietario.html', propietarios_info=None)
 
     comuna_obj = Comuna.query.filter_by(codigo_comuna=comuna_codigo).first()
@@ -212,8 +212,8 @@ def search_multipropietarios():
         return render_template('/multipropietario/multipropietario.html', propietarios_info=None)
     
     query = Multipropietario.query.filter(
-        Multipropietario.ano_vigencia_inicial <= año,
-        (Multipropietario.ano_vigencia_final >= año) | (Multipropietario.ano_vigencia_final == None),
+        Multipropietario.ano_vigencia_inicial <= year,
+        (Multipropietario.ano_vigencia_final >= year) | (Multipropietario.ano_vigencia_final == None),
         Multipropietario.rol.like(bien_raiz_id)
     )
     multipropietarios = query.all()
