@@ -1,6 +1,6 @@
 from flask import render_template, Blueprint, request, redirect, flash, jsonify
-from app.forms import *
-from app.models import *
+from app.forms import MyForm
+from app.models import db, Formulario, Implicados, Multipropietario, Propietario, CNE, BienRaiz, Comuna, Persona
 from .algoritmo_multipropietario.insert_multipropietario import AlgoritmoMultipropietario
 import json
 
@@ -16,26 +16,22 @@ blueprint = Blueprint('pages', __name__)
 
 @blueprint.route('/', methods=['GET', 'POST'])
 def home():
-    if request.method == 'POST':
-        if 'upload_file' in request.files:
-            file = request.files['upload_file']
-            if file.filename == '':
-                flash('No selected file')
-                return redirect(request.url)
-            if file:
-                filename = secure_filename(file.filename)
-                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+    if request.method == 'POST' and 'upload_file' in request.files:
+        file = request.files['upload_file']
+        if file.filename == '':
+            flash('No selected file')
+            return redirect(request.url)
+        if file:
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
-                return 'File Uploaded Successfully'
+            return 'File Uploaded Successfully'
     return render_template('home.html')
 
 
 @blueprint.route('/form-F2890', methods=['GET', 'POST'])
 def form():
     form = MyForm()
-
-    cnes = CNE.query.all()
-    comunas = Comuna.query.all()
 
     if request.method == 'POST' and form.validate_on_submit():
 
@@ -46,8 +42,7 @@ def form():
             cne_record = CNE(form.cne.data, '')
             db.session.add(cne_record)
             db.session.commit()
-        else:
-            pass
+
 
 
         existing_bien_raiz = BienRaiz.query.filter_by(
@@ -75,59 +70,57 @@ def form():
 
 
 
-        adquirientesRut = request.form.getlist('adquirientesRut[]')
-        adquirientesPorcentaje = request.form.getlist('adquirientesPorcentaje[]')
+        adquirientes_rut = request.form.getlist('adquirientesRut[]')
+        adquirientes_porcentaje = request.form.getlist('adquirientesPorcentaje[]')
         try: 
-            enajenantesRut = request.form.getlist('enajenantesRut[]')
-            enajenantesPorcentaje = request.form.getlist('enajenantesPorcentaje[]')
+            enajenantes_rut = request.form.getlist('enajenantesRut[]')
+            enajenantes_porcentaje = request.form.getlist('enajenantesPorcentaje[]')
         except:
             pass
 
 
-        for adquiriente in adquirientesRut:
-            adquirientePersona = Persona.query.filter_by(rut=adquiriente).first()
-            if adquirientePersona is None:
-                adquirientePersona = Persona(adquiriente)
-                db.session.add(adquirientePersona)
+        for adquiriente in adquirientes_rut:
+            adquiriente_persona = Persona.query.filter_by(rut=adquiriente).first()
+            if adquiriente_persona is None:
+                adquiriente_persona = Persona(adquiriente)
+                db.session.add(adquiriente_persona)
                 db.session.commit()
-            else:
-                pass
 
-            adquirienteImplicado = Implicados(
+
+            adquiriente_implicado = Implicados(
                 rut=adquiriente,
                 numero_atencion=new_form.numero_atencion,
-                porcentaje_derecho=adquirientesPorcentaje[adquirientesRut.index(adquiriente)],
+                porcentaje_derecho=adquirientes_porcentaje[adquirientes_rut.index(adquiriente)],
                 adquiriente=True
             )
-            db.session.add(adquirienteImplicado)
+            db.session.add(adquiriente_implicado)
 
 
-        for enajenante in enajenantesRut:
-            enajenantePersona = Persona.query.filter_by(rut=enajenante).first()
-            if enajenantePersona is None:
-                enajenantePersona = Persona(enajenante)
-                db.session.add(enajenantePersona)
+        for enajenante in enajenantes_rut:
+            enajenante_persona = Persona.query.filter_by(rut=enajenante).first()
+            if enajenante_persona is None:
+                enajenante_persona = Persona(enajenante)
+                db.session.add(enajenante_persona)
                 db.session.commit() 
-            else:
-                pass
 
-            enajenanteImplicado = Implicados(
+
+            enajenante_implicado = Implicados(
                 rut=enajenante,
                 numero_atencion=new_form.numero_atencion,
-                porcentaje_derecho=enajenantesPorcentaje[enajenantesRut.index(enajenante)],
+                porcentaje_derecho=enajenantes_porcentaje[enajenantes_rut.index(enajenante)],
                 adquiriente=False
             )
-            db.session.add(enajenanteImplicado)
+            db.session.add(enajenante_implicado)
 
         enajenantes = []
         adquirientes = []
 
         # Initialize adquirientes list with dictionaries
-        for rut, porcentaje in zip(adquirientesRut, adquirientesPorcentaje):
+        for rut, porcentaje in zip(adquirientes_rut, adquirientes_porcentaje):
             adquirientes.append({'rut': rut, 'pctje_derecho': porcentaje})
 
         # Initialize enajenantes list with dictionaries
-        for rut, porcentaje in zip(enajenantesRut, enajenantesPorcentaje):
+        for rut, porcentaje in zip(enajenantes_rut, enajenantes_porcentaje):
             enajenantes.append({'rut': rut, 'pctje_derecho': porcentaje})
 
 
@@ -213,19 +206,19 @@ def form_detail(numero_atencion):
 @blueprint.route('/buscar_multipropietarios', methods=['GET','POST'])
 def search_multipropietarios():
     if request.method == 'POST':
-        año = request.form.get('año')
+        year = request.form.get('año')
         comuna_codigo = request.form.get('comuna')
         manzana = request.form.get('manzana')
         predio = request.form.get('predio')
     elif request.method == 'GET':
-        año = request.args.get('año')
+        year = request.args.get('año')
         comuna_codigo = request.args.get('comuna')
         manzana = request.args.get('manzana')
         predio = request.args.get('predio')
 
-    if None in (año, comuna_codigo, manzana, predio):
+    if None in (year, comuna_codigo, manzana, predio):
         return render_template('/multipropietario/multipropietario.html', propietarios_info=None)
-    elif '' in (año, comuna_codigo, manzana, predio):
+    elif '' in (year, comuna_codigo, manzana, predio):
         return render_template('/multipropietario/multipropietario.html', propietarios_info=None)
 
     comuna_obj = Comuna.query.filter_by(codigo_comuna=comuna_codigo).first()
@@ -241,8 +234,8 @@ def search_multipropietarios():
         return render_template('/multipropietario/multipropietario.html', propietarios_info=None)
     
     query = Multipropietario.query.filter(
-        Multipropietario.ano_vigencia_inicial <= año,
-        (Multipropietario.ano_vigencia_final >= año) | (Multipropietario.ano_vigencia_final == None),
+        Multipropietario.ano_vigencia_inicial <= year,
+        (Multipropietario.ano_vigencia_final >= year) | (Multipropietario.ano_vigencia_final == None),
         Multipropietario.rol.like(bien_raiz_id)
     )
     multipropietarios = query.all()

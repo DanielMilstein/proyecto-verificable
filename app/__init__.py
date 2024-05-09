@@ -11,7 +11,7 @@ from app.seeder import seed_database
 migrate = Migrate()
 
 
-def create_app(config_filename='config'):
+def create_app():
     app = Flask(__name__, template_folder='src/views')
     app.config.from_object(Config)
 
