@@ -14,8 +14,8 @@ class MultipropietarioTableHandler:
         db.session.commit()
         return new_form.id
     
-    def upload_propietarios(self, adquirientes, multipropietario_id):
-        self.propietario_handler.upload_propietario(adquirientes, multipropietario_id)
+    def upload_propietarios(self, propietarios, multipropietario_id):
+        self.propietario_handler.upload_propietario(propietarios, multipropietario_id)
 
     def update_form(self, form_id, ano_vigencia_final):
         form = Multipropietario.query.get(form_id)
