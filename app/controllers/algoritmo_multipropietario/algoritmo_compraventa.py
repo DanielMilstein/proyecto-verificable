@@ -120,8 +120,46 @@ class AlgoritmoCompraventa:
         return sum(adquiriente.get('pctje_derecho', 0) for adquiriente in adquirientes) == 0
     
     def handle_scenario_2(self, form_data):
-        # Logic for scenario 2
-        pass
+        rol = form_data.get('rol')
+        all_forms = self.get_existing_forms(rol)
+        previous_form = self.get_latest_form(all_forms)
+        temp_storage = self.store_form_data(previous_form)
+
+        for entry in temp_storage:
+            entry['ano_vigencia_final'] = form_data.get('fecha_inscripcion').year - 1
+
+        enajenantes_ruts = [enajenante.get('rut') for enajenante in form_data.get('enajenantes', [])]
+        sum_porcentaje_enajenantes = sum([self.find_porcentaje_derecho(previous_form, rut) for rut in enajenantes_ruts])
+
+        temp_storage = [entry for entry in temp_storage if entry['rut'] not in enajenantes_ruts]
+
+        num_adquirientes = len(form_data.get('adquirientes', []))
+        new_porcentaje_derecho = sum_porcentaje_enajenantes / num_adquirientes
+
+        for adquiriente in form_data.get('adquirientes', []):
+            entry = {
+                'id': None,
+                'rol': form_data.get("rol", None),
+                'fecha_inscripcion': form_data.get("fecha_inscripcion"),
+                'fojas': form_data.get("fojas", None),
+                'nro_inscripcion': form_data.get("nro_inscripcion"),
+                'rut': adquiriente.get("rut", None),
+                'porcentaje_derecho': new_porcentaje_derecho,
+                'ano_vigencia_final': None
+            }
+            temp_storage.append(entry)
+
+        for entry in temp_storage:
+            entry['ano_inscripcion'] = form_data.get('fecha_inscripcion').year
+            if entry['id'] is None:
+                entry['ano_vigencia_inicial'] = form_data.get('fecha_inscripcion').year
+
+        for entry in temp_storage:
+            if entry['id'] is None:
+                self.upload_multipropietario(entry)
+            else:
+                self.upload_propietario(entry)
+
 
     def is_scenario_3(self, adquirientes, enajenantes):
         return 0 < sum(adquiriente.get('pctje_derecho', 0) for adquiriente in adquirientes) < 100 and len(adquirientes) == 1 and len(enajenantes) == 1
