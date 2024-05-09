@@ -226,5 +226,40 @@ class AlgoritmoCompraventa:
 
 
     def handle_scenario_4(self, form_data):
-        # Logic for scenario 4
-        pass
+        rol = form_data.get('rol')
+        all_forms = self.get_existing_forms(rol)
+        previous_form = self.get_latest_form(all_forms)
+        temp_storage = self.store_form_data(previous_form)
+
+        for entry in temp_storage:
+            if entry['rut'] in [enajenante.get('rut') for enajenante in form_data.get('enajenantes', [])]:
+                prev_porcentaje_derecho = entry['porcentaje_derecho']
+                for enajenante in form_data.get('enajenantes', []):
+                    if enajenante.get('rut') == entry['rut']:
+                        enajenante_porcentaje = enajenante.get('pctje_derecho')
+                        final_porcentaje_derecho_enajenante = prev_porcentaje_derecho - enajenante_porcentaje
+                        entry['porcentaje_derecho'] = final_porcentaje_derecho_enajenante
+            else:
+                for adquiriente in form_data.get('adquirientes', []):
+                    if adquiriente.get('rut') == entry['rut']:
+                        if entry['id'] is None:
+                            entry['porcentaje_derecho'] = adquiriente.get('pctje_derecho')
+                        else:
+                            entry['porcentaje_derecho'] += adquiriente.get('pctje_derecho')
+
+        temp_storage = [entry for entry in temp_storage if entry['porcentaje_derecho'] > 0]
+
+        for entry in temp_storage:
+            entry['ano_vigencia_final'] = form_data.get('fecha_inscripcion').year - 1
+
+        for entry in temp_storage:
+            entry['ano_inscripcion'] = form_data.get('fecha_inscripcion').year
+            if entry['id'] is None:
+                entry['ano_vigencia_inicial'] = form_data.get('fecha_inscripcion').year
+
+        for entry in temp_storage:
+            if entry['id'] is None:
+                self.upload_multipropietario(entry)
+            else:
+                self.upload_propietario(entry)
+
