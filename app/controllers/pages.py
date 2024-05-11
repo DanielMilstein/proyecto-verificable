@@ -3,6 +3,7 @@ from app.forms import MyForm
 from app.models import db, Formulario, Implicados, Multipropietario, Propietario, CNE, BienRaiz, Comuna, Persona
 from .algoritmo_multipropietario.insert_multipropietario import AlgoritmoMultipropietario
 import json
+from datetime import datetime
 
 
 blueprint = Blueprint('pages', __name__)
@@ -132,7 +133,6 @@ def form():
             'fojas': form.fojas.data,
             'enajenantes':enajenantes,
             'adquirientes': adquirientes
-
         }
 
         upload_to_multipropietario(form_data)
@@ -275,18 +275,16 @@ def json_interpreter():
             json_data = json.loads(file.read())
             errors = []  
             success_messages = []  
-            
+
             for form_data in json_data.get('F2890', []):
                 try:
                     cne_code = form_data.get('CNE')
-                    
-                    
+
                     if cne_code not in [8, 99]:
                         errors.append(f"Invalid CNE code: {cne_code}")
-                        #Form format isn't valid.
+                        # Form format isn't valid.
                         continue
-                                        
-                    
+
                     bien_raiz_data = form_data.get('bienRaiz', {})
                     comuna_code = bien_raiz_data.get('comuna')
                     comuna = Comuna.query.filter_by(codigo_comuna=comuna_code).first()
@@ -306,7 +304,6 @@ def json_interpreter():
                         db.session.add(bien_raiz)
                         db.session.commit()
 
-                   
                     new_form = Formulario(
                         cne=cne_code,
                         rol=bien_raiz.rol,
@@ -317,9 +314,11 @@ def json_interpreter():
                     db.session.add(new_form)
                     db.session.commit()
 
+                    adquirientes = []
                     for adquirente_data in form_data.get('adquirentes', []):
                         rut = adquirente_data.get('RUNRUT')
                         porcentaje_derecho = adquirente_data.get('porcDerecho')
+                        adquirientes.append({'rut': rut, 'pctje_derecho': porcentaje_derecho})
                         adquiriente = Persona.query.filter_by(rut=rut).first()
                         if not adquiriente:
                             adquiriente = Persona(rut=rut)
@@ -333,9 +332,11 @@ def json_interpreter():
                         )
                         db.session.add(adquiriente_implicado)
 
+                    enajenantes = []
                     for enajenante_data in form_data.get('enajenantes', []):
                         rut = enajenante_data.get('RUNRUT')
                         porcentaje_derecho = enajenante_data.get('porcDerecho')
+                        enajenantes.append({'rut': rut, 'pctje_derecho': porcentaje_derecho})
                         enajenante = Persona.query.filter_by(rut=rut).first()
                         if not enajenante:
                             enajenante = Persona(rut=rut)
@@ -348,39 +349,29 @@ def json_interpreter():
                             porcentaje_derecho=porcentaje_derecho
                         )
                         db.session.add(enajenante_implicado)
+                    
+                    db.session.commit()
 
+                    form_data = {
+                        'cne': cne_code,
+                        'rol': bien_raiz.rol,
+                        'fecha_inscripcion': datetime.strptime(form_data.get('fechaInscripcion', ''), '%Y-%m-%d').date(),
+                        'nro_inscripcion': form_data.get('nroInscripcion'),
+                        'fojas': form_data.get('fojas'),
+                        'enajenantes': enajenantes,
+                        'adquirientes': adquirientes
+                    }
+
+                    upload_to_multipropietario(form_data)
                     db.session.commit()
                     success_messages.append(f"Form data processed successfully: {form_data}")
-                    """
-                    Not required yet.
-                    multipropietario_data = form_data.get('multipropietario', {})
-                    rol = multipropietario_data.get('rol', '')
-                    fojas = multipropietario_data.get('fojas', None)
-                    fecha_inscripcion = multipropietario_data.get('fecha_inscripcion', None)
-                    numero_inscripcion = multipropietario_data.get('nroInscripcion', None)
-                    ano_inscripcion = multipropietario_data.get('ano_inscripcion', None)
-                    ano_vigencia_inicial = multipropietario_data.get('ano_vigencia_inicial', None)
-                    ano_vigencia_final = multipropietario_data.get('ano_vigencia_final', None)
 
-                    multipropietario = Multipropietario(
-                        rol=rol,
-                        fojas=fojas,
-                        fecha_inscripcion=fecha_inscripcion,
-                        numero_inscripcion=numero_inscripcion,
-                        ano_inscripcion=ano_inscripcion,
-                        ano_vigencia_inicial=ano_vigencia_inicial,
-                        ano_vigencia_final=ano_vigencia_final
-                    )
-                    db.session.add(multipropietario)
-                    """
-                    
-                    
                 except Exception as e:
                     db.session.rollback()
                     errors.append(f"Error processing form data: {e}")
-            
+
             return render_template('json-interpreter/json-interpreter.html', success=True, success_messages=success_messages, errors=errors)
-        
+
         except json.JSONDecodeError as e:
             return jsonify({'error': f'Invalid JSON format: {e}'})
 
