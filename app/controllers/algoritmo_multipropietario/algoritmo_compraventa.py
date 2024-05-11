@@ -6,21 +6,17 @@ class AlgoritmoCompraventa:
         self.multipropietario_handler = MultipropietarioTableHandler()
 
     def apply_algorithm_on(self, form_data):
-        rol = form_data.get('rol', None)
-        fecha_inscripcion = form_data.get('fecha_inscripcion', None)
-        nro_inscripcion = form_data.get('nro_inscripcion', None)
-        fojas = form_data.get('fojas', None)
         adquirientes = form_data.get('adquirientes', [])
         enajenantes = form_data.get('enajenantes', [])
         
         if self.is_scenario_1(adquirientes):
             self.handle_scenario_1(form_data)
         elif self.is_scenario_2(adquirientes):
-            pass
+            self.handle_scenario_2(form_data)
         elif self.is_scenario_3(adquirientes, enajenantes):
-            pass
+            self.handle_scenario_3(form_data)
         else:
-            pass
+            self.handle_scenario_4(form_data)
 
     def is_scenario_1(self, adquirientes):
         return sum(adquiriente.get('pctje_derecho', 0) for adquiriente in adquirientes) == 100
@@ -31,11 +27,9 @@ class AlgoritmoCompraventa:
         previous_form = self.get_latest_form(all_forms)
         temp_storage = self.store_form_data(previous_form)
 
-        # THIS IS WRONG, NEED TO UPDATE THEIR PREVIOUS ANO_VIGENCIA_FINAL 
-        # => Method 'update_form' from multipropietarioTableHandler should do the trick.
-        # Current one should be None
         for entry in temp_storage:
-            entry['ano_vigencia_final'] = form_data.get('fecha_inscripcion').year - 1
+            if entry['id'] is not None:
+                self.multipropietario_handler.update_form(entry['id'], form_data.get('fecha_inscripcion').year - 1)
 
         enajenantes_ruts = [enajenante.get('rut') for enajenante in form_data.get('enajenantes', [])]
         sum_porcentaje_enajenantes = sum([self.find_porcentaje_derecho(previous_form, rut) for rut in enajenantes_ruts])
@@ -128,11 +122,9 @@ class AlgoritmoCompraventa:
         previous_form = self.get_latest_form(all_forms)
         temp_storage = self.store_form_data(previous_form)
 
-        # THIS IS WRONG, NEED TO UPDATE THEIR PREVIOUS ANO_VIGENCIA_FINAL 
-        # => Method 'update_form' from multipropietarioTableHandler should do the trick.
-        # Current one should be None
         for entry in temp_storage:
-            entry['ano_vigencia_final'] = form_data.get('fecha_inscripcion').year - 1
+            if entry['id'] is not None:
+                self.multipropietario_handler.update_form(entry['id'], form_data.get('fecha_inscripcion').year - 1)
 
         enajenantes_ruts = [enajenante.get('rut') for enajenante in form_data.get('enajenantes', [])]
         sum_porcentaje_enajenantes = sum([self.find_porcentaje_derecho(previous_form, rut) for rut in enajenantes_ruts])
@@ -176,11 +168,9 @@ class AlgoritmoCompraventa:
         previous_form = self.get_latest_form(all_forms)
         temp_storage = self.store_form_data(previous_form)
 
-        # THIS IS WRONG, NEED TO UPDATE THEIR PREVIOUS ANO_VIGENCIA_FINAL 
-        # => Method 'update_form' from multipropietarioTableHandler should do the trick.
-        # Current one should be None
         for entry in temp_storage:
-            entry['ano_vigencia_final'] = form_data.get('fecha_inscripcion').year - 1
+            if entry['id'] is not None:
+                self.multipropietario_handler.update_form(entry['id'], form_data.get('fecha_inscripcion').year - 1)
 
         enajenantes_ruts = [enajenante.get('rut') for enajenante in form_data.get('enajenantes', [])]
 
@@ -192,7 +182,6 @@ class AlgoritmoCompraventa:
                 'fojas': form_data.get("fojas", None),
                 'nro_inscripcion': form_data.get("nro_inscripcion"),
                 'rut': adquiriente.get("rut", None),
-                'ano_vigencia_final': None
             }
             temp_storage.append(entry)
 
@@ -215,6 +204,7 @@ class AlgoritmoCompraventa:
 
         for entry in temp_storage:
             entry['ano_inscripcion'] = form_data.get('fecha_inscripcion').year
+            entry['ano_vigencia_inicial'] = None
             if entry['id'] is None:
                 entry['ano_vigencia_inicial'] = form_data.get('fecha_inscripcion').year
 
