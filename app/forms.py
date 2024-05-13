@@ -7,17 +7,17 @@ from datetime import date
 import re
 
 
-def rol_validator(form, field):
+def rol_validator(field):
 	triplet_regex = re.compile(r'^\d+-\d+-\d+$')
 	if not triplet_regex.match(field.data):
 		raise ValidationError('El ROL debe tener el formato XXX-XXX-XXX')
 
-def rut_validator(form, field):
+def rut_validator(field):
 	rut_regex = re.compile(r'^\d{7,8}-\d$')
 	if not rut_regex.match(field.data):
 		raise ValidationError('El RUT debe tener el formato XXXXXXXX-X')
 
-def porcentaje_validator(form, field):
+def porcentaje_validator(field):
 	if not field.data:
 		raise ValidationError('El porcentaje debe tomar una valor númerico.')
 	if field.data < 0 or field.data > 100:
