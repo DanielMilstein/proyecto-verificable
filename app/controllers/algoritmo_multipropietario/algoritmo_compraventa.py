@@ -10,6 +10,7 @@ class AlgoritmoCompraventa:
         enajenantes = form_data.get('enajenantes', [])
         
         if self.is_scenario_1(adquirientes):
+
             self.handle_scenario_1(form_data)
         elif self.is_scenario_2(adquirientes):
             self.handle_scenario_2(form_data)
@@ -23,42 +24,46 @@ class AlgoritmoCompraventa:
 
     def handle_scenario_1(self, form_data):
         rol = form_data.get('rol')
+
         all_forms = self.get_existing_forms(rol)
         previous_form = self.get_latest_form(all_forms)
-        temp_storage = self.store_form_data(previous_form)
+        prev_storage = self.store_form_data(previous_form)
 
-        for entry in temp_storage:
-            if entry['id'] is not None:
-                self.multipropietario_handler.update_form(entry['id'], form_data.get('fecha_inscripcion').year - 1)
+        for entry in prev_storage:
+            self.multipropietario_handler.update_form(entry['id'], form_data.get('fecha_inscripcion').year - 1)
+        print(prev_storage, "inicio")
 
         enajenantes_ruts = [enajenante.get('rut') for enajenante in form_data.get('enajenantes', [])]
-        sum_porcentaje_enajenantes = sum([self.find_porcentaje_derecho(previous_form, rut) for rut in enajenantes_ruts])
-
-        temp_storage = [entry for entry in temp_storage if entry['rut'] not in enajenantes_ruts]
-
+        sum_porcentaje_enajenantes = sum([self.find_porcentaje_derecho(previous_form.id, rut) for rut in enajenantes_ruts])
+        temp_storage = [entry for entry in prev_storage if entry['rut'] not in enajenantes_ruts]
+        
+        adquirientes_ruts = []
         for adquiriente in form_data.get('adquirientes', []):
+            adquirientes_ruts.append(adquiriente.get("rut", None))
             entry = {
                     'id': None,
-                    'rol': form_data.get("rol", None),
+                    'rol': rol,
                     'fecha_inscripcion': form_data.get("fecha_inscripcion"),
                     'fojas': form_data.get("fojas", None),
                     'nro_inscripcion': form_data.get("nro_inscripcion"),
                     'rut': adquiriente.get("rut", None),
-                    'porcentaje_derecho': adquiriente.get("pctje_derecho")*sum_porcentaje_enajenantes,
+                    'porcentaje_derecho': adquiriente.get("pctje_derecho")*sum_porcentaje_enajenantes/100,
                     'ano_vigencia_final': None
             }
             temp_storage.append(entry)
 
         for entry in temp_storage:
-            entry['ano_inscripcion'] = form_data.get('fecha_inscripcion').year
-            if entry['id'] is None:
-                entry['ano_vigencia_inicial'] = form_data.get('fecha_inscripcion').year
+            if (entry['rut'] in enajenantes_ruts) or (entry['rut'] in adquirientes_ruts):
+                entry['ano_inscripcion'] = form_data.get('fecha_inscripcion').year
+            else:
+                del entry['multipropietario_id']
+                entry['id'] = None
+            print(entry)
+            entry['ano_vigencia_inicial'] = form_data.get('fecha_inscripcion').year
+            entry['ano_vigencia_final'] = None
 
         for entry in temp_storage:
-            if entry['id'] is None:
-                self.upload_multipropietario(entry)
-            else:
-                self.upload_propietario(entry)
+            self.upload_propietario(entry)
 
     def get_existing_forms(self, rol):
         return self.multipropietario_handler.get_forms_by_rol(rol)
@@ -72,12 +77,12 @@ class AlgoritmoCompraventa:
             propietarios = self.multipropietario_handler.propietario_handler.get_by_multipropietario_id(previous_form.id)
             for propietario in propietarios:
                 entry = {
-                    'id': propietario.id,
+                    'id': propietario.propietario_id,
                     'multipropietario_id': previous_form.id,
                     'rol': previous_form.rol,
                     'fecha_inscripcion': previous_form.fecha_inscripcion,
                     'fojas': previous_form.fojas,
-                    'nro_inscripcion': previous_form.nro_inscripcion,
+                    'nro_inscripcion': previous_form.numero_inscripcion,
                     'rut': propietario.rut,
                     'porcentaje_derecho': propietario.porcentaje_derecho,
                     'ano_inscripcion': previous_form.ano_inscripcion,
@@ -87,10 +92,11 @@ class AlgoritmoCompraventa:
                 temp_storage.append(entry)
         return temp_storage
 
-    def find_porcentaje_derecho(self, previous_form, rut):
-        for propietario in previous_form.propietarios:
-            if propietario.rut == rut:
-                return propietario.porcentaje_derecho
+    def find_porcentaje_derecho(self, previous_form_id, rut):
+        propietarios = self.multipropietario_handler.get_linked_propietarios(previous_form_id)
+        for propietario in propietarios:
+            if propietario.get("rut") == rut:
+                return propietario.get("pctje_derecho")
         return 0
 
     def upload_multipropietario(self, entry):
@@ -104,13 +110,14 @@ class AlgoritmoCompraventa:
             entry['ano_vigencia_final']
         )
         entry['id'] = new_form
+        print("voy a subir muliti, entre denuevo", entry['id'])
         return entry['id']
 
     def upload_propietario(self, entry):
-        self.upload_multipropietario(entry)
+        new_multipropietario_id = self.upload_multipropietario(entry)
         self.multipropietario_handler.upload_propietario(
             {'rut': entry['rut'], 'porcentaje_derecho': entry['porcentaje_derecho']}, 
-            entry['id']
+            new_multipropietario_id
         )
 
     def is_scenario_2(self, adquirientes):
