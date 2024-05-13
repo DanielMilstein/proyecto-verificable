@@ -254,6 +254,7 @@ def search_multipropietarios():
                 'fecha_inscripcion': multi_propietario.fecha_inscripcion,
                 'ano_inscripcion': multi_propietario.ano_inscripcion,
                 'numero_inscripcion': multi_propietario.numero_inscripcion,
+                'fojas': multi_propietario.fojas,
                 'año_vigencia_inicial': multi_propietario.ano_vigencia_inicial,
                 'año_vigencia_final': multi_propietario.ano_vigencia_final
             })
