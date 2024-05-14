@@ -35,7 +35,7 @@ class AlgoritmoCompraventa:
         enajenantes_ruts = [enajenante.get('rut') for enajenante in form_data.get('enajenantes', [])]
         sum_porcentaje_enajenantes = sum([self.find_porcentaje_derecho(rut, rol) for rut in enajenantes_ruts])
         temp_storage = [entry for entry in prev_storage if entry['rut'] not in enajenantes_ruts]
-        
+            
         adquirientes_ruts = []
         for adquiriente in form_data.get('adquirientes', []):
             adquirientes_ruts.append(adquiriente.get("rut", None))
@@ -118,6 +118,10 @@ class AlgoritmoCompraventa:
             new_multipropietario_id
         )
 
+    def check_if_repeated_enajenante(self, rut, rol, ano_vigencia_inicial):
+        self.multipropietario_handler.check_if_repeated_enajenante(rut, rol, ano_vigencia_inicial)
+        return
+    
     def is_scenario_2(self, adquirientes):
         return sum(adquiriente.get('pctje_derecho', 0) for adquiriente in adquirientes) == 0
     
@@ -131,12 +135,14 @@ class AlgoritmoCompraventa:
             self.multipropietario_handler.update_form(entry['multipropietario_id'], form_data.get('fecha_inscripcion').year - 1)
 
         enajenantes_ruts = [enajenante.get('rut') for enajenante in form_data.get('enajenantes', [])]
+
         sum_porcentaje_enajenantes = sum([self.find_porcentaje_derecho(rut, rol) for rut in enajenantes_ruts])
         temp_storage = [entry for entry in prev_storage if entry['rut'] not in enajenantes_ruts]
+        for rut in enajenantes_ruts:
+            self.check_if_repeated_enajenante(rut, rol, form_data.get('fecha_inscripcion').year)
 
         num_adquirientes = len(form_data.get('adquirientes', []))
         new_porcentaje_derecho = sum_porcentaje_enajenantes / num_adquirientes
-        print(sum_porcentaje_enajenantes, num_adquirientes, new_porcentaje_derecho)
 
         adquirientes_ruts = []
         for adquiriente in form_data.get('adquirientes', []):
@@ -174,11 +180,13 @@ class AlgoritmoCompraventa:
         all_forms = self.get_existing_forms(rol)
         previous_form = self.get_latest_form(all_forms)
         temp_storage = self.store_form_data(previous_form)
-
+        print('inicio',previous_form.id)
         for entry in temp_storage:
-            self.multipropietario_handler.update_form(entry['multipropietario_id'], form_data.get('fecha_inscripcion').year - 1)
+            if entry['ano_inscripcion'] < form_data.get('fecha_inscripcion').year - 1:
+                self.multipropietario_handler.update_form(entry['multipropietario_id'], form_data.get('fecha_inscripcion').year - 1)
 
         enajenante_rut = [enajenante.get('rut') for enajenante in form_data.get('enajenantes', [])][0]
+        enajenante_pctje = [enajenante.get('pctje_derecho') for enajenante in form_data.get('enajenantes', [])][0]
         
         for adquiriente in form_data.get('adquirientes', []):
             adquiriente_rut = adquiriente.get("rut", None)
@@ -197,20 +205,20 @@ class AlgoritmoCompraventa:
         for entry in temp_storage:
             if entry['rut'] == enajenante_rut:
                 prev_porcentaje_derecho = entry['porcentaje_derecho']
-                for enajenante in form_data.get('enajenantes', []):
-                    if enajenante.get('rut') == entry['rut']:
-                        enajenante_porcentaje = enajenante.get('pctje_derecho')
-                        final_porcentaje_derecho_enajenante = prev_porcentaje_derecho - (enajenante_porcentaje/100 * prev_porcentaje_derecho)
-                        entry['porcentaje_derecho'] = final_porcentaje_derecho_enajenante
-                        break
+        if self.find_porcentaje_derecho(enajenante_rut, rol):
+            prev_porcentaje_derecho = self.find_porcentaje_derecho(enajenante_rut, rol)
+            print("esto encontre", prev_porcentaje_derecho)
+        
+        final_porcentaje_derecho_enajenante = prev_porcentaje_derecho - (enajenante_/100 * prev_porcentaje_derecho)
+        entry['porcentaje_derecho'] = final_porcentaje_derecho_enajenante
         
         for entry in temp_storage:
             if entry["rut"] == adquiriente_rut:
+                print(entry, prev_porcentaje_derecho)
                 final_porcentaje_derecho_adquiriente = entry['porcentaje_derecho'] /100 * prev_porcentaje_derecho
                 entry['porcentaje_derecho'] = final_porcentaje_derecho_adquiriente
                 break
-
-        temp_storage = [entry for entry in temp_storage if entry['porcentaje_derecho'] != 0]
+        print(adquiriente_rut, enajenante_rut)
 
         for entry in temp_storage:
             if (entry['rut'] == adquiriente_rut):

@@ -76,7 +76,20 @@ class MultipropietarioTableHandler:
 
         return latest_pctje_derecho
 
+    def check_if_repeated_enajenante(self,rut, rol, ano_vigencia_inicial):
+        max_fecha_inscripcion = 0
+        current_ano_vigencia_inicial = None
 
+        propietarios = self.propietario_handler.check_if_propietario_exists(rut)
+        for propietario in propietarios:
+            multipropietarios = Multipropietario.query.filter((Multipropietario.id == propietario.multipropietario_id) & (Multipropietario.rol == rol)).all()
+            for multipropietario in multipropietarios:
+                if multipropietario.id > max_fecha_inscripcion:
+                    max_fecha_inscripcion = multipropietario.id
+                    current_ano_vigencia_inicial = multipropietario.ano_vigencia_inicial
+                    
+        if current_ano_vigencia_inicial == ano_vigencia_inicial:
+            self.delete(max_fecha_inscripcion)  
 
     def get_posterior_forms(self, new_form_data):
         return Multipropietario.query.filter(
