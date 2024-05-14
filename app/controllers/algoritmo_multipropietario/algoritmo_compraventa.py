@@ -111,10 +111,10 @@ class AlgoritmoCompraventa:
         return entry['id']
 
     def upload_propietario(self, entry):
-        repeated_multipropietarios = self.multipropietario_handler.check_if_propietario_exists(entry['rut'], entry['rol'], entry['ano_vigencia_inicial'])
+        """repeated_multipropietarios = self.multipropietario_handler.check_if_propietario_exists(entry['rut'], entry['rol'], entry['ano_vigencia_inicial'])
         if repeated_multipropietarios:
             for multipropietario in repeated_multipropietarios:
-                self.multipropietario_handler.delete(multipropietario.id)
+                self.multipropietario_handler.delete(multipropietario.id)"""
         new_multipropietario_id = self.upload_multipropietario(entry)
         self.multipropietario_handler.upload_propietario(
             {'rut': entry['rut'], 'porcentaje_derecho': entry['porcentaje_derecho']}, 
@@ -271,7 +271,6 @@ class AlgoritmoCompraventa:
                 entry['id'] = None
             entry['ano_vigencia_inicial'] = form_data.get('fecha_inscripcion').year
             entry['ano_vigencia_final'] = None
-        print(temp_storage)
         for entry in temp_storage:
             self.upload_propietario(entry)
 
