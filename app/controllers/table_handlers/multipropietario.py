@@ -1,5 +1,6 @@
 from app.models import Multipropietario, db
 from .propietario import PropietarioTableHandler
+from datetime import *
 
 class MultipropietarioTableHandler:
     def __init__(self) :
@@ -14,11 +15,26 @@ class MultipropietarioTableHandler:
         db.session.commit()
         return new_form.id
     
-    def upload_propietarios(self, propietarios, multipropietario_id):
-        self.propietario_handler.upload_propietario(propietarios, multipropietario_id)
+    def upload_propietario(self, propietario, multipropietario_id):
+        self.propietario_handler.upload_propietario(propietario, multipropietario_id)
+
+    def check_if_propietario_exists(self, rut, rol, ano_vigencia_inicial):
+        propietarios = self.propietario_handler.check_if_propietario_exists(rut)
+        for propietario in propietarios:
+            multipropietario = Multipropietario.query.filter((Multipropietario.id == propietario.multipropietario_id),
+            (Multipropietario.ano_vigencia_inicial == ano_vigencia_inicial),
+            (Multipropietario.rol == rol)).all()
+            if multipropietario:
+                return multipropietario
+        return False
+        
+    def upload_adquirientes(self, adquirientes, multipropietario_id):
+        self.propietario_handler.upload_adquirientes(adquirientes, multipropietario_id)
 
     def update_form(self, form_id, ano_vigencia_final):
         form = Multipropietario.query.get(form_id)
+        if not form:
+            return        
         form.ano_vigencia_final = ano_vigencia_final
         db.session.commit()
     
@@ -45,6 +61,35 @@ class MultipropietarioTableHandler:
             adquiriente['pctje_derecho'] = propietario.porcentaje_derecho
             adquirientes.append(adquiriente)
         return adquirientes
+    
+    def get_pctje_derecho_propietario(self, rut, rol):
+        max_fecha_inscripcion = 0
+        latest_pctje_derecho = None
+
+        propietarios = self.propietario_handler.check_if_propietario_exists(rut)
+        for propietario in propietarios:
+            multipropietarios = Multipropietario.query.filter((Multipropietario.id == propietario.multipropietario_id) & (Multipropietario.rol == rol)).all()
+            for multipropietario in multipropietarios:
+                if multipropietario.id > max_fecha_inscripcion:
+                    max_fecha_inscripcion = multipropietario.id
+                    latest_pctje_derecho = propietario.porcentaje_derecho
+
+        return latest_pctje_derecho
+
+    def check_if_repeated_enajenante(self,rut, rol, ano_vigencia_inicial):
+        max_fecha_inscripcion = 0
+        current_ano_vigencia_inicial = None
+
+        propietarios = self.propietario_handler.check_if_propietario_exists(rut)
+        for propietario in propietarios:
+            multipropietarios = Multipropietario.query.filter((Multipropietario.id == propietario.multipropietario_id) & (Multipropietario.rol == rol)).all()
+            for multipropietario in multipropietarios:
+                if multipropietario.id > max_fecha_inscripcion:
+                    max_fecha_inscripcion = multipropietario.id
+                    current_ano_vigencia_inicial = multipropietario.ano_vigencia_inicial
+                    
+        if current_ano_vigencia_inicial == ano_vigencia_inicial:
+            self.delete(max_fecha_inscripcion)  
 
     def get_posterior_forms(self, new_form_data):
         return Multipropietario.query.filter(

@@ -254,6 +254,7 @@ def search_multipropietarios():
                 'fecha_inscripcion': multi_propietario.fecha_inscripcion,
                 'ano_inscripcion': multi_propietario.ano_inscripcion,
                 'numero_inscripcion': multi_propietario.numero_inscripcion,
+                'fojas': multi_propietario.fojas,
                 'año_vigencia_inicial': multi_propietario.ano_vigencia_inicial,
                 'año_vigencia_final': multi_propietario.ano_vigencia_final
             })
@@ -273,10 +274,12 @@ def json_interpreter():
     if file and file.filename.endswith('.json'):
         try:
             json_data = json.loads(file.read())
-            errors = []  
-            success_messages = []  
+            errors = []
+            success_messages = []
 
-            for form_data in json_data.get('F2890', []):
+            forms_data = sorted(json_data.get('F2890', []), key=lambda x: datetime.strptime(x.get('fechaInscripcion', ''), '%Y-%m-%d'))
+
+            for form_data in forms_data:
                 try:
                     cne_code = form_data.get('CNE')
 
@@ -292,7 +295,7 @@ def json_interpreter():
                         errors.append(f'Comuna with code {comuna_code} not found')
                         comuna = None
                         comuna_code = None
-                        continue  
+                        continue
 
                     manzana = bien_raiz_data.get('manzana', '')
                     predio = bien_raiz_data.get('predio', '')
@@ -308,7 +311,7 @@ def json_interpreter():
                         cne=cne_code,
                         rol=bien_raiz.rol,
                         fojas=form_data.get('fojas', ''),
-                        fecha_inscripcion=form_data.get('fechaInscripcion', None),
+                        fecha_inscripcion=datetime.strptime(form_data.get('fechaInscripcion', ''), '%Y-%m-%d').date(),
                         numero_inscripcion=form_data.get('nroInscripcion', None)
                     )
                     db.session.add(new_form)
@@ -349,7 +352,7 @@ def json_interpreter():
                             porcentaje_derecho=porcentaje_derecho
                         )
                         db.session.add(enajenante_implicado)
-                    
+
                     db.session.commit()
 
                     form_data = {

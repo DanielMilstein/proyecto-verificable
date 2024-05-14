@@ -37,7 +37,7 @@ class AlgoritmoRegularizacionPatrimonio:
         ano_inscripcion = fecha_inscripcion.year
         ano_vigencia_final = None
         multipropietario_id = self.multipropietario_handler.upload_form(rol, fecha_inscripcion, fojas, nro_inscripcion, ano_inscripcion, ano_vigencia_inicial, ano_vigencia_final)
-        self.multipropietario_handler.upload_propietarios(adquirientes, multipropietario_id)
+        self.multipropietario_handler.upload_adquirientes(adquirientes, multipropietario_id)
 
     def update_previous_form(self, prev_form, fecha_inscripcion):
         ano_vigencia_final = fecha_inscripcion.year - 1
