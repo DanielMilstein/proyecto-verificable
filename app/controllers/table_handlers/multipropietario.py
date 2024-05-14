@@ -1,5 +1,6 @@
 from app.models import Multipropietario, db
 from .propietario import PropietarioTableHandler
+from datetime import *
 
 class MultipropietarioTableHandler:
     def __init__(self) :
@@ -60,6 +61,22 @@ class MultipropietarioTableHandler:
             adquiriente['pctje_derecho'] = propietario.porcentaje_derecho
             adquirientes.append(adquiriente)
         return adquirientes
+    
+    def get_pctje_derecho_propietario(self, rut, rol):
+        max_fecha_inscripcion = 0
+        latest_pctje_derecho = None
+
+        propietarios = self.propietario_handler.check_if_propietario_exists(rut)
+        for propietario in propietarios:
+            multipropietarios = Multipropietario.query.filter((Multipropietario.id == propietario.multipropietario_id) & (Multipropietario.rol == rol)).all()
+            for multipropietario in multipropietarios:
+                if multipropietario.id > max_fecha_inscripcion:
+                    max_fecha_inscripcion = multipropietario.id
+                    latest_pctje_derecho = propietario.porcentaje_derecho
+
+        return latest_pctje_derecho
+
+
 
     def get_posterior_forms(self, new_form_data):
         return Multipropietario.query.filter(

@@ -33,7 +33,7 @@ class AlgoritmoCompraventa:
             self.multipropietario_handler.update_form(entry['multipropietario_id'], form_data.get('fecha_inscripcion').year - 1)
 
         enajenantes_ruts = [enajenante.get('rut') for enajenante in form_data.get('enajenantes', [])]
-        sum_porcentaje_enajenantes = sum([self.find_porcentaje_derecho(previous_form.id, rut) for rut in enajenantes_ruts])
+        sum_porcentaje_enajenantes = sum([self.find_porcentaje_derecho(rut, rol) for rut in enajenantes_ruts])
         temp_storage = [entry for entry in prev_storage if entry['rut'] not in enajenantes_ruts]
         
         adquirientes_ruts = []
@@ -90,12 +90,9 @@ class AlgoritmoCompraventa:
                 temp_storage.append(entry)
         return temp_storage
 
-    def find_porcentaje_derecho(self, previous_form_id, rut):
-        propietarios = self.multipropietario_handler.get_linked_propietarios(previous_form_id)
-        for propietario in propietarios:
-            if propietario.get("rut") == rut:
-                return propietario.get("pctje_derecho")
-        return 0
+    def find_porcentaje_derecho(self, rut, rol):
+        return self.multipropietario_handler.get_pctje_derecho_propietario(rut, rol)
+       
 
     def upload_multipropietario(self, entry):
         new_form = self.multipropietario_handler.upload_form(
@@ -134,11 +131,12 @@ class AlgoritmoCompraventa:
             self.multipropietario_handler.update_form(entry['multipropietario_id'], form_data.get('fecha_inscripcion').year - 1)
 
         enajenantes_ruts = [enajenante.get('rut') for enajenante in form_data.get('enajenantes', [])]
-        sum_porcentaje_enajenantes = sum([self.find_porcentaje_derecho(previous_form.id, rut) for rut in enajenantes_ruts])
+        sum_porcentaje_enajenantes = sum([self.find_porcentaje_derecho(rut, rol) for rut in enajenantes_ruts])
         temp_storage = [entry for entry in prev_storage if entry['rut'] not in enajenantes_ruts]
 
         num_adquirientes = len(form_data.get('adquirientes', []))
         new_porcentaje_derecho = sum_porcentaje_enajenantes / num_adquirientes
+        print(sum_porcentaje_enajenantes, num_adquirientes, new_porcentaje_derecho)
 
         adquirientes_ruts = []
         for adquiriente in form_data.get('adquirientes', []):
