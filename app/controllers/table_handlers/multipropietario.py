@@ -17,6 +17,16 @@ class MultipropietarioTableHandler:
     def upload_propietario(self, propietario, multipropietario_id):
         self.propietario_handler.upload_propietario(propietario, multipropietario_id)
 
+    def check_if_propietario_exists(self, rut, rol, ano_vigencia_inicial):
+        propietarios = self.propietario_handler.check_if_propietario_exists(rut)
+        for propietario in propietarios:
+            multipropietario = Multipropietario.query.filter((Multipropietario.id == propietario.multipropietario_id),
+            (Multipropietario.ano_vigencia_inicial == ano_vigencia_inicial),
+            (Multipropietario.rol == rol)).all()
+            if multipropietario:
+                return multipropietario
+        return False
+        
     def upload_adquirientes(self, adquirientes, multipropietario_id):
         self.propietario_handler.upload_adquirientes(adquirientes, multipropietario_id)
 

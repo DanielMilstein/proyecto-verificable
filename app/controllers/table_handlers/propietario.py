@@ -18,3 +18,7 @@ class PropietarioTableHandler:
     def delete(self, propietario):
         db.session.delete(propietario)
         db.session.commit()
+
+    def check_if_propietario_exists(self, rut):
+        propietarios = Propietario.query.filter_by(rut=rut).all()
+        return propietarios
