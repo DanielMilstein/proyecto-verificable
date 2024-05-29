@@ -1,6 +1,7 @@
 from flask import render_template, Blueprint, request, redirect, flash, jsonify
 from app.forms import MyForm
 from app.models import db, Formulario, Implicados, Multipropietario, Propietario, CNE, BienRaiz, Comuna, Persona
+from app.controllers.functions import refresh_multipropietario
 from .algoritmo_multipropietario.insert_multipropietario import AlgoritmoMultipropietario
 import json
 from datetime import datetime
@@ -87,7 +88,6 @@ def form():
                 db.session.add(adquiriente_persona)
                 db.session.commit()
 
-
             adquiriente_implicado = Implicados(
                 rut=adquiriente,
                 numero_atencion=new_form.numero_atencion,
@@ -96,14 +96,12 @@ def form():
             )
             db.session.add(adquiriente_implicado)
 
-
         for enajenante in enajenantes_rut:
             enajenante_persona = Persona.query.filter_by(rut=enajenante).first()
             if enajenante_persona is None:
                 enajenante_persona = Persona(enajenante)
                 db.session.add(enajenante_persona)
                 db.session.commit() 
-
 
             enajenante_implicado = Implicados(
                 rut=enajenante,
@@ -124,16 +122,19 @@ def form():
         for rut, porcentaje in zip(enajenantes_rut, enajenantes_porcentaje):
             enajenantes.append({'rut': rut, 'pctje_derecho': porcentaje})
 
-
         form_data = {
             'cne': form.cne.data.codigo_cne,
             'rol': bien_raiz.rol,
             'fecha_inscripcion': form.fecha_inscripcion.data,
             'nro_inscripcion': form.numero_inscripcion.data,
             'fojas': form.fojas.data,
-            'enajenantes':enajenantes,
+            'enajenantes': enajenantes,
             'adquirientes': adquirientes
         }
+
+        db.session.commit()
+        refresh_multipropietario()
+
 
         upload_to_multipropietario(form_data)
 
@@ -161,7 +162,7 @@ def form_list():
         form.nombre_cne = nombre_cne
 
 
-
+    refresh_multipropietario()
     return render_template('form-list/form-list.html', title='Form List', forms=forms)
 
 
@@ -368,7 +369,7 @@ def json_interpreter():
                     upload_to_multipropietario(form_data)
                     db.session.commit()
                     success_messages.append(f"Form data processed successfully: {form_data}")
-
+                    refresh_multipropietario()
                 except Exception as e:
                     db.session.rollback()
                     errors.append(f"Error processing form data: {e}")
