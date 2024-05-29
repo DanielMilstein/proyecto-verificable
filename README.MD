@@ -1,18 +1,37 @@
-# Diseño de software Verificable - Proyecto, Entrega 1
-## Como correr la aplicación
-**Base de datos:** 
-	Nuestra base de datos MySQL está contenerizada dentro de docker. Por lo tanto, para poder utilizarla, se deben seguir los sigueintes pasos: <br>
-	`docker pull mysql`<br>
-	`docker run --name project -e MYSQL_ROOT_PASSWORD=verificables -e MYSQL_DATABASE=project_app_db -e MYSQL_USER=myuser -e MYSQL_PASSWORD=verificables -p 3306:3306 -d mysql`<br>
-	`docker exec -it project mysql -umyuser -pverificables`
-**Flask:**
-En el direcotrio principal del proyecto, nada más correr el comando:
-	`python run.py`
+# Diseño de software Verificable - Proyecto, Entrega 2
 
-En caso de errores, acá hay dos posibles problemas y sus soluciones:
-- Creamos un script para poder rellenar la DB automáticamente con los CNE y las Comunas. Para que este script (y la DB) funcione correctamente, se necesita que el archivo excel 'regionesComunas.xlsx' del enunciado esté en el directorio principal del proyecto.<br>
-- Instalar las librerías requeridas para el proyecto:
-	`pip install -r requirements.txt`
+## Cómo correr la aplicación
+
+Nuestra base de datos MySQL está contenerizada dentro de Docker. Para utilizarla, sigue estos pasos:
+
+1. Asegúrate de tener Docker instalado en tu sistema.
+
+2. Luego, crea y ejecuta el contenedor de MySQL con el siguiente comando:
+
+```bash
+docker compose up
+```
+
+Este archivo `compose.yml` define dos servicios: `sii-mysql-db` y `sii-flask-app`. Aquí está la explicación de lo que hace cada uno de ellos:
+
+### Servicio `sii-mysql-db`:
+- **Imagen:** Utiliza la imagen oficial de MySQL versión 8.0.
+- **Variables de entorno:** Establece las siguientes variables de entorno para la configuración de MySQL:
+  - `MYSQL_ROOT_PASSWORD`: Contraseña para el usuario root de MySQL.
+  - `MYSQL_DATABASE`: Nombre de la base de datos que se creará dentro del contenedor.
+  - `MYSQL_USER`: Nombre de usuario de MySQL.
+  - `MYSQL_PASSWORD`: Contraseña del usuario de MySQL.
+- **Puertos:** Mapea el puerto 3306 del contenedor al puerto 3306 del host, lo que permite que otras aplicaciones se conecten al servidor MySQL.
+- **Healthcheck:** Define un comando de verificación de salud para asegurarse de que el servicio MySQL esté en funcionamiento. El healthcheck intenta ejecutar el comando `mysqladmin ping -h localhost` cada 5 segundos y reintentará hasta 10 veces si falla.
+
+### Servicio `sii-flask-app`:
+- **Construcción de la imagen:** Usa el Dockerfile en el directorio actual (`.`) para construir la imagen del servicio Flask. Esto significa que el Dockerfile debe estar en el mismo directorio que el archivo `compose.yml`.
+- **Puertos:** Mapea el puerto 5000 del contenedor al puerto 5000 del host, permitiendo acceder a la aplicación Flask desde el navegador u otras aplicaciones.
+- **Dependencias:** Especifica que este servicio depende del servicio `sii-mysql-db` y se asegura de que el servicio `sii-mysql-db` esté en un estado saludable (`service_healthy`) antes de iniciar este servicio. Esto garantiza que la base de datos esté disponible antes de que la aplicación Flask intente conectarse a ella.
+
+Este archivo `compose.yml` proporciona una forma de definir, construir y orquestar múltiples servicios Docker para facilitar el desarrollo y la implementación de aplicaciones complejas. En este caso, se utiliza para gestionar la base de datos MySQL y la aplicación Flask de manera conjunta.
+
+
 ## Cómo probar tabla Multi propietarios
 Debido a que nuestro modelo de datos está basado en la consistencia de los mismos (nos pareció que podría ser útil pensando en el futuro ; quizás nos arrepentimos 🥴), se deben realizar múltiples inserciones para poder probar la tabla Multi propietarios. <br><br>Todo los snippets de código que se ven de aquí en adelante son ejemplos, y sus valores pueden ser modificados con libertad. 
 	<br>*Nota: Técnicamente se pueden provocar errores con la base de datos al insertar ciertos atributos con libertad absoluta usando la inserción manual mediante la consola de mysql (por ejemplo, ingresando un RUT/RUN más largo del esperado). Ya que los usuarios no pueden ingresar formularios de esta manera, no pensamos que el cliente se preocupe de este tipo de errores.*<br>

@@ -1,0 +1,2085 @@
+
+{ "Comuna": [
+  {
+    "codigo_comuna": 394,
+    "nombre_comuna": "ALTO HOSPICIO",
+    "codigo_region": 1,
+    "nombre_region": "Región de Tarapacá"
+  },
+  {
+    "codigo_comuna": 7,
+    "nombre_comuna": "CAMIÑA",
+    "codigo_region": 1,
+    "nombre_region": "Región de Tarapacá"
+  },
+  {
+    "codigo_comuna": 8,
+    "nombre_comuna": "COLCHANE",
+    "codigo_region": 1,
+    "nombre_region": "Región de Tarapacá"
+  },
+  {
+    "codigo_comuna": 6,
+    "nombre_comuna": "HUARA",
+    "codigo_region": 1,
+    "nombre_region": "Región de Tarapacá"
+  },
+  {
+    "codigo_comuna": 5,
+    "nombre_comuna": "IQUIQUE",
+    "codigo_region": 1,
+    "nombre_region": "Región de Tarapacá"
+  },
+  {
+    "codigo_comuna": 9,
+    "nombre_comuna": "PICA",
+    "codigo_region": 1,
+    "nombre_region": "Región de Tarapacá"
+  },
+  {
+    "codigo_comuna": 10,
+    "nombre_comuna": "POZO ALMONTE",
+    "codigo_region": 1,
+    "nombre_region": "Región de Tarapacá"
+  },
+  {
+    "codigo_comuna": 16,
+    "nombre_comuna": "ANTOFAGASTA",
+    "codigo_region": 2,
+    "nombre_region": "Región de Antofagasta"
+  },
+  {
+    "codigo_comuna": 13,
+    "nombre_comuna": "CALAMA",
+    "codigo_region": 2,
+    "nombre_region": "Región de Antofagasta"
+  },
+  {
+    "codigo_comuna": 12,
+    "nombre_comuna": "MARÍA ELENA",
+    "codigo_region": 2,
+    "nombre_region": "Región de Antofagasta"
+  },
+  {
+    "codigo_comuna": 17,
+    "nombre_comuna": "MEJILLONES",
+    "codigo_region": 2,
+    "nombre_region": "Región de Antofagasta"
+  },
+  {
+    "codigo_comuna": 14,
+    "nombre_comuna": "OLLAGÜE",
+    "codigo_region": 2,
+    "nombre_region": "Región de Antofagasta"
+  },
+  {
+    "codigo_comuna": 15,
+    "nombre_comuna": "SAN PEDRO DE ATACAMA",
+    "codigo_region": 2,
+    "nombre_region": "Región de Antofagasta"
+  },
+  {
+    "codigo_comuna": 18,
+    "nombre_comuna": "SIERRA GORDA",
+    "codigo_region": 2,
+    "nombre_region": "Región de Antofagasta"
+  },
+  {
+    "codigo_comuna": 19,
+    "nombre_comuna": "TALTAL",
+    "codigo_region": 2,
+    "nombre_region": "Región de Antofagasta"
+  },
+  {
+    "codigo_comuna": 11,
+    "nombre_comuna": "TOCOPILLA",
+    "codigo_region": 2,
+    "nombre_region": "Región de Antofagasta"
+  },
+  {
+    "codigo_comuna": 28,
+    "nombre_comuna": "ALTO DEL CARMEN",
+    "codigo_region": 3,
+    "nombre_region": "Región de Atacama"
+  },
+  {
+    "codigo_comuna": 23,
+    "nombre_comuna": "CALDERA",
+    "codigo_region": 3,
+    "nombre_region": "Región de Atacama"
+  },
+  {
+    "codigo_comuna": 20,
+    "nombre_comuna": "CHAÑARAL",
+    "codigo_region": 3,
+    "nombre_region": "Región de Atacama"
+  },
+  {
+    "codigo_comuna": 22,
+    "nombre_comuna": "COPIAPÓ",
+    "codigo_region": 3,
+    "nombre_region": "Región de Atacama"
+  },
+  {
+    "codigo_comuna": 21,
+    "nombre_comuna": "DIEGO DE ALMAGRO",
+    "codigo_region": 3,
+    "nombre_region": "Región de Atacama"
+  },
+  {
+    "codigo_comuna": 26,
+    "nombre_comuna": "FREIRINA",
+    "codigo_region": 3,
+    "nombre_region": "Región de Atacama"
+  },
+  {
+    "codigo_comuna": 27,
+    "nombre_comuna": "HUASCO",
+    "codigo_region": 3,
+    "nombre_region": "Región de Atacama"
+  },
+  {
+    "codigo_comuna": 24,
+    "nombre_comuna": "TIERRA AMARILLA",
+    "codigo_region": 3,
+    "nombre_region": "Región de Atacama"
+  },
+  {
+    "codigo_comuna": 25,
+    "nombre_comuna": "VALLENAR",
+    "codigo_region": 3,
+    "nombre_region": "Región de Atacama"
+  },
+  {
+    "codigo_comuna": 32,
+    "nombre_comuna": "ANDACOLLO",
+    "codigo_region": 4,
+    "nombre_region": "Región de Coquimbo"
+  },
+  {
+    "codigo_comuna": 43,
+    "nombre_comuna": "CANELA",
+    "codigo_region": 4,
+    "nombre_region": "Región de Coquimbo"
+  },
+  {
+    "codigo_comuna": 38,
+    "nombre_comuna": "COMBARBALÁ",
+    "codigo_region": 4,
+    "nombre_region": "Región de Coquimbo"
+  },
+  {
+    "codigo_comuna": 31,
+    "nombre_comuna": "COQUIMBO",
+    "codigo_region": 4,
+    "nombre_region": "Región de Coquimbo"
+  },
+  {
+    "codigo_comuna": 40,
+    "nombre_comuna": "ILLAPEL",
+    "codigo_region": 4,
+    "nombre_region": "Región de Coquimbo"
+  },
+  {
+    "codigo_comuna": 30,
+    "nombre_comuna": "LA HIGUERA",
+    "codigo_region": 4,
+    "nombre_region": "Región de Coquimbo"
+  },
+  {
+    "codigo_comuna": 29,
+    "nombre_comuna": "LA SERENA",
+    "codigo_region": 4,
+    "nombre_region": "Región de Coquimbo"
+  },
+  {
+    "codigo_comuna": 42,
+    "nombre_comuna": "LOS VILOS",
+    "codigo_region": 4,
+    "nombre_region": "Región de Coquimbo"
+  },
+  {
+    "codigo_comuna": 37,
+    "nombre_comuna": "MONTE PATRIA",
+    "codigo_region": 4,
+    "nombre_region": "Región de Coquimbo"
+  },
+  {
+    "codigo_comuna": 35,
+    "nombre_comuna": "OVALLE",
+    "codigo_region": 4,
+    "nombre_region": "Región de Coquimbo"
+  },
+  {
+    "codigo_comuna": 34,
+    "nombre_comuna": "PAIHUANO",
+    "codigo_region": 4,
+    "nombre_region": "Región de Coquimbo"
+  },
+  {
+    "codigo_comuna": 39,
+    "nombre_comuna": "PUNITAQUI",
+    "codigo_region": 4,
+    "nombre_region": "Región de Coquimbo"
+  },
+  {
+    "codigo_comuna": 36,
+    "nombre_comuna": "RÍO HURTADO",
+    "codigo_region": 4,
+    "nombre_region": "Región de Coquimbo"
+  },
+  {
+    "codigo_comuna": 41,
+    "nombre_comuna": "SALAMANCA",
+    "codigo_region": 4,
+    "nombre_region": "Región de Coquimbo"
+  },
+  {
+    "codigo_comuna": 33,
+    "nombre_comuna": "VICUÑA",
+    "codigo_region": 4,
+    "nombre_region": "Región de Coquimbo"
+  },
+  {
+    "codigo_comuna": 78,
+    "nombre_comuna": "ALGARROBO",
+    "codigo_region": 5,
+    "nombre_region": "Región de Valparaíso"
+  },
+  {
+    "codigo_comuna": 46,
+    "nombre_comuna": "CABILDO",
+    "codigo_region": 5,
+    "nombre_region": "Región de Valparaíso"
+  },
+  {
+    "codigo_comuna": 61,
+    "nombre_comuna": "CALERA",
+    "codigo_region": 5,
+    "nombre_region": "Región de Valparaíso"
+  },
+  {
+    "codigo_comuna": 51,
+    "nombre_comuna": "CALLE LARGA",
+    "codigo_region": 5,
+    "nombre_region": "Región de Valparaíso"
+  },
+  {
+    "codigo_comuna": 75,
+    "nombre_comuna": "CARTAGENA",
+    "codigo_region": 5,
+    "nombre_region": "Región de Valparaíso"
+  },
+  {
+    "codigo_comuna": 72,
+    "nombre_comuna": "CASABLANCA",
+    "codigo_region": 5,
+    "nombre_region": "Región de Valparaíso"
+  },
+  {
+    "codigo_comuna": 58,
+    "nombre_comuna": "CATEMU",
+    "codigo_region": 5,
+    "nombre_region": "Región de Valparaíso"
+  },
+  {
+    "codigo_comuna": 377,
+    "nombre_comuna": "CONCÓN",
+    "codigo_region": 5,
+    "nombre_region": "Región de Valparaíso"
+  },
+  {
+    "codigo_comuna": 77,
+    "nombre_comuna": "EL QUISCO",
+    "codigo_region": 5,
+    "nombre_region": "Región de Valparaíso"
+  },
+  {
+    "codigo_comuna": 76,
+    "nombre_comuna": "EL TABO",
+    "codigo_region": 5,
+    "nombre_region": "Región de Valparaíso"
+  },
+  {
+    "codigo_comuna": 63,
+    "nombre_comuna": "HIJUELAS",
+    "codigo_region": 5,
+    "nombre_region": "Región de Valparaíso"
+  },
+  {
+    "codigo_comuna": 80,
+    "nombre_comuna": "ISLA DE PASCUA",
+    "codigo_region": 5,
+    "nombre_region": "Región de Valparaíso"
+  },
+  {
+    "codigo_comuna": 73,
+    "nombre_comuna": "JUAN FERNÁNDEZ",
+    "codigo_region": 5,
+    "nombre_region": "Región de Valparaíso"
+  },
+  {
+    "codigo_comuna": 60,
+    "nombre_comuna": "LA CRUZ",
+    "codigo_region": 5,
+    "nombre_region": "Región de Valparaíso"
+  },
+  {
+    "codigo_comuna": 44,
+    "nombre_comuna": "LA LIGUA",
+    "codigo_region": 5,
+    "nombre_region": "Región de Valparaíso"
+  },
+  {
+    "codigo_comuna": 64,
+    "nombre_comuna": "LIMACHE",
+    "codigo_region": 5,
+    "nombre_region": "Región de Valparaíso"
+  },
+  {
+    "codigo_comuna": 57,
+    "nombre_comuna": "LLAILLAY",
+    "codigo_region": 5,
+    "nombre_region": "Región de Valparaíso"
+  },
+  {
+    "codigo_comuna": 382,
+    "nombre_comuna": "LLAY LLAY",
+    "codigo_region": 5,
+    "nombre_region": "Región de Valparaíso"
+  },
+  {
+    "codigo_comuna": 49,
+    "nombre_comuna": "LOS ANDES",
+    "codigo_region": 5,
+    "nombre_region": "Región de Valparaíso"
+  },
+  {
+    "codigo_comuna": 62,
+    "nombre_comuna": "NOGALES",
+    "codigo_region": 5,
+    "nombre_region": "Región de Valparaíso"
+  },
+  {
+    "codigo_comuna": 65,
+    "nombre_comuna": "OLMUÉ",
+    "codigo_region": 5,
+    "nombre_region": "Región de Valparaíso"
+  },
+  {
+    "codigo_comuna": 56,
+    "nombre_comuna": "PANQUEHUE",
+    "codigo_region": 5,
+    "nombre_region": "Región de Valparaíso"
+  },
+  {
+    "codigo_comuna": 48,
+    "nombre_comuna": "PAPUDO",
+    "codigo_region": 5,
+    "nombre_region": "Región de Valparaíso"
+  },
+  {
+    "codigo_comuna": 45,
+    "nombre_comuna": "PETORCA",
+    "codigo_region": 5,
+    "nombre_region": "Región de Valparaíso"
+  },
+  {
+    "codigo_comuna": 69,
+    "nombre_comuna": "PUCHUNCAVÍ",
+    "codigo_region": 5,
+    "nombre_region": "Región de Valparaíso"
+  },
+  {
+    "codigo_comuna": 54,
+    "nombre_comuna": "PUTAENDO",
+    "codigo_region": 5,
+    "nombre_region": "Región de Valparaíso"
+  },
+  {
+    "codigo_comuna": 59,
+    "nombre_comuna": "QUILLOTA",
+    "codigo_region": 5,
+    "nombre_region": "Región de Valparaíso"
+  },
+  {
+    "codigo_comuna": 70,
+    "nombre_comuna": "QUILPUÉ",
+    "codigo_region": 5,
+    "nombre_region": "Región de Valparaíso"
+  },
+  {
+    "codigo_comuna": 68,
+    "nombre_comuna": "QUINTERO",
+    "codigo_region": 5,
+    "nombre_region": "Región de Valparaíso"
+  },
+  {
+    "codigo_comuna": 52,
+    "nombre_comuna": "RINCONADA",
+    "codigo_region": 5,
+    "nombre_region": "Región de Valparaíso"
+  },
+  {
+    "codigo_comuna": 74,
+    "nombre_comuna": "SAN ANTONIO",
+    "codigo_region": 5,
+    "nombre_region": "Región de Valparaíso"
+  },
+  {
+    "codigo_comuna": 50,
+    "nombre_comuna": "SAN ESTEBAN",
+    "codigo_region": 5,
+    "nombre_region": "Región de Valparaíso"
+  },
+  {
+    "codigo_comuna": 53,
+    "nombre_comuna": "SAN FELIPE",
+    "codigo_region": 5,
+    "nombre_region": "Región de Valparaíso"
+  },
+  {
+    "codigo_comuna": 55,
+    "nombre_comuna": "SANTA MARÍA",
+    "codigo_region": 5,
+    "nombre_region": "Región de Valparaíso"
+  },
+  {
+    "codigo_comuna": 79,
+    "nombre_comuna": "SANTO DOMINGO",
+    "codigo_region": 5,
+    "nombre_region": "Región de Valparaíso"
+  },
+  {
+    "codigo_comuna": 66,
+    "nombre_comuna": "VALPARAÍSO",
+    "codigo_region": 5,
+    "nombre_region": "Región de Valparaíso"
+  },
+  {
+    "codigo_comuna": 71,
+    "nombre_comuna": "VILLA ALEMANA",
+    "codigo_region": 5,
+    "nombre_region": "Región de Valparaíso"
+  },
+  {
+    "codigo_comuna": 67,
+    "nombre_comuna": "VIÑA DEL MAR",
+    "codigo_region": 5,
+    "nombre_region": "Región de Valparaíso"
+  },
+  {
+    "codigo_comuna": 47,
+    "nombre_comuna": "ZAPALLAR",
+    "codigo_region": 5,
+    "nombre_region": "Región de Valparaíso"
+  },
+  {
+    "codigo_comuna": 153,
+    "nombre_comuna": "CHÉPICA",
+    "codigo_region": 6,
+    "nombre_region": "Región del Libertador General Bernardo O'Higgins"
+  },
+  {
+    "codigo_comuna": 150,
+    "nombre_comuna": "CHIMBARONGO",
+    "codigo_region": 6,
+    "nombre_region": "Región del Libertador General Bernardo O'Higgins"
+  },
+  {
+    "codigo_comuna": 135,
+    "nombre_comuna": "CODEGUA",
+    "codigo_region": 6,
+    "nombre_region": "Región del Libertador General Bernardo O'Higgins"
+  },
+  {
+    "codigo_comuna": 146,
+    "nombre_comuna": "COINCO",
+    "codigo_region": 6,
+    "nombre_region": "Región del Libertador General Bernardo O'Higgins"
+  },
+  {
+    "codigo_comuna": 145,
+    "nombre_comuna": "COLTAUCO",
+    "codigo_region": 6,
+    "nombre_region": "Región del Libertador General Bernardo O'Higgins"
+  },
+  {
+    "codigo_comuna": 147,
+    "nombre_comuna": "DOÑIHUE",
+    "codigo_region": 6,
+    "nombre_region": "Región del Libertador General Bernardo O'Higgins"
+  },
+  {
+    "codigo_comuna": 133,
+    "nombre_comuna": "GRANEROS",
+    "codigo_region": 6,
+    "nombre_region": "Región del Libertador General Bernardo O'Higgins"
+  },
+  {
+    "codigo_comuna": 162,
+    "nombre_comuna": "LA ESTRELLA",
+    "codigo_region": 6,
+    "nombre_region": "Región del Libertador General Bernardo O'Higgins"
+  },
+  {
+    "codigo_comuna": 148,
+    "nombre_comuna": "LAS CABRAS",
+    "codigo_region": 6,
+    "nombre_region": "Región del Libertador General Bernardo O'Higgins"
+  },
+  {
+    "codigo_comuna": 161,
+    "nombre_comuna": "LITUECHE",
+    "codigo_region": 6,
+    "nombre_region": "Región del Libertador General Bernardo O'Higgins"
+  },
+  {
+    "codigo_comuna": 155,
+    "nombre_comuna": "LOLOL",
+    "codigo_region": 6,
+    "nombre_region": "Región del Libertador General Bernardo O'Higgins"
+  },
+  {
+    "codigo_comuna": 136,
+    "nombre_comuna": "MACHALÍ",
+    "codigo_region": 6,
+    "nombre_region": "Región del Libertador General Bernardo O'Higgins"
+  },
+  {
+    "codigo_comuna": 140,
+    "nombre_comuna": "MALLOA",
+    "codigo_region": 6,
+    "nombre_region": "Región del Libertador General Bernardo O'Higgins"
+  },
+  {
+    "codigo_comuna": 163,
+    "nombre_comuna": "MARCHIHUE",
+    "codigo_region": 6,
+    "nombre_region": "Región del Libertador General Bernardo O'Higgins"
+  },
+  {
+    "codigo_comuna": 134,
+    "nombre_comuna": "MOSTAZAL",
+    "codigo_region": 6,
+    "nombre_region": "Región del Libertador General Bernardo O'Higgins"
+  },
+  {
+    "codigo_comuna": 152,
+    "nombre_comuna": "NANCAGUA",
+    "codigo_region": 6,
+    "nombre_region": "Región del Libertador General Bernardo O'Higgins"
+  },
+  {
+    "codigo_comuna": 160,
+    "nombre_comuna": "NAVIDAD",
+    "codigo_region": 6,
+    "nombre_region": "Región del Libertador General Bernardo O'Higgins"
+  },
+  {
+    "codigo_comuna": 137,
+    "nombre_comuna": "OLIVAR",
+    "codigo_region": 6,
+    "nombre_region": "Región del Libertador General Bernardo O'Higgins"
+  },
+  {
+    "codigo_comuna": 157,
+    "nombre_comuna": "PALMILLA",
+    "codigo_region": 6,
+    "nombre_region": "Región del Libertador General Bernardo O'Higgins"
+  },
+  {
+    "codigo_comuna": 164,
+    "nombre_comuna": "PAREDONES",
+    "codigo_region": 6,
+    "nombre_region": "Región del Libertador General Bernardo O'Higgins"
+  },
+  {
+    "codigo_comuna": 158,
+    "nombre_comuna": "PERALILLO",
+    "codigo_region": 6,
+    "nombre_region": "Región del Libertador General Bernardo O'Higgins"
+  },
+  {
+    "codigo_comuna": 144,
+    "nombre_comuna": "PEUMO",
+    "codigo_region": 6,
+    "nombre_region": "Región del Libertador General Bernardo O'Higgins"
+  },
+  {
+    "codigo_comuna": 143,
+    "nombre_comuna": "PICHIDEGUA",
+    "codigo_region": 6,
+    "nombre_region": "Región del Libertador General Bernardo O'Higgins"
+  },
+  {
+    "codigo_comuna": 159,
+    "nombre_comuna": "PICHILEMU",
+    "codigo_region": 6,
+    "nombre_region": "Región del Libertador General Bernardo O'Higgins"
+  },
+  {
+    "codigo_comuna": 151,
+    "nombre_comuna": "PLACILLA",
+    "codigo_region": 6,
+    "nombre_region": "Región del Libertador General Bernardo O'Higgins"
+  },
+  {
+    "codigo_comuna": 156,
+    "nombre_comuna": "PUMANQUE",
+    "codigo_region": 6,
+    "nombre_region": "Región del Libertador General Bernardo O'Higgins"
+  },
+  {
+    "codigo_comuna": 141,
+    "nombre_comuna": "QUINTA DE TILCOCO",
+    "codigo_region": 6,
+    "nombre_region": "Región del Libertador General Bernardo O'Higgins"
+  },
+  {
+    "codigo_comuna": 132,
+    "nombre_comuna": "RANCAGUA",
+    "codigo_region": 6,
+    "nombre_region": "Región del Libertador General Bernardo O'Higgins"
+  },
+  {
+    "codigo_comuna": 139,
+    "nombre_comuna": "RENGO",
+    "codigo_region": 6,
+    "nombre_region": "Región del Libertador General Bernardo O'Higgins"
+  },
+  {
+    "codigo_comuna": 138,
+    "nombre_comuna": "REQUÍNOA",
+    "codigo_region": 6,
+    "nombre_region": "Región del Libertador General Bernardo O'Higgins"
+  },
+  {
+    "codigo_comuna": 149,
+    "nombre_comuna": "SAN FERNANDO",
+    "codigo_region": 6,
+    "nombre_region": "Región del Libertador General Bernardo O'Higgins"
+  },
+  {
+    "codigo_comuna": 142,
+    "nombre_comuna": "SAN VICENTE",
+    "codigo_region": 6,
+    "nombre_region": "Región del Libertador General Bernardo O'Higgins"
+  },
+  {
+    "codigo_comuna": 154,
+    "nombre_comuna": "SANTA CRUZ",
+    "codigo_region": 6,
+    "nombre_region": "Región del Libertador General Bernardo O'Higgins"
+  },
+  {
+    "codigo_comuna": 191,
+    "nombre_comuna": "CAUQUENES",
+    "codigo_region": 7,
+    "nombre_region": "Región del Maule"
+  },
+  {
+    "codigo_comuna": 193,
+    "nombre_comuna": "CHANCO",
+    "codigo_region": 7,
+    "nombre_region": "Región del Maule"
+  },
+  {
+    "codigo_comuna": 185,
+    "nombre_comuna": "COLBÚN",
+    "codigo_region": 7,
+    "nombre_region": "Región del Maule"
+  },
+  {
+    "codigo_comuna": 181,
+    "nombre_comuna": "CONSTITUCIÓN",
+    "codigo_region": 7,
+    "nombre_region": "Región del Maule"
+  },
+  {
+    "codigo_comuna": 182,
+    "nombre_comuna": "CUREPTO",
+    "codigo_region": 7,
+    "nombre_region": "Región del Maule"
+  },
+  {
+    "codigo_comuna": 165,
+    "nombre_comuna": "CURICÓ",
+    "codigo_region": 7,
+    "nombre_region": "Región del Maule"
+  },
+  {
+    "codigo_comuna": 179,
+    "nombre_comuna": "EMPEDRADO",
+    "codigo_region": 7,
+    "nombre_region": "Región del Maule"
+  },
+  {
+    "codigo_comuna": 170,
+    "nombre_comuna": "HUALAÑÉ",
+    "codigo_region": 7,
+    "nombre_region": "Región del Maule"
+  },
+  {
+    "codigo_comuna": 171,
+    "nombre_comuna": "LICANTÉN",
+    "codigo_region": 7,
+    "nombre_region": "Región del Maule"
+  },
+  {
+    "codigo_comuna": 183,
+    "nombre_comuna": "LINARES",
+    "codigo_region": 7,
+    "nombre_region": "Región del Maule"
+  },
+  {
+    "codigo_comuna": 186,
+    "nombre_comuna": "LONGAVÍ",
+    "codigo_region": 7,
+    "nombre_region": "Región del Maule"
+  },
+  {
+    "codigo_comuna": 178,
+    "nombre_comuna": "MAULE",
+    "codigo_region": 7,
+    "nombre_region": "Región del Maule"
+  },
+  {
+    "codigo_comuna": 168,
+    "nombre_comuna": "MOLINA",
+    "codigo_region": 7,
+    "nombre_region": "Región del Maule"
+  },
+  {
+    "codigo_comuna": 187,
+    "nombre_comuna": "PARRAL",
+    "codigo_region": 7,
+    "nombre_region": "Región del Maule"
+  },
+  {
+    "codigo_comuna": 175,
+    "nombre_comuna": "PELARCO",
+    "codigo_region": 7,
+    "nombre_region": "Región del Maule"
+  },
+  {
+    "codigo_comuna": 192,
+    "nombre_comuna": "PELLUHUE",
+    "codigo_region": 7,
+    "nombre_region": "Región del Maule"
+  },
+  {
+    "codigo_comuna": 180,
+    "nombre_comuna": "PENCAHUE",
+    "codigo_region": 7,
+    "nombre_region": "Región del Maule"
+  },
+  {
+    "codigo_comuna": 173,
+    "nombre_comuna": "RAUCO",
+    "codigo_region": 7,
+    "nombre_region": "Región del Maule"
+  },
+  {
+    "codigo_comuna": 188,
+    "nombre_comuna": "RETIRO",
+    "codigo_region": 7,
+    "nombre_region": "Región del Maule"
+  },
+  {
+    "codigo_comuna": 176,
+    "nombre_comuna": "RÍO CLARO",
+    "codigo_region": 7,
+    "nombre_region": "Región del Maule"
+  },
+  {
+    "codigo_comuna": 167,
+    "nombre_comuna": "ROMERAL",
+    "codigo_region": 7,
+    "nombre_region": "Región del Maule"
+  },
+  {
+    "codigo_comuna": 169,
+    "nombre_comuna": "SAGRADA FAMILIA",
+    "codigo_region": 7,
+    "nombre_region": "Región del Maule"
+  },
+  {
+    "codigo_comuna": 177,
+    "nombre_comuna": "SAN CLEMENTE",
+    "codigo_region": 7,
+    "nombre_region": "Región del Maule"
+  },
+  {
+    "codigo_comuna": 190,
+    "nombre_comuna": "SAN JAVIER",
+    "codigo_region": 7,
+    "nombre_region": "Región del Maule"
+  },
+  {
+    "codigo_comuna": 378,
+    "nombre_comuna": "SAN RAFAEL",
+    "codigo_region": 7,
+    "nombre_region": "Región del Maule"
+  },
+  {
+    "codigo_comuna": 174,
+    "nombre_comuna": "TALCA",
+    "codigo_region": 7,
+    "nombre_region": "Región del Maule"
+  },
+  {
+    "codigo_comuna": 166,
+    "nombre_comuna": "TENO",
+    "codigo_region": 7,
+    "nombre_region": "Región del Maule"
+  },
+  {
+    "codigo_comuna": 172,
+    "nombre_comuna": "VICHUQUÉN",
+    "codigo_region": 7,
+    "nombre_region": "Región del Maule"
+  },
+  {
+    "codigo_comuna": 189,
+    "nombre_comuna": "VILLA ALEGRE",
+    "codigo_region": 7,
+    "nombre_region": "Región del Maule"
+  },
+  {
+    "codigo_comuna": 184,
+    "nombre_comuna": "YERBAS BUENAS",
+    "codigo_region": 7,
+    "nombre_region": "Región del Maule"
+  },
+  {
+    "codigo_comuna": 393,
+    "nombre_comuna": "ALTO BIOBÍO",
+    "codigo_region": 8,
+    "nombre_region": "Región del Biobío"
+  },
+  {
+    "codigo_comuna": 217,
+    "nombre_comuna": "ANTUCO",
+    "codigo_region": 8,
+    "nombre_region": "Región del Biobío"
+  },
+  {
+    "codigo_comuna": 237,
+    "nombre_comuna": "ARAUCO",
+    "codigo_region": 8,
+    "nombre_region": "Región del Biobío"
+  },
+  {
+    "codigo_comuna": 215,
+    "nombre_comuna": "CABRERO",
+    "codigo_region": 8,
+    "nombre_region": "Región del Biobío"
+  },
+  {
+    "codigo_comuna": 240,
+    "nombre_comuna": "CAÑETE",
+    "codigo_region": 8,
+    "nombre_region": "Región del Biobío"
+  },
+  {
+    "codigo_comuna": 372,
+    "nombre_comuna": "CHIGUAYANTE",
+    "codigo_region": 8,
+    "nombre_region": "Región del Biobío"
+  },
+  {
+    "codigo_comuna": 227,
+    "nombre_comuna": "CONCEPCIÓN",
+    "codigo_region": 8,
+    "nombre_region": "Región del Biobío"
+  },
+  {
+    "codigo_comuna": 241,
+    "nombre_comuna": "CONTULMO",
+    "codigo_region": 8,
+    "nombre_region": "Región del Biobío"
+  },
+  {
+    "codigo_comuna": 235,
+    "nombre_comuna": "CORONEL",
+    "codigo_region": 8,
+    "nombre_region": "Región del Biobío"
+  },
+  {
+    "codigo_comuna": 238,
+    "nombre_comuna": "CURANILAHUE",
+    "codigo_region": 8,
+    "nombre_region": "Región del Biobío"
+  },
+  {
+    "codigo_comuna": 231,
+    "nombre_comuna": "FLORIDA",
+    "codigo_region": 8,
+    "nombre_region": "Región del Biobío"
+  },
+  {
+    "codigo_comuna": 392,
+    "nombre_comuna": "HUALPÉN",
+    "codigo_region": 8,
+    "nombre_region": "Región del Biobío"
+  },
+  {
+    "codigo_comuna": 232,
+    "nombre_comuna": "HUALQUI",
+    "codigo_region": 8,
+    "nombre_region": "Región del Biobío"
+  },
+  {
+    "codigo_comuna": 224,
+    "nombre_comuna": "LAJA",
+    "codigo_region": 8,
+    "nombre_region": "Región del Biobío"
+  },
+  {
+    "codigo_comuna": 236,
+    "nombre_comuna": "LEBU",
+    "codigo_region": 8,
+    "nombre_region": "Región del Biobío"
+  },
+  {
+    "codigo_comuna": 239,
+    "nombre_comuna": "LOS ALAMOS",
+    "codigo_region": 8,
+    "nombre_region": "Región del Biobío"
+  },
+  {
+    "codigo_comuna": 214,
+    "nombre_comuna": "LOS ANGELES",
+    "codigo_region": 8,
+    "nombre_region": "Región del Biobío"
+  },
+  {
+    "codigo_comuna": 234,
+    "nombre_comuna": "LOTA",
+    "codigo_region": 8,
+    "nombre_region": "Región del Biobío"
+  },
+  {
+    "codigo_comuna": 221,
+    "nombre_comuna": "MULCHÉN",
+    "codigo_region": 8,
+    "nombre_region": "Región del Biobío"
+  },
+  {
+    "codigo_comuna": 223,
+    "nombre_comuna": "NACIMIENTO",
+    "codigo_region": 8,
+    "nombre_region": "Región del Biobío"
+  },
+  {
+    "codigo_comuna": 222,
+    "nombre_comuna": "NEGRETE",
+    "codigo_region": 8,
+    "nombre_region": "Región del Biobío"
+  },
+  {
+    "codigo_comuna": 229,
+    "nombre_comuna": "PENCO",
+    "codigo_region": 8,
+    "nombre_region": "Región del Biobío"
+  },
+  {
+    "codigo_comuna": 220,
+    "nombre_comuna": "QUILACO",
+    "codigo_region": 8,
+    "nombre_region": "Región del Biobío"
+  },
+  {
+    "codigo_comuna": 218,
+    "nombre_comuna": "QUILLECO",
+    "codigo_region": 8,
+    "nombre_region": "Región del Biobío"
+  },
+  {
+    "codigo_comuna": 380,
+    "nombre_comuna": "SAN PEDRO DE LA PAZ",
+    "codigo_region": 8,
+    "nombre_region": "Región del Biobío"
+  },
+  {
+    "codigo_comuna": 225,
+    "nombre_comuna": "SAN ROSENDO",
+    "codigo_region": 8,
+    "nombre_region": "Región del Biobío"
+  },
+  {
+    "codigo_comuna": 219,
+    "nombre_comuna": "SANTA BÁRBARA",
+    "codigo_region": 8,
+    "nombre_region": "Región del Biobío"
+  },
+  {
+    "codigo_comuna": 233,
+    "nombre_comuna": "SANTA JUANA",
+    "codigo_region": 8,
+    "nombre_region": "Región del Biobío"
+  },
+  {
+    "codigo_comuna": 228,
+    "nombre_comuna": "TALCAHUANO",
+    "codigo_region": 8,
+    "nombre_region": "Región del Biobío"
+  },
+  {
+    "codigo_comuna": 242,
+    "nombre_comuna": "TIRÚA",
+    "codigo_region": 8,
+    "nombre_region": "Región del Biobío"
+  },
+  {
+    "codigo_comuna": 230,
+    "nombre_comuna": "TOMÉ",
+    "codigo_region": 8,
+    "nombre_region": "Región del Biobío"
+  },
+  {
+    "codigo_comuna": 216,
+    "nombre_comuna": "TUCAPEL",
+    "codigo_region": 8,
+    "nombre_region": "Región del Biobío"
+  },
+  {
+    "codigo_comuna": 226,
+    "nombre_comuna": "YUMBEL",
+    "codigo_region": 8,
+    "nombre_region": "Región del Biobío"
+  },
+  {
+    "codigo_comuna": 243,
+    "nombre_comuna": "ANGOL",
+    "codigo_region": 9,
+    "nombre_region": "Región de la Araucanía"
+  },
+  {
+    "codigo_comuna": 270,
+    "nombre_comuna": "CARAHUE",
+    "codigo_region": 9,
+    "nombre_region": "Región de la Araucanía"
+  },
+  {
+    "codigo_comuna": 391,
+    "nombre_comuna": "CHOLCHOL",
+    "codigo_region": 9,
+    "nombre_region": "Región de la Araucanía"
+  },
+  {
+    "codigo_comuna": 245,
+    "nombre_comuna": "COLLIPULLI",
+    "codigo_region": 9,
+    "nombre_region": "Región de la Araucanía"
+  },
+  {
+    "codigo_comuna": 258,
+    "nombre_comuna": "CUNCO",
+    "codigo_region": 9,
+    "nombre_region": "Región de la Araucanía"
+  },
+  {
+    "codigo_comuna": 247,
+    "nombre_comuna": "CURACAUTÍN",
+    "codigo_region": 9,
+    "nombre_region": "Región de la Araucanía"
+  },
+  {
+    "codigo_comuna": 260,
+    "nombre_comuna": "CURARREHUE",
+    "codigo_region": 9,
+    "nombre_region": "Región de la Araucanía"
+  },
+  {
+    "codigo_comuna": 248,
+    "nombre_comuna": "ERCILLA",
+    "codigo_region": 9,
+    "nombre_region": "Región de la Araucanía"
+  },
+  {
+    "codigo_comuna": 263,
+    "nombre_comuna": "FREIRE",
+    "codigo_region": 9,
+    "nombre_region": "Región de la Araucanía"
+  },
+  {
+    "codigo_comuna": 272,
+    "nombre_comuna": "GALVARINO",
+    "codigo_region": 9,
+    "nombre_region": "Región de la Araucanía"
+  },
+  {
+    "codigo_comuna": 265,
+    "nombre_comuna": "GORBEA",
+    "codigo_region": 9,
+    "nombre_region": "Región de la Araucanía"
+  },
+  {
+    "codigo_comuna": 255,
+    "nombre_comuna": "LAUTARO",
+    "codigo_region": 9,
+    "nombre_region": "Región de la Araucanía"
+  },
+  {
+    "codigo_comuna": 266,
+    "nombre_comuna": "LONCOCHE",
+    "codigo_region": 9,
+    "nombre_region": "Región de la Araucanía"
+  },
+  {
+    "codigo_comuna": 246,
+    "nombre_comuna": "LONQUIMAY",
+    "codigo_region": 9,
+    "nombre_region": "Región de la Araucanía"
+  },
+  {
+    "codigo_comuna": 253,
+    "nombre_comuna": "LOS SAUCES",
+    "codigo_region": 9,
+    "nombre_region": "Región de la Araucanía"
+  },
+  {
+    "codigo_comuna": 251,
+    "nombre_comuna": "LUMACO",
+    "codigo_region": 9,
+    "nombre_region": "Región de la Araucanía"
+  },
+  {
+    "codigo_comuna": 259,
+    "nombre_comuna": "MELIPEUCO",
+    "codigo_region": 9,
+    "nombre_region": "Región de la Araucanía"
+  },
+  {
+    "codigo_comuna": 271,
+    "nombre_comuna": "NUEVA IMPERIAL",
+    "codigo_region": 9,
+    "nombre_region": "Región de la Araucanía"
+  },
+  {
+    "codigo_comuna": 376,
+    "nombre_comuna": "PADRE LAS CASAS",
+    "codigo_region": 9,
+    "nombre_region": "Región de la Araucanía"
+  },
+  {
+    "codigo_comuna": 256,
+    "nombre_comuna": "PERQUENCO",
+    "codigo_region": 9,
+    "nombre_region": "Región de la Araucanía"
+  },
+  {
+    "codigo_comuna": 264,
+    "nombre_comuna": "PITRUFQUÉN",
+    "codigo_region": 9,
+    "nombre_region": "Región de la Araucanía"
+  },
+  {
+    "codigo_comuna": 261,
+    "nombre_comuna": "PUCÓN",
+    "codigo_region": 9,
+    "nombre_region": "Región de la Araucanía"
+  },
+  {
+    "codigo_comuna": 252,
+    "nombre_comuna": "PURÉN",
+    "codigo_region": 9,
+    "nombre_region": "Región de la Araucanía"
+  },
+  {
+    "codigo_comuna": 244,
+    "nombre_comuna": "RENAICO",
+    "codigo_region": 9,
+    "nombre_region": "Región de la Araucanía"
+  },
+  {
+    "codigo_comuna": 269,
+    "nombre_comuna": "SAAVEDRA",
+    "codigo_region": 9,
+    "nombre_region": "Región de la Araucanía"
+  },
+  {
+    "codigo_comuna": 254,
+    "nombre_comuna": "TEMUCO",
+    "codigo_region": 9,
+    "nombre_region": "Región de la Araucanía"
+  },
+  {
+    "codigo_comuna": 268,
+    "nombre_comuna": "TEODORO SCHMIDT",
+    "codigo_region": 9,
+    "nombre_region": "Región de la Araucanía"
+  },
+  {
+    "codigo_comuna": 267,
+    "nombre_comuna": "TOLTÉN",
+    "codigo_region": 9,
+    "nombre_region": "Región de la Araucanía"
+  },
+  {
+    "codigo_comuna": 250,
+    "nombre_comuna": "TRAIGUÉN",
+    "codigo_region": 9,
+    "nombre_region": "Región de la Araucanía"
+  },
+  {
+    "codigo_comuna": 249,
+    "nombre_comuna": "VICTORIA",
+    "codigo_region": 9,
+    "nombre_region": "Región de la Araucanía"
+  },
+  {
+    "codigo_comuna": 257,
+    "nombre_comuna": "VILCÚN",
+    "codigo_region": 9,
+    "nombre_region": "Región de la Araucanía"
+  },
+  {
+    "codigo_comuna": 262,
+    "nombre_comuna": "VILLARRICA",
+    "codigo_region": 9,
+    "nombre_region": "Región de la Araucanía"
+  },
+  {
+    "codigo_comuna": 302,
+    "nombre_comuna": "ANCUD",
+    "codigo_region": 10,
+    "nombre_region": "Región de Los Lagos"
+  },
+  {
+    "codigo_comuna": 295,
+    "nombre_comuna": "CALBUCO",
+    "codigo_region": 10,
+    "nombre_region": "Región de Los Lagos"
+  },
+  {
+    "codigo_comuna": 301,
+    "nombre_comuna": "CASTRO",
+    "codigo_region": 10,
+    "nombre_region": "Región de Los Lagos"
+  },
+  {
+    "codigo_comuna": 311,
+    "nombre_comuna": "CHAITÉN",
+    "codigo_region": 10,
+    "nombre_region": "Región de Los Lagos"
+  },
+  {
+    "codigo_comuna": 308,
+    "nombre_comuna": "CHONCHI",
+    "codigo_region": 10,
+    "nombre_region": "Región de Los Lagos"
+  },
+  {
+    "codigo_comuna": 294,
+    "nombre_comuna": "COCHAMÓ",
+    "codigo_region": 10,
+    "nombre_region": "Región de Los Lagos"
+  },
+  {
+    "codigo_comuna": 305,
+    "nombre_comuna": "CURACO DE VÉLEZ",
+    "codigo_region": 10,
+    "nombre_region": "Región de Los Lagos"
+  },
+  {
+    "codigo_comuna": 304,
+    "nombre_comuna": "DALCAHUE",
+    "codigo_region": 10,
+    "nombre_region": "Región de Los Lagos"
+  },
+  {
+    "codigo_comuna": 298,
+    "nombre_comuna": "FRESIA",
+    "codigo_region": 10,
+    "nombre_region": "Región de Los Lagos"
+  },
+  {
+    "codigo_comuna": 300,
+    "nombre_comuna": "FRUTILLAR",
+    "codigo_region": 10,
+    "nombre_region": "Región de Los Lagos"
+  },
+  {
+    "codigo_comuna": 313,
+    "nombre_comuna": "FUTALEUFÚ",
+    "codigo_region": 10,
+    "nombre_region": "Región de Los Lagos"
+  },
+  {
+    "codigo_comuna": 312,
+    "nombre_comuna": "HUALAIHUÉ",
+    "codigo_region": 10,
+    "nombre_region": "Región de Los Lagos"
+  },
+  {
+    "codigo_comuna": 299,
+    "nombre_comuna": "LLANQUIHUE",
+    "codigo_region": 10,
+    "nombre_region": "Región de Los Lagos"
+  },
+  {
+    "codigo_comuna": 297,
+    "nombre_comuna": "LOS MUERMOS",
+    "codigo_region": 10,
+    "nombre_region": "Región de Los Lagos"
+  },
+  {
+    "codigo_comuna": 296,
+    "nombre_comuna": "MAULLÍN",
+    "codigo_region": 10,
+    "nombre_region": "Región de Los Lagos"
+  },
+  {
+    "codigo_comuna": 285,
+    "nombre_comuna": "OSORNO",
+    "codigo_region": 10,
+    "nombre_region": "Región de Los Lagos"
+  },
+  {
+    "codigo_comuna": 314,
+    "nombre_comuna": "PALENA",
+    "codigo_region": 10,
+    "nombre_region": "Región de Los Lagos"
+  },
+  {
+    "codigo_comuna": 292,
+    "nombre_comuna": "PUERTO MONTT",
+    "codigo_region": 10,
+    "nombre_region": "Región de Los Lagos"
+  },
+  {
+    "codigo_comuna": 288,
+    "nombre_comuna": "PUERTO OCTAY",
+    "codigo_region": 10,
+    "nombre_region": "Región de Los Lagos"
+  },
+  {
+    "codigo_comuna": 293,
+    "nombre_comuna": "PUERTO VARAS",
+    "codigo_region": 10,
+    "nombre_region": "Región de Los Lagos"
+  },
+  {
+    "codigo_comuna": 307,
+    "nombre_comuna": "PUQUELDÓN",
+    "codigo_region": 10,
+    "nombre_region": "Región de Los Lagos"
+  },
+  {
+    "codigo_comuna": 289,
+    "nombre_comuna": "PURRANQUE",
+    "codigo_region": 10,
+    "nombre_region": "Región de Los Lagos"
+  },
+  {
+    "codigo_comuna": 373,
+    "nombre_comuna": "PUYEHUE",
+    "codigo_region": 10,
+    "nombre_region": "Región de Los Lagos"
+  },
+  {
+    "codigo_comuna": 309,
+    "nombre_comuna": "QUEILÉN",
+    "codigo_region": 10,
+    "nombre_region": "Región de Los Lagos"
+  },
+  {
+    "codigo_comuna": 310,
+    "nombre_comuna": "QUELLÓN",
+    "codigo_region": 10,
+    "nombre_region": "Región de Los Lagos"
+  },
+  {
+    "codigo_comuna": 303,
+    "nombre_comuna": "QUEMCHI",
+    "codigo_region": 10,
+    "nombre_region": "Región de Los Lagos"
+  },
+  {
+    "codigo_comuna": 306,
+    "nombre_comuna": "QUINCHAO",
+    "codigo_region": 10,
+    "nombre_region": "Región de Los Lagos"
+  },
+  {
+    "codigo_comuna": 290,
+    "nombre_comuna": "RÍO NEGRO",
+    "codigo_region": 10,
+    "nombre_region": "Región de Los Lagos"
+  },
+  {
+    "codigo_comuna": 291,
+    "nombre_comuna": "SAN JUAN DE LA COSTA",
+    "codigo_region": 10,
+    "nombre_region": "Región de Los Lagos"
+  },
+  {
+    "codigo_comuna": 286,
+    "nombre_comuna": "SAN PABLO",
+    "codigo_region": 10,
+    "nombre_region": "Región de Los Lagos"
+  },
+  {
+    "codigo_comuna": 317,
+    "nombre_comuna": "AISÉN",
+    "codigo_region": 11,
+    "nombre_region": "Región de Aysén del Gral.Carlos Ibáñez del C."
+  },
+  {
+    "codigo_comuna": 320,
+    "nombre_comuna": "CHILE CHICO",
+    "codigo_region": 11,
+    "nombre_region": "Región de Aysén del Gral.Carlos Ibáñez del C."
+  },
+  {
+    "codigo_comuna": 318,
+    "nombre_comuna": "CISNES",
+    "codigo_region": 11,
+    "nombre_region": "Región de Aysén del Gral.Carlos Ibáñez del C."
+  },
+  {
+    "codigo_comuna": 322,
+    "nombre_comuna": "COCHRANE",
+    "codigo_region": 11,
+    "nombre_region": "Región de Aysén del Gral.Carlos Ibáñez del C."
+  },
+  {
+    "codigo_comuna": 315,
+    "nombre_comuna": "COYHAIQUE",
+    "codigo_region": 11,
+    "nombre_region": "Región de Aysén del Gral.Carlos Ibáñez del C."
+  },
+  {
+    "codigo_comuna": 319,
+    "nombre_comuna": "GUAITECAS",
+    "codigo_region": 11,
+    "nombre_region": "Región de Aysén del Gral.Carlos Ibáñez del C."
+  },
+  {
+    "codigo_comuna": 316,
+    "nombre_comuna": "LAGO VERDE",
+    "codigo_region": 11,
+    "nombre_region": "Región de Aysén del Gral.Carlos Ibáñez del C."
+  },
+  {
+    "codigo_comuna": 321,
+    "nombre_comuna": "RÍO IBÁÑEZ",
+    "codigo_region": 11,
+    "nombre_region": "Región de Aysén del Gral.Carlos Ibáñez del C."
+  },
+  {
+    "codigo_comuna": 324,
+    "nombre_comuna": "TORTEL",
+    "codigo_region": 11,
+    "nombre_region": "Región de Aysén del Gral.Carlos Ibáñez del C."
+  },
+  {
+    "codigo_comuna": 335,
+    "nombre_comuna": "ANTÁRTICA",
+    "codigo_region": 12,
+    "nombre_region": "Región de Magallanes y la Antártica Chilena"
+  },
+  {
+    "codigo_comuna": 389,
+    "nombre_comuna": "CABO DE HORNOS",
+    "codigo_region": 12,
+    "nombre_region": "Región de Magallanes y la Antártica Chilena"
+  },
+  {
+    "codigo_comuna": 329,
+    "nombre_comuna": "LAGUNA BLANCA",
+    "codigo_region": 12,
+    "nombre_region": "Región de Magallanes y la Antártica Chilena"
+  },
+  {
+    "codigo_comuna": 325,
+    "nombre_comuna": "NATALES",
+    "codigo_region": 12,
+    "nombre_region": "Región de Magallanes y la Antártica Chilena"
+  },
+  {
+    "codigo_comuna": 331,
+    "nombre_comuna": "PORVENIR",
+    "codigo_region": 12,
+    "nombre_region": "Región de Magallanes y la Antártica Chilena"
+  },
+  {
+    "codigo_comuna": 332,
+    "nombre_comuna": "PRIMAVERA",
+    "codigo_region": 12,
+    "nombre_region": "Región de Magallanes y la Antártica Chilena"
+  },
+  {
+    "codigo_comuna": 327,
+    "nombre_comuna": "PUNTA ARENAS",
+    "codigo_region": 12,
+    "nombre_region": "Región de Magallanes y la Antártica Chilena"
+  },
+  {
+    "codigo_comuna": 328,
+    "nombre_comuna": "RÍO VERDE",
+    "codigo_region": 12,
+    "nombre_region": "Región de Magallanes y la Antártica Chilena"
+  },
+  {
+    "codigo_comuna": 330,
+    "nombre_comuna": "SAN GREGORIO",
+    "codigo_region": 12,
+    "nombre_region": "Región de Magallanes y la Antártica Chilena"
+  },
+  {
+    "codigo_comuna": 333,
+    "nombre_comuna": "TIMAUKEL",
+    "codigo_region": 12,
+    "nombre_region": "Región de Magallanes y la Antártica Chilena"
+  },
+  {
+    "codigo_comuna": 326,
+    "nombre_comuna": "TORRES DEL PAINE",
+    "codigo_region": 12,
+    "nombre_region": "Región de Magallanes y la Antártica Chilena"
+  },
+  {
+    "codigo_comuna": 126,
+    "nombre_comuna": "ALHUÉ",
+    "codigo_region": 13,
+    "nombre_region": "Región Metropolitana de Santiago"
+  },
+  {
+    "codigo_comuna": 120,
+    "nombre_comuna": "BUIN",
+    "codigo_region": 13,
+    "nombre_region": "Región Metropolitana de Santiago"
+  },
+  {
+    "codigo_comuna": 122,
+    "nombre_comuna": "CALERA DE TANGO",
+    "codigo_region": 13,
+    "nombre_region": "Región Metropolitana de Santiago"
+  },
+  {
+    "codigo_comuna": 105,
+    "nombre_comuna": "CERRILLOS",
+    "codigo_region": 13,
+    "nombre_region": "Región Metropolitana de Santiago"
+  },
+  {
+    "codigo_comuna": 110,
+    "nombre_comuna": "CERRO NAVIA",
+    "codigo_region": 13,
+    "nombre_region": "Región Metropolitana de Santiago"
+  },
+  {
+    "codigo_comuna": 113,
+    "nombre_comuna": "COLINA",
+    "codigo_region": 13,
+    "nombre_region": "Región Metropolitana de Santiago"
+  },
+  {
+    "codigo_comuna": 83,
+    "nombre_comuna": "CONCHALÍ",
+    "codigo_region": 13,
+    "nombre_region": "Región Metropolitana de Santiago"
+  },
+  {
+    "codigo_comuna": 125,
+    "nombre_comuna": "CURACAVÍ",
+    "codigo_region": 13,
+    "nombre_region": "Región Metropolitana de Santiago"
+  },
+  {
+    "codigo_comuna": 101,
+    "nombre_comuna": "EL BOSQUE",
+    "codigo_region": 13,
+    "nombre_region": "Región Metropolitana de Santiago"
+  },
+  {
+    "codigo_comuna": 131,
+    "nombre_comuna": "EL MONTE",
+    "codigo_region": 13,
+    "nombre_region": "Región Metropolitana de Santiago"
+  },
+  {
+    "codigo_comuna": 104,
+    "nombre_comuna": "ESTACIÓN CENTRAL",
+    "codigo_region": 13,
+    "nombre_region": "Región Metropolitana de Santiago"
+  },
+  {
+    "codigo_comuna": 84,
+    "nombre_comuna": "HUECHURABA",
+    "codigo_region": 13,
+    "nombre_region": "Región Metropolitana de Santiago"
+  },
+  {
+    "codigo_comuna": 82,
+    "nombre_comuna": "INDEPENDENCIA",
+    "codigo_region": 13,
+    "nombre_region": "Región Metropolitana de Santiago"
+  },
+  {
+    "codigo_comuna": 130,
+    "nombre_comuna": "ISLA DE MAIPO",
+    "codigo_region": 13,
+    "nombre_region": "Región Metropolitana de Santiago"
+  },
+  {
+    "codigo_comuna": 100,
+    "nombre_comuna": "LA CISTERNA",
+    "codigo_region": 13,
+    "nombre_region": "Región Metropolitana de Santiago"
+  },
+  {
+    "codigo_comuna": 94,
+    "nombre_comuna": "LA FLORIDA",
+    "codigo_region": 13,
+    "nombre_region": "Región Metropolitana de Santiago"
+  },
+  {
+    "codigo_comuna": 96,
+    "nombre_comuna": "LA GRANJA",
+    "codigo_region": 13,
+    "nombre_region": "Región Metropolitana de Santiago"
+  },
+  {
+    "codigo_comuna": 97,
+    "nombre_comuna": "LA PINTANA",
+    "codigo_region": 13,
+    "nombre_region": "Región Metropolitana de Santiago"
+  },
+  {
+    "codigo_comuna": 91,
+    "nombre_comuna": "LA REINA",
+    "codigo_region": 13,
+    "nombre_region": "Región Metropolitana de Santiago"
+  },
+  {
+    "codigo_comuna": 114,
+    "nombre_comuna": "LAMPA",
+    "codigo_region": 13,
+    "nombre_region": "Región Metropolitana de Santiago"
+  },
+  {
+    "codigo_comuna": 89,
+    "nombre_comuna": "LAS CONDES",
+    "codigo_region": 13,
+    "nombre_region": "Región Metropolitana de Santiago"
+  },
+  {
+    "codigo_comuna": 88,
+    "nombre_comuna": "LO BARNECHEA",
+    "codigo_region": 13,
+    "nombre_region": "Región Metropolitana de Santiago"
+  },
+  {
+    "codigo_comuna": 103,
+    "nombre_comuna": "LO ESPEJO",
+    "codigo_region": 13,
+    "nombre_region": "Región Metropolitana de Santiago"
+  },
+  {
+    "codigo_comuna": 108,
+    "nombre_comuna": "LO PRADO",
+    "codigo_region": 13,
+    "nombre_region": "Región Metropolitana de Santiago"
+  },
+  {
+    "codigo_comuna": 92,
+    "nombre_comuna": "MACUL",
+    "codigo_region": 13,
+    "nombre_region": "Región Metropolitana de Santiago"
+  },
+  {
+    "codigo_comuna": 106,
+    "nombre_comuna": "MAIPÚ",
+    "codigo_region": 13,
+    "nombre_region": "Región Metropolitana de Santiago"
+  },
+  {
+    "codigo_comuna": 124,
+    "nombre_comuna": "MARÍA PINTO",
+    "codigo_region": 13,
+    "nombre_region": "Región Metropolitana de Santiago"
+  },
+  {
+    "codigo_comuna": 123,
+    "nombre_comuna": "MELIPILLA",
+    "codigo_region": 13,
+    "nombre_region": "Región Metropolitana de Santiago"
+  },
+  {
+    "codigo_comuna": 90,
+    "nombre_comuna": "ÑUÑOA",
+    "codigo_region": 13,
+    "nombre_region": "Región Metropolitana de Santiago"
+  },
+  {
+    "codigo_comuna": 381,
+    "nombre_comuna": "PADRE HURTADO",
+    "codigo_region": 13,
+    "nombre_region": "Región Metropolitana de Santiago"
+  },
+  {
+    "codigo_comuna": 121,
+    "nombre_comuna": "PAINE",
+    "codigo_region": 13,
+    "nombre_region": "Región Metropolitana de Santiago"
+  },
+  {
+    "codigo_comuna": 102,
+    "nombre_comuna": "PEDRO AGUIRRE CERDA",
+    "codigo_region": 13,
+    "nombre_region": "Región Metropolitana de Santiago"
+  },
+  {
+    "codigo_comuna": 129,
+    "nombre_comuna": "PEÑAFLOR",
+    "codigo_region": 13,
+    "nombre_region": "Región Metropolitana de Santiago"
+  },
+  {
+    "codigo_comuna": 93,
+    "nombre_comuna": "PEÑALOLÉN",
+    "codigo_region": 13,
+    "nombre_region": "Región Metropolitana de Santiago"
+  },
+  {
+    "codigo_comuna": 118,
+    "nombre_comuna": "PIRQUE",
+    "codigo_region": 13,
+    "nombre_region": "Región Metropolitana de Santiago"
+  },
+  {
+    "codigo_comuna": 86,
+    "nombre_comuna": "PROVIDENCIA",
+    "codigo_region": 13,
+    "nombre_region": "Región Metropolitana de Santiago"
+  },
+  {
+    "codigo_comuna": 109,
+    "nombre_comuna": "PUDAHUEL",
+    "codigo_region": 13,
+    "nombre_region": "Región Metropolitana de Santiago"
+  },
+  {
+    "codigo_comuna": 116,
+    "nombre_comuna": "PUENTE ALTO",
+    "codigo_region": 13,
+    "nombre_region": "Región Metropolitana de Santiago"
+  },
+  {
+    "codigo_comuna": 112,
+    "nombre_comuna": "QUILICURA",
+    "codigo_region": 13,
+    "nombre_region": "Región Metropolitana de Santiago"
+  },
+  {
+    "codigo_comuna": 107,
+    "nombre_comuna": "QUINTA NORMAL",
+    "codigo_region": 13,
+    "nombre_region": "Región Metropolitana de Santiago"
+  },
+  {
+    "codigo_comuna": 85,
+    "nombre_comuna": "RECOLETA",
+    "codigo_region": 13,
+    "nombre_region": "Región Metropolitana de Santiago"
+  },
+  {
+    "codigo_comuna": 111,
+    "nombre_comuna": "RENCA",
+    "codigo_region": 13,
+    "nombre_region": "Región Metropolitana de Santiago"
+  },
+  {
+    "codigo_comuna": 119,
+    "nombre_comuna": "SAN BERNARDO",
+    "codigo_region": 13,
+    "nombre_region": "Región Metropolitana de Santiago"
+  },
+  {
+    "codigo_comuna": 95,
+    "nombre_comuna": "SAN JOAQUÍN",
+    "codigo_region": 13,
+    "nombre_region": "Región Metropolitana de Santiago"
+  },
+  {
+    "codigo_comuna": 117,
+    "nombre_comuna": "SAN JOSÉ DE MAIPO",
+    "codigo_region": 13,
+    "nombre_region": "Región Metropolitana de Santiago"
+  },
+  {
+    "codigo_comuna": 99,
+    "nombre_comuna": "SAN MIGUEL",
+    "codigo_region": 13,
+    "nombre_region": "Región Metropolitana de Santiago"
+  },
+  {
+    "codigo_comuna": 127,
+    "nombre_comuna": "SAN PEDRO",
+    "codigo_region": 13,
+    "nombre_region": "Región Metropolitana de Santiago"
+  },
+  {
+    "codigo_comuna": 98,
+    "nombre_comuna": "SAN RAMÓN",
+    "codigo_region": 13,
+    "nombre_region": "Región Metropolitana de Santiago"
+  },
+  {
+    "codigo_comuna": 81,
+    "nombre_comuna": "SANTIAGO",
+    "codigo_region": 13,
+    "nombre_region": "Región Metropolitana de Santiago"
+  },
+  {
+    "codigo_comuna": 128,
+    "nombre_comuna": "TALAGANTE",
+    "codigo_region": 13,
+    "nombre_region": "Región Metropolitana de Santiago"
+  },
+  {
+    "codigo_comuna": 115,
+    "nombre_comuna": "TILTIL",
+    "codigo_region": 13,
+    "nombre_region": "Región Metropolitana de Santiago"
+  },
+  {
+    "codigo_comuna": 87,
+    "nombre_comuna": "VITACURA",
+    "codigo_region": 13,
+    "nombre_region": "Región Metropolitana de Santiago"
+  },
+  {
+    "codigo_comuna": 278,
+    "nombre_comuna": "CORRAL",
+    "codigo_region": 14,
+    "nombre_region": "Región de Los Ríos"
+  },
+  {
+    "codigo_comuna": 277,
+    "nombre_comuna": "FUTRONO",
+    "codigo_region": 14,
+    "nombre_region": "Región de Los Ríos"
+  },
+  {
+    "codigo_comuna": 281,
+    "nombre_comuna": "LA UNIÓN",
+    "codigo_region": 14,
+    "nombre_region": "Región de Los Ríos"
+  },
+  {
+    "codigo_comuna": 284,
+    "nombre_comuna": "LAGO RANCO",
+    "codigo_region": 14,
+    "nombre_region": "Región de Los Ríos"
+  },
+  {
+    "codigo_comuna": 275,
+    "nombre_comuna": "LANCO",
+    "codigo_region": 14,
+    "nombre_region": "Región de Los Ríos"
+  },
+  {
+    "codigo_comuna": 276,
+    "nombre_comuna": "LOS LAGOS",
+    "codigo_region": 14,
+    "nombre_region": "Región de Los Ríos"
+  },
+  {
+    "codigo_comuna": 279,
+    "nombre_comuna": "MÁFIL",
+    "codigo_region": 14,
+    "nombre_region": "Región de Los Ríos"
+  },
+  {
+    "codigo_comuna": 274,
+    "nombre_comuna": "MARIQUINA",
+    "codigo_region": 14,
+    "nombre_region": "Región de Los Ríos"
+  },
+  {
+    "codigo_comuna": 282,
+    "nombre_comuna": "PAILLACO",
+    "codigo_region": 14,
+    "nombre_region": "Región de Los Ríos"
+  },
+  {
+    "codigo_comuna": 280,
+    "nombre_comuna": "PANGUIPULLI",
+    "codigo_region": 14,
+    "nombre_region": "Región de Los Ríos"
+  },
+  {
+    "codigo_comuna": 283,
+    "nombre_comuna": "RÍO BUENO",
+    "codigo_region": 14,
+    "nombre_region": "Región de Los Ríos"
+  },
+  {
+    "codigo_comuna": 273,
+    "nombre_comuna": "VALDIVIA",
+    "codigo_region": 14,
+    "nombre_region": "Región de Los Ríos"
+  },
+  {
+    "codigo_comuna": 1,
+    "nombre_comuna": "ARICA",
+    "codigo_region": 15,
+    "nombre_region": "Región de Arica y Parinacota"
+  },
+  {
+    "codigo_comuna": 2,
+    "nombre_comuna": "CAMARONES",
+    "codigo_region": 15,
+    "nombre_region": "Región de Arica y Parinacota"
+  },
+  {
+    "codigo_comuna": 4,
+    "nombre_comuna": "GENERAL LAGOS",
+    "codigo_region": 15,
+    "nombre_region": "Región de Arica y Parinacota"
+  },
+  {
+    "codigo_comuna": 3,
+    "nombre_comuna": "PUTRE",
+    "codigo_region": 15,
+    "nombre_region": "Región de Arica y Parinacota"
+  },
+  {
+    "codigo_comuna": 204,
+    "nombre_comuna": "BULNES",
+    "codigo_region": 16,
+    "nombre_region": "Región de Ñuble"
+  },
+  {
+    "codigo_comuna": 194,
+    "nombre_comuna": "CHILLÁN",
+    "codigo_region": 16,
+    "nombre_region": "Región de Ñuble"
+  },
+  {
+    "codigo_comuna": 379,
+    "nombre_comuna": "CHILLÁN VIEJO",
+    "codigo_region": 16,
+    "nombre_region": "Región de Ñuble"
+  },
+  {
+    "codigo_comuna": 210,
+    "nombre_comuna": "COBQUECURA",
+    "codigo_region": 16,
+    "nombre_region": "Región de Ñuble"
+  },
+  {
+    "codigo_comuna": 208,
+    "nombre_comuna": "COELEMU",
+    "codigo_region": 16,
+    "nombre_region": "Región de Ñuble"
+  },
+  {
+    "codigo_comuna": 198,
+    "nombre_comuna": "COIHUECO",
+    "codigo_region": 16,
+    "nombre_region": "Región de Ñuble"
+  },
+  {
+    "codigo_comuna": 201,
+    "nombre_comuna": "EL CARMEN",
+    "codigo_region": 16,
+    "nombre_region": "Región de Ñuble"
+  },
+  {
+    "codigo_comuna": 212,
+    "nombre_comuna": "NINHUE",
+    "codigo_region": 16,
+    "nombre_region": "Región de Ñuble"
+  },
+  {
+    "codigo_comuna": 196,
+    "nombre_comuna": "ÑIQUÉN",
+    "codigo_region": 16,
+    "nombre_region": "Región de Ñuble"
+  },
+  {
+    "codigo_comuna": 203,
+    "nombre_comuna": "PEMUCO",
+    "codigo_region": 16,
+    "nombre_region": "Región de Ñuble"
+  },
+  {
+    "codigo_comuna": 199,
+    "nombre_comuna": "PINTO",
+    "codigo_region": 16,
+    "nombre_region": "Región de Ñuble"
+  },
+  {
+    "codigo_comuna": 207,
+    "nombre_comuna": "PORTEZUELO",
+    "codigo_region": 16,
+    "nombre_region": "Región de Ñuble"
+  },
+  {
+    "codigo_comuna": 205,
+    "nombre_comuna": "QUILLÓN",
+    "codigo_region": 16,
+    "nombre_region": "Región de Ñuble"
+  },
+  {
+    "codigo_comuna": 211,
+    "nombre_comuna": "QUIRIHUE",
+    "codigo_region": 16,
+    "nombre_region": "Región de Ñuble"
+  },
+  {
+    "codigo_comuna": 206,
+    "nombre_comuna": "RÁNQUIL",
+    "codigo_region": 16,
+    "nombre_region": "Región de Ñuble"
+  },
+  {
+    "codigo_comuna": 195,
+    "nombre_comuna": "SAN CARLOS",
+    "codigo_region": 16,
+    "nombre_region": "Región de Ñuble"
+  },
+  {
+    "codigo_comuna": 197,
+    "nombre_comuna": "SAN FABIÁN",
+    "codigo_region": 16,
+    "nombre_region": "Región de Ñuble"
+  },
+  {
+    "codigo_comuna": 200,
+    "nombre_comuna": "SAN IGNACIO",
+    "codigo_region": 16,
+    "nombre_region": "Región de Ñuble"
+  },
+  {
+    "codigo_comuna": 213,
+    "nombre_comuna": "SAN NICOLÁS",
+    "codigo_region": 16,
+    "nombre_region": "Región de Ñuble"
+  },
+  {
+    "codigo_comuna": 209,
+    "nombre_comuna": "TREGUACO",
+    "codigo_region": 16,
+    "nombre_region": "Región de Ñuble"
+  },
+  {
+    "codigo_comuna": 202,
+    "nombre_comuna": "YUNGAY",
+    "codigo_region": 16,
+    "nombre_region": "Región de Ñuble"
+  },
+  {
+    "codigo_comuna": 323,
+    "nombre_comuna": "O'HIGGINS",
+    "codigo_region": 11,
+    "nombre_region": "Región de Aysén del Gral.Carlos Ibáñez del C."
+  }
+]}

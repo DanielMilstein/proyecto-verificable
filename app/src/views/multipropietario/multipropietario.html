@@ -152,6 +152,7 @@
                 <th>Fecha de Inscripción</th>
                 <th>Año de Inscripción</th>
                 <th>Número de inscripción</th>
+                <th>Fojas</th>
                 <th>Año Vigencia Inicial</th>
                 <th>Año Vigencia Final</th>
                 </tr>
@@ -176,6 +177,7 @@
                         {% endif %}
                     </td>
                     <td>{{ propietario_info.numero_inscripcion if propietario_info.numero_inscripcion else '-' }}</td>
+                    <td>{{ propietario_info.fojas if propietario_info.fojas else '-' }}</td>
                     <td>{{ propietario_info.año_vigencia_inicial if propietario_info.año_vigencia_inicial else '-' }}</td>
                     <td>{{ propietario_info.año_vigencia_final if propietario_info.año_vigencia_final else '-' }}</td>
                 </tr>            
@@ -186,6 +188,6 @@
         <p>No hay resultados para la búsqueda actual. Intente nuevamente.</p>
         {% endif %}
     </div>
-    <button class="goback-btn" onclick="goBack()">Volver atrás</button>
+    <a class="goback-btn" href="./">Volver atrás</a>
 </body>
 </html>

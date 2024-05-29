@@ -1,4 +1,4 @@
-from openpyxl import load_workbook
+import json
 from . import db
 from .models import CNE, Comuna
 
@@ -8,20 +8,16 @@ NUMERO_FORMULARIOS = 2
 def retrieve_comunas_list():
     comunas_list = []
 
-    # Load workbook
-    wb = load_workbook('regionesComunas.xlsx')
-    
-    # Get sheets
-    comunas_sheet = wb['comunas']
-    regiones_sheet = wb['regiones']
+    with open('app/comunas-region-seed.json', 'r', encoding='utf-8') as json_file:
+        comunas_data = json.load(json_file)
 
-    # Dictionary to store region names based on id_region
-    region_id_name_mapping = {region_row[0]: region_row[1] for region_row in regiones_sheet.iter_rows(values_only=True)}
-
-    # Iterate through "comunas" sheet
-    for id_comuna, descripcion, id_region in comunas_sheet.iter_rows(min_row=2, values_only=True):
-        nombre_region = region_id_name_mapping.get(id_region, '')
-        comunas_list.append(Comuna(codigo_comuna=id_comuna, nombre_comuna=descripcion, codigo_region=id_region, nombre_region=nombre_region))
+        for comuna_data in comunas_data['Comuna']:
+            comunas_list.append(Comuna(
+                codigo_comuna=comuna_data['codigo_comuna'],
+                nombre_comuna=comuna_data['nombre_comuna'],
+                codigo_region=comuna_data['codigo_region'],
+                nombre_region=comuna_data['nombre_region']
+            ))
     
     return comunas_list
 
@@ -29,7 +25,6 @@ def retrieve_formularios_list():
     formularios = [
         CNE(codigo_cne='8', nombre_cne='Compraventa'),
         CNE(codigo_cne='99', nombre_cne='Regularización del Patrimonio'),
-        # Add formularios as needed
     ]
     return formularios
 
@@ -60,4 +55,3 @@ def seed_database():
         print("Database seeded successfully")
     else:
         print("Database is already seeded")
-
