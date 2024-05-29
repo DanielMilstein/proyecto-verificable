@@ -1,5 +1,5 @@
-from .algoritmo_regularizacion_patrimonio import AlgoritmoRegularizacionPatrimonio
-from .algoritmo_compraventa import AlgoritmoCompraventa
+from .algoritmos.regularizacion_patrimonio.algoritmo_regularizacion_patrimonio import AlgoritmoRegularizacionPatrimonio
+from .algoritmos.compraventa.algoritmo_compraventa import AlgoritmoCompraventa
 
 REGULARIZACION_DE_PATRIMONIO = 99
 COMPRAVENTA = 8

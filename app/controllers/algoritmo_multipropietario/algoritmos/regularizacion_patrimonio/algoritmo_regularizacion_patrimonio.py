@@ -1,4 +1,4 @@
-from ..table_handlers.multipropietario import MultipropietarioTableHandler
+from ....table_handlers.multipropietario import MultipropietarioTableHandler
 from app.models import db
 
 class AlgoritmoRegularizacionPatrimonio:
