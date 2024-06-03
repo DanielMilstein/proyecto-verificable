@@ -1,6 +1,4 @@
-from ..algoritmo_compraventa import AlgoritmoCompraventa
-
-class HandleScenario1(AlgoritmoCompraventa):
+class HandleScenario1():
     def handle(self, form_data):
         rol = form_data.get('rol')
 
