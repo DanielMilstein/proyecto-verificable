@@ -3,10 +3,9 @@ from app.forms import *
 from app.models import *
 import json
 from datetime import datetime
-
+from .algoritmo_multipropietario.insert_multipropietario import AlgoritmoMultipropietario
 
 blueprint = Blueprint('pages', __name__)
-
 
 
 ################
@@ -71,7 +70,6 @@ def create_implicados(form, personas, adquiriente_flag):
 
 def upload_to_multipropietario(form_data):
     multipropietario = AlgoritmoMultipropietario()
-    # Call the method to insert into 'multipropietario'
     success = multipropietario.insert_into_multipropietario(form_data)
 
     if success:
@@ -99,7 +97,7 @@ def form():
 
         new_form = Formulario(
             cne=form.cne.data.codigo_cne,
-            rol=bien_raiz.rol,
+            rol=f'{form.comuna.data.codigo_comuna}-{form.manzana.data}-{form.predio.data}',
             fojas=form.fojas.data,
             fecha_inscripcion=form.fecha_inscripcion.data,
             numero_inscripcion=form.numero_inscripcion.data
@@ -118,6 +116,18 @@ def form():
 
         create_implicados(new_form, adquirientes, True)
         create_implicados(new_form, enajenantes, False)
+
+        form_data = {
+            'cne': form.cne.data.codigo_cne,
+            'rol': f'{form.comuna.data.codigo_comuna}-{form.manzana.data}-{form.predio.data}',
+            'fecha_inscripcion': datetime.strptime(form.fecha_inscripcion.data, '%Y-%m-%d').date(),
+            'nro_inscripcion': form.numero_inscripcion.data,
+            'fojas': form.fojas.data,
+            'enajenantes': enajenantes,
+            'adquirientes': adquirientes
+        }
+        upload_to_multipropietario(form_data)
+        db.session.commit()
 
         return redirect('/')
     return render_template('form-F2890/form-F2890.html', title='Form', form=form)
@@ -169,24 +179,22 @@ def form_detail(numero_atencion):
     else:
         return render_template('404.html'), 404
 
-
-
 @blueprint.route('/buscar_multipropietarios', methods=['GET','POST'])
 def search_multipropietarios():
     if request.method == 'POST':
-        año = request.form.get('año')
+        year = request.form.get('año')
         comuna_codigo = request.form.get('comuna')
         manzana = request.form.get('manzana')
         predio = request.form.get('predio')
     elif request.method == 'GET':
-        año = request.args.get('año')
+        year = request.args.get('año')
         comuna_codigo = request.args.get('comuna')
         manzana = request.args.get('manzana')
         predio = request.args.get('predio')
 
-    if None in (año, comuna_codigo, manzana, predio):
+    if None in (year, comuna_codigo, manzana, predio):
         return render_template('/multipropietario/multipropietario.html', propietarios_info=None)
-    elif '' in (año, comuna_codigo, manzana, predio):
+    elif '' in (year, comuna_codigo, manzana, predio):
         return render_template('/multipropietario/multipropietario.html', propietarios_info=None)
 
     comuna_obj = Comuna.query.filter_by(codigo_comuna=comuna_codigo).first()
@@ -200,15 +208,16 @@ def search_multipropietarios():
     
     if not bien_raiz_id:
         return render_template('/multipropietario/multipropietario.html', propietarios_info=None)
-    
+    print("bien raiz", bien_raiz_id)
     query = Multipropietario.query.filter(
-        Multipropietario.ano_vigencia_inicial <= año,
-        (Multipropietario.ano_vigencia_final >= año) | (Multipropietario.ano_vigencia_final == None),
+        Multipropietario.ano_vigencia_inicial <= year,
+        (Multipropietario.ano_vigencia_final >= year) | (Multipropietario.ano_vigencia_final == None),
         Multipropietario.rol.like(bien_raiz_id)
     )
     multipropietarios = query.all()
    
     propietarios_info = []
+    print('hola',multipropietarios)
     for multi_propietario in multipropietarios:
         propietarios = Propietario.query.filter_by(multipropietario_id=multi_propietario.id).all()
         for propietario in propietarios:
@@ -222,10 +231,11 @@ def search_multipropietarios():
                 'fecha_inscripcion': multi_propietario.fecha_inscripcion,
                 'ano_inscripcion': multi_propietario.ano_inscripcion,
                 'numero_inscripcion': multi_propietario.numero_inscripcion,
+                'fojas': multi_propietario.fojas,
                 'año_vigencia_inicial': multi_propietario.ano_vigencia_inicial,
                 'año_vigencia_final': multi_propietario.ano_vigencia_final
             })
-
+    print("resultado:", propietarios_info)
     return render_template('/multipropietario/multipropietario.html', propietarios_info=propietarios_info)
 
 @blueprint.route('/json-interpreter', methods=['POST'])
@@ -280,6 +290,20 @@ def json_interpreter():
 
                     create_implicados(new_form, adquirientes, True)
                     create_implicados(new_form, enajenantes, False)
+                    
+
+                    form_data = {
+                        'cne': form_data.get('CNE'),
+                        'rol': f'{comuna_code}-{manzana}-{predio}',
+                        'fecha_inscripcion': datetime.strptime(form_data.get('fechaInscripcion', ''), '%Y-%m-%d').date(),
+                        'nro_inscripcion': form_data.get('nroInscripcion', None),
+                        'fojas': form_data.get('fojas', ''),
+                        'enajenantes': enajenantes,
+                        'adquirientes': adquirientes
+                    }
+                    upload_to_multipropietario(form_data)
+                    db.session.commit()
+
 
                     success_messages.append(f"Form data processed successfully: {form_data}")
 
