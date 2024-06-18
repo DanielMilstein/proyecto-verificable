@@ -8,7 +8,7 @@ class PropietarioTableHandler:
 
     def upload_adquirientes(self, adquirientes, multipropietario_id):
         for adquiriente in adquirientes:
-            propietario = Propietario(rut=adquiriente['rut'], porcentaje_derecho=adquiriente['pctje_derecho'], multipropietario_id=multipropietario_id)
+            propietario = Propietario(rut=adquiriente['rut'], porcentaje_derecho=adquiriente['porcentaje_derecho'], multipropietario_id=multipropietario_id)
             db.session.add(propietario)
         db.session.commit()
 
