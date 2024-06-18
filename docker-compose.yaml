@@ -22,3 +22,5 @@ services:
     depends_on:
       sii-mysql-db:
         condition: service_healthy
+    volumes:
+      - .:/app
