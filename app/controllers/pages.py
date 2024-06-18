@@ -2,6 +2,7 @@ from flask import render_template, Blueprint, request, redirect, flash, jsonify
 from app.forms import *
 from app.models import *
 import json
+from datetime import datetime
 
 
 blueprint = Blueprint('pages', __name__)
@@ -34,7 +35,49 @@ def save_uploaded_file(file):
     filename = secure_filename(file.filename)
     file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
+def get_or_create_bien_raiz(comuna_code, manzana, predio):
+    bien_raiz = BienRaiz.query.filter_by(
+        comuna=comuna_code,
+        manzana=manzana,
+        predio=predio
+    ).first()
+    if not bien_raiz:
+        bien_raiz = BienRaiz(comuna_code, manzana, predio)
+        db.session.add(bien_raiz)
+        db.session.commit()
+    return bien_raiz
 
+def get_or_create_persona(rut):
+    persona = Persona.query.filter_by(rut=rut).first()
+    if not persona:
+        persona = Persona(rut)
+        db.session.add(persona)
+        db.session.commit()
+    return persona
+
+def create_implicados(form, personas, adquiriente_flag):
+    for persona in personas:
+        rut = persona['rut']
+        porcentaje_derecho = persona['porcentaje_derecho']
+        persona_obj = get_or_create_persona(rut)
+        implicado = Implicados(
+            rut=rut,
+            numero_atencion=form.numero_atencion,
+            porcentaje_derecho=porcentaje_derecho,
+            adquiriente=adquiriente_flag
+        )
+        db.session.add(implicado)
+    db.session.commit()
+
+def upload_to_multipropietario(form_data):
+    multipropietario = AlgoritmoMultipropietario()
+    # Call the method to insert into 'multipropietario'
+    success = multipropietario.insert_into_multipropietario(form_data)
+
+    if success:
+        print("Data inserted into 'multipropietario' successfully.")
+    else:
+        print("Failed to insert data into 'multipropietario'.")
 
 
 @blueprint.route('/form-F2890', methods=['GET', 'POST'])
@@ -42,29 +85,17 @@ def form():
     form = MyForm()
 
     if request.method == 'POST' and form.validate_on_submit():
-
-
         cne_record = CNE.query.filter_by(codigo_cne=str(form.cne.data.codigo_cne)).first()
-
         if cne_record is None:
             cne_record = CNE(form.cne.data, '')
             db.session.add(cne_record)
             db.session.commit()
 
-
-        existing_bien_raiz = BienRaiz.query.filter_by(
-            comuna=form.comuna.data.codigo_comuna,
-            manzana=form.manzana.data,
-            predio=form.predio.data
-        ).first()
-
-        if existing_bien_raiz is None:
-            bien_raiz = BienRaiz(form.comuna.data.codigo_comuna, form.manzana.data, form.predio.data)
-            db.session.add(bien_raiz)
-            db.session.commit()
-        else:
-            bien_raiz = existing_bien_raiz
-
+        bien_raiz = get_or_create_bien_raiz(
+            form.comuna.data.codigo_comuna,
+            form.manzana.data,
+            form.predio.data
+        )
 
         new_form = Formulario(
             cne=form.cne.data.codigo_cne,
@@ -73,52 +104,20 @@ def form():
             fecha_inscripcion=form.fecha_inscripcion.data,
             numero_inscripcion=form.numero_inscripcion.data
         )
-        db.session.add(new_form)            
+        db.session.add(new_form)
 
+        adquirientes = [{'rut': rut, 'porcentaje_derecho': pctje} for rut, pctje in zip(
+            request.form.getlist('adquirientesRut[]'), 
+            request.form.getlist('adquirientesPorcentaje[]')
+        )]
 
+        enajenantes = [{'rut': rut, 'porcentaje_derecho': pctje} for rut, pctje in zip(
+            request.form.getlist('enajenantesRut[]', []), 
+            request.form.getlist('enajenantesPorcentaje[]', [])
+        )]
 
-        adquirientes_rut = request.form.getlist('adquirientesRut[]')
-        adquirientes_porcentaje = request.form.getlist('adquirientesPorcentaje[]')
-        try: 
-            enajenantes_rut = request.form.getlist('enajenantesRut[]')
-            enajenantes_porcentaje = request.form.getlist('enajenantesPorcentaje[]')
-        except:
-            pass
-
-
-        for adquiriente in adquirientes_rut:
-            adquiriente_persona = Persona.query.filter_by(rut=adquiriente).first()
-            if adquiriente_persona is None:
-                adquiriente_persona = Persona(adquiriente)
-                db.session.add(adquiriente_persona)
-                db.session.commit()
-
-            adquiriente_implicado = Implicados(
-                rut=adquiriente,
-                numero_atencion=new_form.numero_atencion,
-                porcentaje_derecho=adquirientes_porcentaje[adquirientes_rut.index(adquiriente)],
-                adquiriente=True
-            )
-            db.session.add(adquiriente_implicado)
-
-
-        for enajenante in enajenantes_rut:
-            enajenante_persona = Persona.query.filter_by(rut=enajenante).first()
-            if enajenante_persona is None:
-                enajenante_persona = Persona(enajenante)
-                db.session.add(enajenante_persona)
-                db.session.commit() 
-
-            enajenante_implicado = Implicados(
-                rut=enajenante,
-                numero_atencion=new_form.numero_atencion,
-                porcentaje_derecho=enajenantes_porcentaje[enajenantes_rut.index(enajenante)],
-                adquiriente=False
-            )
-            db.session.add(enajenante_implicado)
-
-        db.session.commit()
-
+        create_implicados(new_form, adquirientes, True)
+        create_implicados(new_form, enajenantes, False)
 
         return redirect('/')
     return render_template('form-F2890/form-F2890.html', title='Form', form=form)
@@ -242,40 +241,24 @@ def json_interpreter():
     if file and file.filename.endswith('.json'):
         try:
             json_data = json.loads(file.read())
-            errors = []  
-            success_messages = []  
-            
+            errors = []
+            success_messages = []
+
             for form_data in json_data.get('F2890', []):
                 try:
                     cne_code = form_data.get('CNE')
-                    
-                    
+
                     if cne_code not in [8, 99]:
                         errors.append(f"Invalid CNE code: {cne_code}")
-                        #Form format isn't valid.
                         continue
-                                        
-                    
+
                     bien_raiz_data = form_data.get('bienRaiz', {})
                     comuna_code = bien_raiz_data.get('comuna')
-                    comuna = Comuna.query.filter_by(codigo_comuna=comuna_code).first()
-                    if not comuna:
-                        errors.append(f'Comuna with code {comuna_code} not found')
-                        comuna = None
-                        comuna_code = None
-                        continue  
-
                     manzana = bien_raiz_data.get('manzana', '')
                     predio = bien_raiz_data.get('predio', '')
-                    rol_template = f'{comuna_code}-{manzana}-{predio}'
 
-                    bien_raiz = BienRaiz.query.filter_by(rol=rol_template).first()
-                    if not bien_raiz:
-                        bien_raiz = BienRaiz(comuna=comuna_code, manzana=manzana, predio=predio)
-                        db.session.add(bien_raiz)
-                        db.session.commit()
+                    bien_raiz = get_or_create_bien_raiz(comuna_code, manzana, predio)
 
-                   
                     new_form = Formulario(
                         cne=cne_code,
                         rol=bien_raiz.rol,
@@ -284,50 +267,28 @@ def json_interpreter():
                         numero_inscripcion=form_data.get('nroInscripcion', None)
                     )
                     db.session.add(new_form)
-                    db.session.commit()
 
-                    for adquirente_data in form_data.get('adquirentes', []):
-                        rut = adquirente_data.get('RUNRUT')
-                        porcentaje_derecho = adquirente_data.get('porcDerecho')
-                        adquiriente = Persona.query.filter_by(rut=rut).first()
-                        if not adquiriente:
-                            adquiriente = Persona(rut=rut)
-                            db.session.add(adquiriente)
-                            db.session.commit()
-                        adquiriente_implicado = Implicados(
-                            numero_atencion=new_form.numero_atencion,
-                            rut=rut,
-                            adquiriente=True,
-                            porcentaje_derecho=porcentaje_derecho
-                        )
-                        db.session.add(adquiriente_implicado)
+                    adquirientes = [
+                        {'rut': a.get('RUNRUT'), 'porcentaje_derecho': a.get('porcDerecho')}
+                        for a in form_data.get('adquirentes', [])
+                    ]
 
-                    for enajenante_data in form_data.get('enajenantes', []):
-                        rut = enajenante_data.get('RUNRUT')
-                        porcentaje_derecho = enajenante_data.get('porcDerecho')
-                        enajenante = Persona.query.filter_by(rut=rut).first()
-                        if not enajenante:
-                            enajenante = Persona(rut=rut)
-                            db.session.add(enajenante)
-                            db.session.commit()
-                        enajenante_implicado = Implicados(
-                            numero_atencion=new_form.numero_atencion,
-                            rut=rut,
-                            adquiriente=False,
-                            porcentaje_derecho=porcentaje_derecho
-                        )
-                        db.session.add(enajenante_implicado)
+                    enajenantes = [
+                        {'rut': e.get('RUNRUT'), 'porcentaje_derecho': e.get('porcDerecho')}
+                        for e in form_data.get('enajenantes', [])
+                    ]
 
-                    db.session.commit()
+                    create_implicados(new_form, adquirientes, True)
+                    create_implicados(new_form, enajenantes, False)
+
                     success_messages.append(f"Form data processed successfully: {form_data}")
-                    
-                    
+
                 except Exception as e:
                     db.session.rollback()
                     errors.append(f"Error processing form data: {e}")
-            
+
             return render_template('json-interpreter/json-interpreter.html', success=True, success_messages=success_messages, errors=errors)
-        
+
         except json.JSONDecodeError as e:
             return jsonify({'error': f'Invalid JSON format: {e}'})
 
