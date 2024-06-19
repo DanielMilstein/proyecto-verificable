@@ -22,7 +22,7 @@ class AlgoritmoMultipropietario:
 
             if matching_formulario:
                 form_data['cne'] = matching_formulario.cne
-                if  matching_formulario.cne == COMPRAVENTA:
+                if  matching_formulario.cne == COMPRAVENTA or matching_formulario.cne == REGULARIZACION_DE_PATRIMONIO:
                     numero_atencion = matching_formulario.numero_atencion
 
                     implicados = Implicados.query.filter_by(numero_atencion=numero_atencion).all()
@@ -44,13 +44,14 @@ class AlgoritmoMultipropietario:
                     form_data['enajenantes'] = enajenantes
 
         cne_code = form_data.get('cne', None)
+        print("form cne_code", cne_code)
         success = True
         if cne_code == REGULARIZACION_DE_PATRIMONIO:  
             regularizacion_algorithm = AlgoritmoRegularizacionPatrimonio()
             success = regularizacion_algorithm.apply_algorithm_on(form_data, processed_entries)
         elif cne_code == COMPRAVENTA: 
             compraventa_algorithm = AlgoritmoCompraventa()
-            compraventa_algorithm.apply_algorithm_on(form_data)
+            success = compraventa_algorithm.apply_algorithm_on(form_data, processed_entries)
         else:
             success = False
 
