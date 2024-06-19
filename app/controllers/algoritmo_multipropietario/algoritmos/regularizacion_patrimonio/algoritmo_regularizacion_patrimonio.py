@@ -5,7 +5,7 @@ class AlgoritmoRegularizacionPatrimonio:
     def __init__(self):
         self.multipropietario_handler = MultipropietarioTableHandler()
 
-    def apply_algorithm_on(self, new_form):
+    def apply_algorithm_on(self, new_form, processed_entries):
         rol = new_form.get('rol', None)
         fecha_inscripcion = new_form.get('fecha_inscripcion', None)
 
@@ -14,20 +14,21 @@ class AlgoritmoRegularizacionPatrimonio:
             self.upload_new_form(new_form)
         else:
             same_year_forms = [self.multipropietario_handler.multipropietario_to_dict(form) for form in existing_forms if form.fecha_inscripcion.year == fecha_inscripcion.year]
-            if same_year_forms:
+            if same_year_forms and not processed_entries:
                 for form in same_year_forms:
+                    form['adquirientes'] = self.multipropietario_handler.get_linked_propietarios(form['id'])
                     self.multipropietario_handler.delete(form['id'])
                 db.session.commit()
                 forms_to_reupload = same_year_forms + [new_form]
                 forms_to_reupload.sort(key=lambda x: x['fecha_inscripcion'])
-                for form in forms_to_reupload:
-                    self.recurse_algorithm(form)
+                return forms_to_reupload
             else:
                 self.recurse_algorithm(new_form)
-
+        return True
+            
     def recurse_algorithm(self, form_data):
-        rol = form_data.get('rol', None)
-        fecha_inscripcion = form_data.get('fecha_inscripcion', None)
+        rol = form_data['rol']
+        fecha_inscripcion = form_data['fecha_inscripcion']
 
         existing_forms = self.get_existing_forms(rol)
         if not existing_forms:
@@ -91,7 +92,6 @@ class AlgoritmoRegularizacionPatrimonio:
             rol, fecha_inscripcion, fojas, nro_inscripcion,
             ano_inscripcion, ano_vigencia_inicial, ano_vigencia_final
         )
-        print("nro_inscripcion", nro_inscripcion, adquirientes)
         self.multipropietario_handler.upload_adquirientes(adquirientes, multipropietario_id)
 
     def update_previous_form(self, prev_form, fecha_inscripcion):

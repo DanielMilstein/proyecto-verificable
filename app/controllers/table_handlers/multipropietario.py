@@ -66,7 +66,7 @@ class MultipropietarioTableHandler:
     
     def get_pctje_derecho_propietario(self, rut, rol):
         max_fecha_inscripcion = 0
-        latest_pctje_derecho = None
+        latest_pctje_derecho = 0
 
         propietarios = self.propietario_handler.check_if_propietario_exists(rut)
         for propietario in propietarios:
@@ -106,6 +106,8 @@ class MultipropietarioTableHandler:
             'fecha_inscripcion': multipropietario.fecha_inscripcion,
             'ano_inscripcion': multipropietario.ano_inscripcion,
             'fojas': multipropietario.fojas,
-            'nro_inscripcion': multipropietario.numero_inscripcion
+            'nro_inscripcion': multipropietario.numero_inscripcion,
+            'ano_vigencia_inicial': multipropietario.ano_vigencia_inicial,
+            'ano_vigencia_final': multipropietario.ano_vigencia_final
         }
 

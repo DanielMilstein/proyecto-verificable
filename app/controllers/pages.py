@@ -68,14 +68,23 @@ def create_implicados(form, personas, adquiriente_flag):
         db.session.add(implicado)
     db.session.commit()
 
-def upload_to_multipropietario(form_data):
-    multipropietario = AlgoritmoMultipropietario()
-    success = multipropietario.insert_into_multipropietario(form_data)
+def upload_to_multipropietario(form_data, processed_entries=None):
+    if processed_entries is None:
+        processed_entries = set()
 
-    if success:
-        print("Data inserted into 'multipropietario' successfully.")
+    multipropietario = AlgoritmoMultipropietario()
+    success = multipropietario.insert_into_multipropietario(form_data, processed_entries)
+    if isinstance(success, list):
+        for entry in success:
+            entry_key = (entry['rol'], entry['fecha_inscripcion'], entry['fojas'], entry['nro_inscripcion'])
+            if entry_key not in processed_entries:
+                processed_entries.add(entry_key)
+                upload_to_multipropietario(entry, processed_entries)
     else:
-        print("Failed to insert data into 'multipropietario'.")
+        if success:
+            print("Data inserted into 'multipropietario' successfully.")
+        else:
+            print("Failed to insert data into 'multipropietario'.")
 
 
 @blueprint.route('/form-F2890', methods=['GET', 'POST'])
@@ -208,7 +217,6 @@ def search_multipropietarios():
     
     if not bien_raiz_id:
         return render_template('/multipropietario/multipropietario.html', propietarios_info=None)
-    print("bien raiz", bien_raiz_id)
     query = Multipropietario.query.filter(
         Multipropietario.ano_vigencia_inicial <= year,
         (Multipropietario.ano_vigencia_final >= year) | (Multipropietario.ano_vigencia_final == None),
@@ -217,7 +225,6 @@ def search_multipropietarios():
     multipropietarios = query.all()
    
     propietarios_info = []
-    print('hola',multipropietarios)
     for multi_propietario in multipropietarios:
         propietarios = Propietario.query.filter_by(multipropietario_id=multi_propietario.id).all()
         for propietario in propietarios:
@@ -235,7 +242,6 @@ def search_multipropietarios():
                 'año_vigencia_inicial': multi_propietario.ano_vigencia_inicial,
                 'año_vigencia_final': multi_propietario.ano_vigencia_final
             })
-    print("resultado:", propietarios_info)
     return render_template('/multipropietario/multipropietario.html', propietarios_info=propietarios_info)
 
 @blueprint.route('/json-interpreter', methods=['POST'])
