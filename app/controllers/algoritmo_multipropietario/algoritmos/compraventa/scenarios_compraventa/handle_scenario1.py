@@ -8,8 +8,25 @@ class HandleScenario1():
         rol = form_data['rol']
         all_forms = self.multipropietario_handler.get_forms_by_rol(rol)
         previous_forms = [form for form in all_forms if form.fecha_inscripcion < form_data['fecha_inscripcion']]
-        previous_form = max(previous_forms, key=lambda x: x.fecha_inscripcion) if previous_forms else None
-        prev_storage = self.store_form_data( previous_form)
+        prev_storage = []
+        for previous_form in previous_forms:
+            if previous_form.fecha_inscripcion < form_data['fecha_inscripcion'] and not previous_form.ano_vigencia_final:
+                propietarios = self.multipropietario_handler.propietario_handler.get_by_multipropietario_id(previous_form.id)
+                for propietario in propietarios:
+                    entry = {
+                        'id': propietario.propietario_id,
+                        'multipropietario_id': previous_form.id,
+                        'rol': previous_form.rol,
+                        'fecha_inscripcion': previous_form.fecha_inscripcion,
+                        'fojas': previous_form.fojas,
+                        'nro_inscripcion': previous_form.numero_inscripcion,
+                        'rut': propietario.rut,
+                        'porcentaje_derecho': propietario.porcentaje_derecho,
+                        'ano_inscripcion': previous_form.ano_inscripcion,
+                        'ano_vigencia_inicial': previous_form.ano_vigencia_inicial,
+                        'ano_vigencia_final': previous_form.ano_vigencia_final
+                    }
+                    prev_storage.append(entry)
 
         enajenantes_ruts = [enajenante['rut'] for enajenante in form_data['enajenantes']]
         sum_porcentaje_enajenantes = sum([self.multipropietario_handler.get_pctje_derecho_propietario(rut, rol) for rut in enajenantes_ruts])
