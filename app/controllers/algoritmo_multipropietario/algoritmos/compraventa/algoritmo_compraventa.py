@@ -10,8 +10,8 @@ class AlgoritmoCompraventa:
         self.multipropietario_handler = MultipropietarioTableHandler()
 
     def apply_algorithm_on(self, form_data):
-        adquirientes = form_data.get('adquirientes', [])
-        enajenantes = form_data.get('enajenantes', [])
+        adquirientes = form_data['adquirientes']
+        enajenantes = form_data['enajenantes']
 
         if self.is_scenario_1(adquirientes):
             handler = HandleScenario1()
@@ -21,17 +21,32 @@ class AlgoritmoCompraventa:
             handler = HandleScenario3()
         else:
             handler = HandleScenario4()
+        
+        temp_storage = handler.handle(form_data)
 
-        handler.handle(form_data)
+        grouped_entries = self.group_entries(temp_storage)
+
+        for key, entries in grouped_entries.items():
+            self.upload_entries(entries)
+
+
+    def group_entries(self, entries):
+        grouped_entries = {}
+        for entry in entries:
+            key = (entry['fecha_inscripcion'], entry['fojas'], entry['nro_inscripcion'])
+            if key not in grouped_entries:
+                grouped_entries[key] = []
+            grouped_entries[key].append(entry)
+        return grouped_entries
 
     def is_scenario_1(self, adquirientes):
-        return sum(adquiriente.get('pctje_derecho', 0) for adquiriente in adquirientes) == 100
+        return sum(adquiriente['porcentaje_derecho'] for adquiriente in adquirientes) == 100
 
     def is_scenario_2(self, adquirientes):
-        return sum(adquiriente.get('pctje_derecho', 0) for adquiriente in adquirientes) == 0
+        return sum(adquiriente['porcentaje_derecho'] for adquiriente in adquirientes) == 0
 
     def is_scenario_3(self, adquirientes, enajenantes):
-        return 0 < sum(adquiriente.get('pctje_derecho', 0) for adquiriente in adquirientes) < 100 and len(adquirientes) == 1 and len(enajenantes) == 1
+        return 0 < sum(adquiriente['porcentaje_derecho'] for adquiriente in adquirientes) < 100 and len(adquirientes) == 1 and len(enajenantes) == 1
 
     def get_existing_forms(self, rol):
         return self.multipropietario_handler.get_forms_by_rol(rol)
@@ -71,6 +86,11 @@ class AlgoritmoCompraventa:
     def find_porcentaje_derecho(self, rut, rol):
         return self.multipropietario_handler.get_pctje_derecho_propietario(rut, rol)
 
+    def upload_entries(self, entries):
+        multipropietario_id = self.upload_multipropietario(entries[0])
+        for entry in entries:
+            self.upload_propietario(entry, multipropietario_id)
+
     def upload_multipropietario(self, entry):
         new_form = self.multipropietario_handler.upload_form(
             entry['rol'], 
@@ -84,11 +104,10 @@ class AlgoritmoCompraventa:
         entry['id'] = new_form
         return entry['id']
 
-    def upload_propietario(self, entry):
-        new_multipropietario_id = self.upload_multipropietario(entry)
+    def upload_propietario(self, entry, multipropietario_id):
         self.multipropietario_handler.upload_propietario(
             {'rut': entry['rut'], 'porcentaje_derecho': entry['porcentaje_derecho']}, 
-            new_multipropietario_id
+            multipropietario_id
         )
 
     def check_if_repeated_enajenante(self, rut, rol, ano_vigencia_inicial):
