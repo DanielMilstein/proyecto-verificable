@@ -109,7 +109,4 @@ class AlgoritmoCompraventa:
             {'rut': entry['rut'], 'porcentaje_derecho': entry['porcentaje_derecho']}, 
             multipropietario_id
         )
-
-    def check_if_repeated_enajenante(self, rut, rol, ano_vigencia_inicial):
-        self.multipropietario_handler.check_if_repeated_enajenante(rut, rol, ano_vigencia_inicial)
         
