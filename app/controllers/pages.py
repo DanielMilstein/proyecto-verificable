@@ -14,10 +14,13 @@ blueprint = Blueprint('pages', __name__)
 
 
 @blueprint.route('/', methods=['GET', 'POST'])
-def home():
-    if request.method == 'POST' and 'upload_file' in request.files:
+def show_home_page():
+    if is_file_upload_request():
         return handle_file_upload()
     return render_template('home.html')
+
+def is_file_upload_request():
+    return request.method == 'POST' and 'upload_file' in request.files
 
 def handle_file_upload():
     file = request.files['upload_file']
