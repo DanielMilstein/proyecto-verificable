@@ -36,6 +36,8 @@ class MultipropietarioTableHandler:
         if not form:
             return        
         form.ano_vigencia_final = ano_vigencia_final
+        if form.ano_vigencia_final < form.ano_vigencia_inicial:
+            self.delete(form.id)
         db.session.commit()
     
     def delete(self, multipropietario_id):
@@ -58,7 +60,7 @@ class MultipropietarioTableHandler:
         for propietario in propietarios:
             adquiriente = {}
             adquiriente['rut'] = propietario.rut
-            adquiriente['pctje_derecho'] = propietario.porcentaje_derecho
+            adquiriente['porcentaje_derecho'] = propietario.porcentaje_derecho
             adquirientes.append(adquiriente)
         return adquirientes
     
