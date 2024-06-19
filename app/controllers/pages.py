@@ -263,7 +263,11 @@ def json_interpreter():
             errors = []
             success_messages = []
 
-            for form_data in json_data.get('F2890', []):
+            forms_to_process = json_data.get('F2890', [])
+
+            forms_to_process.sort(key=lambda x: datetime.strptime(x.get('fechaInscripcion', ''), '%Y-%m-%d'))
+
+            for form_data in forms_to_process:
                 try:
                     cne_code = form_data.get('CNE')
 
@@ -282,7 +286,7 @@ def json_interpreter():
                         cne=cne_code,
                         rol=bien_raiz.rol,
                         fojas=form_data.get('fojas', ''),
-                        fecha_inscripcion=form_data.get('fechaInscripcion', None),
+                        fecha_inscripcion=datetime.strptime(form_data.get('fechaInscripcion', ''), '%Y-%m-%d').date(),
                         numero_inscripcion=form_data.get('nroInscripcion', None)
                     )
                     db.session.add(new_form)
@@ -299,7 +303,6 @@ def json_interpreter():
 
                     create_implicados(new_form, adquirientes, True)
                     create_implicados(new_form, enajenantes, False)
-                    
 
                     form_data = {
                         'cne': form_data.get('CNE'),
@@ -312,7 +315,6 @@ def json_interpreter():
                     }
                     upload_to_multipropietario(form_data)
                     db.session.commit()
-
 
                     success_messages.append(f"Form data processed successfully: {form_data}")
 
