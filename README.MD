@@ -66,3 +66,27 @@ Finalmente, ingresamos filas a la tabla Propietario, la cuál se encarga de unir
 	`INSERT INTO propietario (rut, multipropietario_id, porcentaje_derecho) VALUES  ('5498732-1', 3, 25), ('12345678-9', 1, 25),  ('18765432-1', 2, 50);`
 
 Donde el 'rut' deben ser los mismos que fueron ingresados durante el paso 1, y los multipropietario_id los mismo que ingresamos en el paso 3.
+
+
+
+
+## Tests
+
+Para correr los tests, primero debes instalar las dependencias necesarias. Puedes hacerlo ejecutando el siguiente comando:
+
+```bash
+pip install -r requirements.txt
+```
+
+Una vez instaladas las dependencias, puedes ejecutar los tests con el siguiente comando:
+
+```bash
+coverage run -m unittest discover
+```
+
+Este comando ejecutará todos los tests unitarios definidos en el directorio `tests` y generará un reporte de cobertura. Para ver el reporte de cobertura, puedes ejecutar el siguiente comando:
+
+```bash
+coverage report
+```
+
