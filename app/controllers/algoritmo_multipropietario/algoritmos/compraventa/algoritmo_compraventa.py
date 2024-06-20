@@ -29,16 +29,6 @@ class AlgoritmoCompraventa:
         for key, entries in grouped_entries.items():
             self.upload_entries(entries)
 
-
-    def group_entries(self, entries):
-        grouped_entries = {}
-        for entry in entries:
-            key = (entry['fecha_inscripcion'], entry['fojas'], entry['nro_inscripcion'])
-            if key not in grouped_entries:
-                grouped_entries[key] = []
-            grouped_entries[key].append(entry)
-        return grouped_entries
-
     def is_scenario_1(self, adquirientes):
         return sum(adquiriente['porcentaje_derecho'] for adquiriente in adquirientes) == 100
 
@@ -52,6 +42,15 @@ class AlgoritmoCompraventa:
         multipropietario_id = self.upload_multipropietario(entries[0])
         for entry in entries:
             self.upload_propietario(entry, multipropietario_id)
+    
+    def group_entries(self, entries):
+        grouped_entries = {}
+        for entry in entries:
+            key = (entry['fecha_inscripcion'], entry['fojas'], entry['nro_inscripcion'])
+            if key not in grouped_entries:
+                grouped_entries[key] = []
+            grouped_entries[key].append(entry)
+        return grouped_entries
 
     def upload_multipropietario(self, entry):
         new_form = self.multipropietario_handler.upload_form(

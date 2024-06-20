@@ -1,5 +1,6 @@
 from .algoritmos.regularizacion_patrimonio.algoritmo_regularizacion_patrimonio import AlgoritmoRegularizacionPatrimonio
 from .algoritmos.compraventa.algoritmo_compraventa import AlgoritmoCompraventa
+from .algoritmos.enajenantes_inexistentes.algoritmo_enajenantes_inexistentes import AlgoritmoEnajenantesInexistentes
 from ...models import Formulario, Implicados
 from ..table_handlers.multipropietario import MultipropietarioTableHandler
 
@@ -9,15 +10,18 @@ class ExecuteAlgoritmoMultipropietario:
     def __init__(self):
         self.regularizacion_algorithm = AlgoritmoRegularizacionPatrimonio()
         self.compraventa_algorithm = AlgoritmoCompraventa()
+        self.enajenantes_inexistentes_algorithm = AlgoritmoEnajenantesInexistentes()
         self.multipropietario_handler = MultipropietarioTableHandler()
 
     def execute(self, cne_code, form_data, processed_entries):
-
-        current_propietarios = self.find_current_propietarios(form_data)
         if cne_code == REGULARIZACION_DE_PATRIMONIO:
             return self.regularizacion_algorithm.apply_algorithm_on(form_data, processed_entries)
         elif cne_code == COMPRAVENTA:
-            return self.compraventa_algorithm.apply_algorithm_on(form_data, current_propietarios)
+            current_propietarios = self.find_current_propietarios(form_data)
+            if self.has_enajenantes_inexistentes(form_data['enajenantes'], current_propietarios):
+                return self.enajenantes_inexistentes_algorithm.apply_algorithm_on(form_data, current_propietarios)
+            else:
+                return self.compraventa_algorithm.apply_algorithm_on(form_data, current_propietarios)
         else:
             return False
 
@@ -45,6 +49,13 @@ class ExecuteAlgoritmoMultipropietario:
                     }
                     temp_storage.append(entry)
         return temp_storage
+
+    def has_enajenantes_inexistentes(self, enajenantes, current_propietarios):
+        current_propietarios_ruts = {p['rut'] for p in current_propietarios}
+        for enajenante in enajenantes:
+            if enajenante['rut'] not in current_propietarios_ruts:
+                return True
+        return False
 class HandleAlgoritmoMultipropietario:
     def __init__(self):
         self.algorithm_executor = ExecuteAlgoritmoMultipropietario()
