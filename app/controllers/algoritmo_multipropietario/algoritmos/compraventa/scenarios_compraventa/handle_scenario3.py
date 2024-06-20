@@ -7,6 +7,10 @@ class HandleScenario3():
         rol = form_data['rol']
         all_forms = self.multipropietario_handler.get_forms_by_rol(rol)
         previous_forms = [form for form in all_forms if form.fecha_inscripcion < form_data['fecha_inscripcion']]
+
+        enajenante_rut = [enajenante['rut'] for enajenante in form_data['enajenantes']][0]
+        enajenante_porcentaje = [enajenante['porcentaje_derecho'] for enajenante in form_data['enajenantes']][0]
+        
         temp_storage = []
         for previous_form in previous_forms:
             if previous_form.fecha_inscripcion < form_data['fecha_inscripcion'] and not previous_form.ano_vigencia_final:
@@ -27,8 +31,6 @@ class HandleScenario3():
                     }
                     temp_storage.append(entry)
 
-        enajenante_rut = [enajenante['rut'] for enajenante in form_data['enajenantes']][0]
-        enajenante_porcentaje = [enajenante['porcentaje_derecho'] for enajenante in form_data['enajenantes']][0]
 
         for entry in temp_storage:
             self.multipropietario_handler.update_form(entry['multipropietario_id'], form_data['fecha_inscripcion'].year - 1)
@@ -74,8 +76,8 @@ class HandleScenario3():
             else:
                 del entry['multipropietario_id']
                 entry['id'] = None
-            #entry['ano_vigencia_inicial'] = form_data['fecha_inscripcion'].year
-            #entry['ano_vigencia_final'] = None
+            entry['ano_vigencia_inicial'] = form_data['fecha_inscripcion'].year
+            entry['ano_vigencia_final'] = None
        
         return temp_storage
 
