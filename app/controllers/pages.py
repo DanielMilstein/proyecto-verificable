@@ -57,6 +57,44 @@ def get_or_create_persona(rut):
         db.session.commit()
     return persona
 
+from datetime import datetime
+
+from datetime import datetime
+
+def create_formulario_and_implicados(form_data, adquirientes, enajenantes):
+    cne_code = form_data['cne']
+    comuna_code = form_data['comuna']
+    manzana = form_data['manzana']
+    predio = form_data['predio']
+
+    bien_raiz = get_or_create_bien_raiz(comuna_code, manzana, predio)
+
+    new_form = Formulario(
+        cne=cne_code,
+        rol=f'{comuna_code}-{manzana}-{predio}',
+        fojas=form_data['fojas'],
+        fecha_inscripcion=form_data['fecha_inscripcion'],
+        numero_inscripcion=form_data['nro_inscripcion']
+    )
+    db.session.add(new_form)
+    db.session.commit()
+
+    create_implicados(new_form, adquirientes, True)
+    create_implicados(new_form, enajenantes, False)
+
+    form_data = {
+        'cne': cne_code,
+        'rol': f'{comuna_code}-{manzana}-{predio}',
+        'fecha_inscripcion': form_data['fecha_inscripcion'],
+        'nro_inscripcion': form_data['nro_inscripcion'],
+        'fojas': form_data['fojas'],
+        'enajenantes': enajenantes,
+        'adquirientes': adquirientes
+    }
+
+    upload_to_multipropietario(form_data)
+    db.session.commit()
+
 def create_implicados(form, personas, adquiriente_flag):
     for persona in personas:
         rut = persona['rut']
@@ -101,46 +139,27 @@ def form():
             db.session.add(cne_record)
             db.session.commit()
 
-        bien_raiz = get_or_create_bien_raiz(
-            form.comuna.data.codigo_comuna,
-            form.manzana.data,
-            form.predio.data
-        )
+        form_data = {
+            'cne': form.cne.data.codigo_cne,
+            'comuna': form.comuna.data.codigo_comuna,
+            'manzana': form.manzana.data,
+            'predio': form.predio.data,
+            'fojas': form.fojas.data,
+            'fecha_inscripcion':form.fecha_inscripcion.data,
+            'nro_inscripcion': form.numero_inscripcion.data,
+        }
 
-        new_form = Formulario(
-            cne=form.cne.data.codigo_cne,
-            rol=f'{form.comuna.data.codigo_comuna}-{form.manzana.data}-{form.predio.data}',
-            fojas=form.fojas.data,
-            fecha_inscripcion=form.fecha_inscripcion.data,
-            numero_inscripcion=form.numero_inscripcion.data
-        )
-        db.session.add(new_form)
-
-        adquirientes = [{'rut': rut, 'porcentaje_derecho': pctje} for rut, pctje in zip(
+        adquirientes = [{'rut': rut, 'porcentaje_derecho': float(pctje)} for rut, pctje in zip(
             request.form.getlist('adquirientesRut[]'), 
             request.form.getlist('adquirientesPorcentaje[]')
         )]
-
-        enajenantes = [{'rut': rut, 'porcentaje_derecho': pctje} for rut, pctje in zip(
-            request.form.getlist('enajenantesRut[]', []), 
-            request.form.getlist('enajenantesPorcentaje[]', [])
+        print(request.form)
+        enajenantes = [{'rut': rut, 'porcentaje_derecho': float(pctje)} for rut, pctje in zip(
+            request.form.getlist('enajenantesRut[]'), 
+            request.form.getlist('enajenantesPorcentaje[]')
         )]
 
-        create_implicados(new_form, adquirientes, True)
-        create_implicados(new_form, enajenantes, False)
-
-        form_data = {
-            'cne': form.cne.data.codigo_cne,
-            'rol': f'{form.comuna.data.codigo_comuna}-{form.manzana.data}-{form.predio.data}',
-            'fecha_inscripcion': datetime.strptime(form.fecha_inscripcion.data, '%Y-%m-%d').date(),
-            'nro_inscripcion': form.numero_inscripcion.data,
-            'fojas': form.fojas.data,
-            'enajenantes': enajenantes,
-            'adquirientes': adquirientes
-        }
-        upload_to_multipropietario(form_data)
-        db.session.commit()
-
+        create_formulario_and_implicados(form_data, adquirientes, enajenantes)
         return redirect('/')
     return render_template('form-F2890/form-F2890.html', title='Form', form=form)
 
@@ -264,7 +283,6 @@ def json_interpreter():
             success_messages = []
 
             forms_to_process = json_data.get('F2890', [])
-
             forms_to_process.sort(key=lambda x: datetime.strptime(x.get('fechaInscripcion', ''), '%Y-%m-%d'))
 
             for form_data in forms_to_process:
@@ -274,22 +292,6 @@ def json_interpreter():
                     if cne_code not in [8, 99]:
                         errors.append(f"Invalid CNE code: {cne_code}")
                         continue
-
-                    bien_raiz_data = form_data.get('bienRaiz', {})
-                    comuna_code = bien_raiz_data.get('comuna')
-                    manzana = bien_raiz_data.get('manzana', '')
-                    predio = bien_raiz_data.get('predio', '')
-
-                    bien_raiz = get_or_create_bien_raiz(comuna_code, manzana, predio)
-
-                    new_form = Formulario(
-                        cne=cne_code,
-                        rol=bien_raiz.rol,
-                        fojas=form_data.get('fojas', ''),
-                        fecha_inscripcion=datetime.strptime(form_data.get('fechaInscripcion', ''), '%Y-%m-%d').date(),
-                        numero_inscripcion=form_data.get('nroInscripcion', None)
-                    )
-                    db.session.add(new_form)
 
                     adquirientes = [
                         {'rut': a.get('RUNRUT'), 'porcentaje_derecho': a.get('porcDerecho')}
@@ -301,20 +303,17 @@ def json_interpreter():
                         for e in form_data.get('enajenantes', [])
                     ]
 
-                    create_implicados(new_form, adquirientes, True)
-                    create_implicados(new_form, enajenantes, False)
-
                     form_data = {
                         'cne': form_data.get('CNE'),
-                        'rol': f'{comuna_code}-{manzana}-{predio}',
-                        'fecha_inscripcion': datetime.strptime(form_data.get('fechaInscripcion', ''), '%Y-%m-%d').date(),
-                        'nro_inscripcion': form_data.get('nroInscripcion', None),
+                        'comuna': form_data['bienRaiz'].get('comuna'),
+                        'manzana': form_data['bienRaiz'].get('manzana', ''),
+                        'predio': form_data['bienRaiz'].get('predio', ''),
                         'fojas': form_data.get('fojas', ''),
-                        'enajenantes': enajenantes,
-                        'adquirientes': adquirientes
+                        'fecha_inscripcion': datetime.strptime(form_data.get('fechaInscripcion', ''), '%Y-%m-%d').date(),
+                        'nro_inscripcion': form_data.get('nroInscripcion', None)
                     }
-                    upload_to_multipropietario(form_data)
-                    db.session.commit()
+
+                    create_formulario_and_implicados(form_data, adquirientes, enajenantes)
 
                     success_messages.append(f"Form data processed successfully: {form_data}")
 
