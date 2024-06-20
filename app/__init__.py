@@ -11,11 +11,14 @@ from app.seeder import seed_database
 migrate = Migrate()
 
 
-def create_app():
+def create_app(config_name=None, config_object=None):
     app = Flask(__name__, template_folder='src/views')
     app.config.from_object(Config)
 
-
+    if config_object:
+        app.config.from_object(config_object)
+    else:
+        app.config.from_pyfile(f'config/{config_name}.py')
 
     app.register_blueprint(pages_blueprint)
     app.secret_key = b'_53oi3uri34fve34fq9pifpff;apl'
