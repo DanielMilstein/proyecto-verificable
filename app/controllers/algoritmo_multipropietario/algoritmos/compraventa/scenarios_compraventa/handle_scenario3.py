@@ -38,7 +38,16 @@ class HandleScenario3():
         adquiriente_porcentaje = enajenante_porcentaje / 100 * prev_porcentaje_derecho
         temp_storage = self._find_porcentaje_adquiriente(temp_storage, adquiriente_rut, adquiriente_porcentaje)
 
-        temp_storage = self._finalize_entries(temp_storage, form_data, enajenante_rut, adquiriente_rut)
+        for entry in temp_storage:
+            if entry['rut'] == adquiriente_rut:
+               entry['ano_inscripcion'] = form_data['fecha_inscripcion'].year
+            else:
+                del entry['multipropietario_id']
+                entry['id'] = None
+            
+            entry['ano_vigencia_inicial'] = form_data['fecha_inscripcion'].year
+            entry['ano_vigencia_final'] = None
+
         return temp_storage
     
     def _find_current_propietarios(self, form_data, previous_forms):
@@ -66,20 +75,6 @@ class HandleScenario3():
     def _update_previous_forms(self, temp_storage, form_data):
         for entry in temp_storage:
             self.multipropietario_handler.update_form(entry['multipropietario_id'], form_data['fecha_inscripcion'].year - 1)
-
-    def _process_adquirientes(self, form_data, adquiriente):
-        entry = {
-            'id': None,
-            'rol': rol,
-            'fecha_inscripcion': form_data['fecha_inscripcion'],
-            'fojas': form_data['fojas'],
-            'nro_inscripcion': form_data['nro_inscripcion'],
-            'rut': adquiriente['rut'],
-            'porcentaje_derecho':  adquiriente['porcentaje_derecho'],
-            'ano_vigencia_inicial': form_data['fecha_inscripcion'].year,
-            'ano_vigencia_final': None
-        }
-        return entry
     
     def _find_porcentaje_enajenante(self, temp_storage, enajenante_rut, enajenante_porcentaje, rol):
         prev_porcentaje_derecho = 0
@@ -103,16 +98,3 @@ class HandleScenario3():
                 break
         return temp_storage
     
-    def _finalize_entries(self, temp_storage, form_data, enajenante_rut, adquiriente_rut):
-        for entry in temp_storage:
-            if entry['rut'] == enajenante_rut:
-                continue
-            if entry['rut'] == adquiriente_rut:
-                entry['ano_inscripcion'] = form_data['fecha_inscripcion'].year
-            else:
-                del entry['multipropietario_id']
-                entry['id'] = None
-            entry['ano_vigencia_inicial'] = form_data['fecha_inscripcion'].year
-            entry['ano_vigencia_final'] = None
-        
-        return temp_storage
