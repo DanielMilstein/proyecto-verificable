@@ -9,7 +9,7 @@ class AlgoritmoCompraventa:
     def __init__(self):
         self.multipropietario_handler = MultipropietarioTableHandler()
 
-    def apply_algorithm_on(self, form_data):
+    def apply_algorithm_on(self, form_data, current_propietarios):
         adquirientes = form_data['adquirientes']
         enajenantes = form_data['enajenantes']
 
@@ -22,7 +22,7 @@ class AlgoritmoCompraventa:
         else:
             handler = HandleScenario4()
         
-        temp_storage = handler.handle(form_data)
+        temp_storage = handler.handle(form_data, current_propietarios)
 
         grouped_entries = self.group_entries(temp_storage)
 

@@ -1,25 +1,53 @@
 from .algoritmos.regularizacion_patrimonio.algoritmo_regularizacion_patrimonio import AlgoritmoRegularizacionPatrimonio
 from .algoritmos.compraventa.algoritmo_compraventa import AlgoritmoCompraventa
 from ...models import Formulario, Implicados
+from ..table_handlers.multipropietario import MultipropietarioTableHandler
 
 REGULARIZACION_DE_PATRIMONIO = 99
 COMPRAVENTA = 8
-class ExecutelgoritmoMultipropietario:
+class ExecuteAlgoritmoMultipropietario:
     def __init__(self):
         self.regularizacion_algorithm = AlgoritmoRegularizacionPatrimonio()
         self.compraventa_algorithm = AlgoritmoCompraventa()
+        self.multipropietario_handler = MultipropietarioTableHandler()
 
     def execute(self, cne_code, form_data, processed_entries):
+
+        current_propietarios = self.find_current_propietarios(form_data)
         if cne_code == REGULARIZACION_DE_PATRIMONIO:
             return self.regularizacion_algorithm.apply_algorithm_on(form_data, processed_entries)
         elif cne_code == COMPRAVENTA:
-            return self.compraventa_algorithm.apply_algorithm_on(form_data)
+            return self.compraventa_algorithm.apply_algorithm_on(form_data, current_propietarios)
         else:
             return False
 
+    def find_current_propietarios(self, form_data):
+        rol = form_data['rol']
+        all_forms = self.multipropietario_handler.get_forms_by_rol(rol)
+        previous_forms = [form for form in all_forms if form.fecha_inscripcion < form_data['fecha_inscripcion']]
+        temp_storage = []
+        for previous_form in previous_forms:
+            if previous_form.fecha_inscripcion < form_data['fecha_inscripcion'] and not previous_form.ano_vigencia_final:
+                propietarios = self.multipropietario_handler.propietario_handler.get_by_multipropietario_id(previous_form.id)
+                for propietario in propietarios:
+                    entry = {
+                        'id': propietario.propietario_id,
+                        'multipropietario_id': previous_form.id,
+                        'rol': previous_form.rol,
+                        'fecha_inscripcion': previous_form.fecha_inscripcion,
+                        'fojas': previous_form.fojas,
+                        'nro_inscripcion': previous_form.numero_inscripcion,
+                        'rut': propietario.rut,
+                        'porcentaje_derecho': propietario.porcentaje_derecho,
+                        'ano_inscripcion': previous_form.ano_inscripcion,
+                        'ano_vigencia_inicial': previous_form.ano_vigencia_inicial,
+                        'ano_vigencia_final': previous_form.ano_vigencia_final
+                    }
+                    temp_storage.append(entry)
+        return temp_storage
 class HandleAlgoritmoMultipropietario:
     def __init__(self):
-        self.algorithm_executor = ExecutelgoritmoMultipropietario()
+        self.algorithm_executor = ExecuteAlgoritmoMultipropietario()
 
     def insert_into_multipropietario(self, form_data, processed_entries):
         return self.execute_algorithm_on(form_data, processed_entries)
