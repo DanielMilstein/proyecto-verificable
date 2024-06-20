@@ -67,7 +67,7 @@ def create_formulario_and_implicados(form_data, adquirientes, enajenantes):
     manzana = form_data['manzana']
     predio = form_data['predio']
 
-    bien_raiz = get_or_create_bien_raiz(comuna_code, manzana, predio)
+    get_or_create_bien_raiz(comuna_code, manzana, predio)
 
     new_form = Formulario(
         cne=cne_code,
@@ -99,7 +99,7 @@ def create_implicados(form, personas, adquiriente_flag):
     for persona in personas:
         rut = persona['rut']
         porcentaje_derecho = persona['porcentaje_derecho']
-        persona_obj = get_or_create_persona(rut)
+        get_or_create_persona(rut)
         implicado = Implicados(
             rut=rut,
             numero_atencion=form.numero_atencion,
@@ -149,12 +149,12 @@ def form():
             'nro_inscripcion': form.numero_inscripcion.data,
         }
 
-        adquirientes = [{'rut': rut, 'porcentaje_derecho': float(pctje)} for rut, pctje in zip(
+        adquirientes = [{'rut': rut, 'porcentaje_derecho': float(porcentaje_derecho)} for rut, porcentaje_derecho in zip(
             request.form.getlist('adquirientesRut[]'), 
             request.form.getlist('adquirientesPorcentaje[]')
         )]
         print(request.form)
-        enajenantes = [{'rut': rut, 'porcentaje_derecho': float(pctje)} for rut, pctje in zip(
+        enajenantes = [{'rut': rut, 'porcentaje_derecho': float(porcentaje_derecho)} for rut, porcentaje_derecho in zip(
             request.form.getlist('enajenantesRut[]'), 
             request.form.getlist('enajenantesPorcentaje[]')
         )]
@@ -223,9 +223,7 @@ def search_multipropietarios():
         manzana = request.args.get('manzana')
         predio = request.args.get('predio')
 
-    if None in (year, comuna_codigo, manzana, predio):
-        return render_template('/multipropietario/multipropietario.html', propietarios_info=None)
-    elif '' in (year, comuna_codigo, manzana, predio):
+    if None in (year, comuna_codigo, manzana, predio) or '' in (year, comuna_codigo, manzana, predio):
         return render_template('/multipropietario/multipropietario.html', propietarios_info=None)
 
     comuna_obj = Comuna.query.filter_by(codigo_comuna=comuna_codigo).first()
