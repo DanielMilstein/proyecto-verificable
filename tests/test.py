@@ -66,14 +66,6 @@ class TestMultipropietarioTableHandler(unittest.TestCase):
         self.handler.upload_adquirientes('test_adquirientes', 1)
         self.handler.propietario_handler.upload_adquirientes.assert_called_with('test_adquirientes', 1)
 
-    # @patch('app.models.db.session', autospec=True)
-    # def test_update_form(self, mock_session):
-    #     mock_session.commit = MagicMock()
-    #     with patch.object(Multipropietario.query, 'get', return_value=Multipropietario(rol='123-456-789', fojas='12', fecha_inscripcion=date(2023, 1, 1), 
-    #     numero_inscripcion='12', ano_inscripcion='2020', ano_vigencia_inicial='2020', ano_vigencia_final='2022')) as mock_get:
-    #         self.handler.update_form(mock_get.id, 2024)
-    #         self.assertTrue(mock_session.commit.called)
-
     @patch('app.models.db.session', autospec=True)
     def test_delete(self, mock_session):
         self.handler.delete_linked_propietarios = MagicMock()
@@ -91,13 +83,6 @@ class TestMultipropietarioTableHandler(unittest.TestCase):
         self.handler.propietario_handler.check_if_propietario_exists = MagicMock(return_value=[])
         result = self.handler.get_pctje_derecho_propietario('test_rut', 'test_rol')
         self.assertEqual(result, 0)
-
-    # @patch('app.models.db.session', autospec=True)
-    # def test_check_if_repeated_enajenante(self, mock_session):
-    #     mock_session.commit = MagicMock()
-    #     self.handler.propietario_handler.check_if_propietario_exists = MagicMock(return_value=[])
-    #     self.handler.check_if_repeated_enajenante('test_rut', 'test_rol', 2023)
-    #     self.assertTrue(mock_session.commit.called)
 
     def test_get_posterior_forms(self):
         with patch.object(Multipropietario.query, 'filter', return_value=MagicMock(all=MagicMock(return_value=[]))) as mock_filter:
@@ -118,6 +103,22 @@ class TestMultipropietarioTableHandler(unittest.TestCase):
             'ano_vigencia_final': 2025
         }
         self.assertEqual(result, expected)
+
+    @patch('app.models.db.session', autospec=True)
+    def test_delete_multipropietario(self, mock_session):
+        mock_session.commit = MagicMock()
+        self.handler.delete_multipropietario(1)
+        self.assertTrue(mock_session.commit.called)
+
+    @patch('app.models.db.session', autospec=True)
+    def test_delete_linked_propietarios(self, mock_session):
+        mock_session.commit = MagicMock()
+        self.handler.propietario_handler.get_by_multipropietario_id = MagicMock(return_value=[])
+        self.handler.delete_linked_propietarios(1)
+        self.assertTrue(self.handler.propietario_handler.get_by_multipropietario_id.called)
+
+
+
 
 if __name__ == '__main__':
     unittest.main()
