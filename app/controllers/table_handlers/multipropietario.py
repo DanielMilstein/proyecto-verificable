@@ -64,9 +64,9 @@ class MultipropietarioTableHandler:
             adquirientes.append(adquiriente)
         return adquirientes
     
-    def get_pctje_derecho_propietario(self, rut, rol):
+    def get_porcentaje_derecho_propietario(self, rut, rol):
         max_fecha_inscripcion = 0
-        latest_pctje_derecho = 0
+        latest_porcentaje_derecho = 0
 
         propietarios = self.propietario_handler.check_if_propietario_exists(rut)
         for propietario in propietarios:
@@ -74,9 +74,9 @@ class MultipropietarioTableHandler:
             for multipropietario in multipropietarios:
                 if multipropietario.id > max_fecha_inscripcion:
                     max_fecha_inscripcion = multipropietario.id
-                    latest_pctje_derecho = propietario.porcentaje_derecho
+                    latest_porcentaje_derecho = propietario.porcentaje_derecho
 
-        return latest_pctje_derecho
+        return latest_porcentaje_derecho
 
     def check_if_repeated_enajenante(self,rut, rol, ano_vigencia_inicial):
         max_fecha_inscripcion = 0
