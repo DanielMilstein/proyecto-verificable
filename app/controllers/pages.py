@@ -3,7 +3,7 @@ from app.forms import *
 from app.models import *
 import json
 from datetime import datetime
-from .algoritmo_multipropietario.insert_multipropietario import AlgoritmoMultipropietario
+from .algoritmo_multipropietario.insert_into_multipropietario import HandleAlgoritmoMultipropietario
 
 blueprint = Blueprint('pages', __name__)
 
@@ -75,7 +75,7 @@ def upload_to_multipropietario(form_data, processed_entries=None):
     if processed_entries is None:
         processed_entries = set()
 
-    multipropietario = AlgoritmoMultipropietario()
+    multipropietario = HandleAlgoritmoMultipropietario()
     success = multipropietario.insert_into_multipropietario(form_data, processed_entries)
     if isinstance(success, list):
         for entry in success:
