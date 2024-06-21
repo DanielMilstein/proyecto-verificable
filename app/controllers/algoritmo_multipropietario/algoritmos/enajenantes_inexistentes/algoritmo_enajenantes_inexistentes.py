@@ -15,9 +15,11 @@ class AlgoritmoEnajenantesInexistentes:
         if self.is_scenario_1(enajenantes, adquirientes):
             handler = HandleScenario1()
         elif self.is_scenario_2(enajenantes):
-            handler = HandleScenario2()
+            pass
+            #handler = HandleScenario2()
         else:
-            handler = HandleScenario3()
+            pass
+            #handler = HandleScenario3()
         
         temp_storage = handler.handle(form_data, current_propietarios)
         grouped_entries = self.group_entries(temp_storage)
