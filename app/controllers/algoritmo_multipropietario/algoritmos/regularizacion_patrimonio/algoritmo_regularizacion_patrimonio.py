@@ -5,15 +5,19 @@ class AlgoritmoRegularizacionPatrimonio:
     def __init__(self):
         self.multipropietario_handler = MultipropietarioTableHandler()
 
-    def apply_algorithm_on(self, new_form, processed_entries):
+    def apply_algorithm_on(self, new_form, current_propietarios, processed_entries):
         rol = new_form.get('rol', None)
         fecha_inscripcion = new_form.get('fecha_inscripcion', None)
-
+        
         existing_forms = self.get_existing_forms(rol)
         if not existing_forms:
             self.upload_json_form(new_form)
         else:
-            same_year_forms = [self.multipropietario_handler.multipropietario_to_dict(form) for form in existing_forms if form.fecha_inscripcion.year == fecha_inscripcion.year]
+            same_year_forms = [
+                self.multipropietario_handler.multipropietario_to_dict(form)
+                for form in existing_forms
+                if form.fecha_inscripcion and form.fecha_inscripcion.year == fecha_inscripcion.year
+            ]
             if same_year_forms and not processed_entries:
                 for form in same_year_forms:
                     form['adquirientes'] = self.multipropietario_handler.get_linked_propietarios(form['id'])
@@ -23,10 +27,10 @@ class AlgoritmoRegularizacionPatrimonio:
                 forms_to_reupload.sort(key=lambda x: x['fecha_inscripcion'])
                 return forms_to_reupload
             else:
-                self.recurse_algorithm(new_form)
+                self.recurse_algorithm(new_form, current_propietarios)
         return True
             
-    def recurse_algorithm(self, form_data):
+    def recurse_algorithm(self, form_data, current_propietarios):
         rol = form_data['rol']
         fecha_inscripcion = form_data['fecha_inscripcion']
 
@@ -34,13 +38,12 @@ class AlgoritmoRegularizacionPatrimonio:
         if not existing_forms:
             self.upload_json_form(form_data)
         else:
-            prev_form = self.get_most_recent_previous_form(existing_forms, fecha_inscripcion)
-            if not self.check_posterior_forms(existing_forms, fecha_inscripcion) and prev_form:
-                self.update_previous_form(prev_form, fecha_inscripcion)
+            if not self.check_posterior_forms(existing_forms, fecha_inscripcion) and len(current_propietarios):
+                self.update_previous_form(current_propietarios, fecha_inscripcion)
                 self.upload_json_form(form_data)
 
-            elif self.check_posterior_forms(existing_forms, fecha_inscripcion) and prev_form:
-                self.update_previous_form(prev_form, fecha_inscripcion)
+            elif self.check_posterior_forms(existing_forms, fecha_inscripcion) and len(current_propietarios):
+                self.update_previous_form(current_propietarios, fecha_inscripcion)
                 self.reupload_forms(form_data)
 
             else:
@@ -56,10 +59,12 @@ class AlgoritmoRegularizacionPatrimonio:
         return None
 
     def check_posterior_forms(self, forms, target_fecha_inscripcion):
-        posterior_forms = [form for form in forms if form.fecha_inscripcion > target_fecha_inscripcion]
-        if posterior_forms:
-            return True
-        return None
+        posterior_forms = [
+            form for form in forms
+            if form.fecha_inscripcion and form.fecha_inscripcion > target_fecha_inscripcion
+        ]
+        return bool(posterior_forms)
+
 
     def upload_json_form(self, form_data):
         rol = form_data["rol"]
@@ -78,7 +83,8 @@ class AlgoritmoRegularizacionPatrimonio:
 
     def update_previous_form(self, prev_form, fecha_inscripcion):
         ano_vigencia_final = fecha_inscripcion.year - 1
-        self.multipropietario_handler.update_form(prev_form.id, ano_vigencia_final)
+        for propietario in prev_form:
+            self.multipropietario_handler.update_form(propietario['multipropietario_id'], ano_vigencia_final)
 
     def reupload_forms(self, new_form_data):
         new_form_data['id'] = 0
