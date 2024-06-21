@@ -50,23 +50,22 @@ class HandleScenario2:
                         break
             else: 
                 temp_storage.append(propietario)
-
-        suma_porcentaje_derecho_enajenantes = sum(entry['porcentaje_derecho'] for entry in temp_storage if entry['rut'] in enajenantes_ruts)
+        suma_porcentaje_derecho_enajenantes = sum(entry['porcentaje_derecho'] for entry in temp_storage if entry['rut'] in enajenantes_ruts and not entry['fecha_inscripcion'])
         if not suma_porcentaje_derecho_enajenantes:
             suma_porcentaje_derecho_enajenantes = 100
-
+        
         suma_porcentaje_derecho_adquirientes = sum(entry['porcentaje_derecho'] for entry in temp_storage if entry['rut'] in adquirientes_ruts)
         if suma_porcentaje_derecho_adquirientes:
             for entry in temp_storage:
                 if entry['rut'] in adquirientes_ruts:
-                    entry['porcentaje_derecho'] *= suma_porcentaje_derecho_enajenantes
+                    entry['porcentaje_derecho'] *= suma_porcentaje_derecho_enajenantes / 100
         else:
             porcentaje_derecho_adquirientes = suma_porcentaje_derecho_enajenantes / len(adquirientes_ruts)
             for entry in temp_storage:
                 if entry['rut'] in adquirientes_ruts:
                     entry['porcentaje_derecho'] += porcentaje_derecho_adquirientes
 
-        temp_storage = [entry for entry in temp_storage if entry['rut'] not in enajenantes_ruts]
+        temp_storage = [entry for entry in temp_storage if entry['fecha_inscripcion']]
         temp_storage = self._finalize_entries(temp_storage, form_data)
         return temp_storage
     

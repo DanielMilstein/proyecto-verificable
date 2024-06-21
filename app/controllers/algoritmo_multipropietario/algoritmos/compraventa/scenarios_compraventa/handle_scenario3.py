@@ -14,6 +14,7 @@ class HandleScenario3():
 
         for adquiriente in form_data['adquirientes']:
             adquiriente_rut = adquiriente['rut']
+            adquiriente_porcentaje = adquiriente['porcentaje_derecho']
             entry = {
                 'id': None,
                 'rol': rol,
@@ -29,10 +30,11 @@ class HandleScenario3():
         
         # Realmente intenté abstraerlo, pero no hubo caso :(
         #temp_storage = temp_storage + self._process_adquirientes(form_data)    
+        
 
         temp_storage, prev_porcentaje_derecho = self._find_porcentaje_enajenante(temp_storage, enajenante_rut, enajenante_porcentaje, rol)
 
-        adquiriente_porcentaje = enajenante_porcentaje / 100 * prev_porcentaje_derecho
+        adquiriente_porcentaje = adquiriente_porcentaje / 100 * prev_porcentaje_derecho
         temp_storage = self._find_porcentaje_adquiriente(temp_storage, adquiriente_rut, adquiriente_porcentaje)
 
         for entry in temp_storage:
@@ -44,7 +46,6 @@ class HandleScenario3():
             
             entry['ano_vigencia_inicial'] = form_data['fecha_inscripcion'].year
             entry['ano_vigencia_final'] = None
-
         return temp_storage
     
     def _update_previous_forms(self, temp_storage, form_data):
@@ -67,7 +68,7 @@ class HandleScenario3():
     
     def _find_porcentaje_adquiriente(self, temp_storage, adquiriente_rut, adquiriente_porcentaje):
         for entry in temp_storage:
-            if entry["rut"] == adquiriente_rut:
+            if entry["rut"] == adquiriente_rut and not entry['id']:
                 final_porcentaje_derecho_adquiriente = adquiriente_porcentaje
                 entry['porcentaje_derecho'] = final_porcentaje_derecho_adquiriente
                 break
