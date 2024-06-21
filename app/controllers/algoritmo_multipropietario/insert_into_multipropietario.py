@@ -14,10 +14,10 @@ class ExecuteAlgoritmoMultipropietario:
         self.multipropietario_handler = MultipropietarioTableHandler()
 
     def execute(self, cne_code, form_data, processed_entries):
+        current_propietarios = self.find_current_propietarios(form_data)
         if cne_code == REGULARIZACION_DE_PATRIMONIO:
-            return self.regularizacion_algorithm.apply_algorithm_on(form_data, processed_entries)
+            return self.regularizacion_algorithm.apply_algorithm_on(form_data, current_propietarios, processed_entries)
         elif cne_code == COMPRAVENTA:
-            current_propietarios = self.find_current_propietarios(form_data)
             if self.has_enajenantes_inexistentes(form_data['enajenantes'], current_propietarios):
                 return self.enajenantes_inexistentes_algorithm.apply_algorithm_on(form_data, current_propietarios)
             else:
@@ -28,10 +28,13 @@ class ExecuteAlgoritmoMultipropietario:
     def find_current_propietarios(self, form_data):
         rol = form_data['rol']
         all_forms = self.multipropietario_handler.get_forms_by_rol(rol)
-        previous_forms = [form for form in all_forms if form.fecha_inscripcion < form_data['fecha_inscripcion']]
+        previous_forms = [
+            form for form in all_forms
+            if (form.fecha_inscripcion is None or form.fecha_inscripcion < form_data['fecha_inscripcion'])
+        ]
         temp_storage = []
         for previous_form in previous_forms:
-            if previous_form.fecha_inscripcion < form_data['fecha_inscripcion'] and not previous_form.ano_vigencia_final:
+            if not previous_form.ano_vigencia_final:
                 propietarios = self.multipropietario_handler.propietario_handler.get_by_multipropietario_id(previous_form.id)
                 for propietario in propietarios:
                     entry = {
