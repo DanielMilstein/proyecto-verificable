@@ -63,6 +63,7 @@ class MyForm(FlaskForm):
     fojas = IntegerField('Fojas', validators=[DataRequired(), positive_integer_validator])
     fecha_inscripcion = DateField('Fecha de Inscripción', format='%Y-%m-%d', validators=[DataRequired(), validate_past_date])
     numero_inscripcion = IntegerField('Número de Inscripción', validators=[DataRequired(), positive_integer_validator])
+    rut = StringField('RUT', validators=[DataRequired(), rut_validator, numero_verificador_validator])
     
     submit = SubmitField('Enviar')
 
