@@ -14,18 +14,42 @@ class ExecuteAlgoritmoMultipropietario:
         self.multipropietario_handler = MultipropietarioTableHandler()
 
     def execute(self, cne_code, form_data, processed_entries):
-        current_propietarios = self.find_current_propietarios(form_data)
+        form_data = self._merge_repeated_propietarios(form_data)
+
+        current_propietarios = self._find_current_propietarios(form_data)
         if cne_code == REGULARIZACION_DE_PATRIMONIO:
             return self.regularizacion_algorithm.apply_algorithm_on(form_data, current_propietarios, processed_entries)
         elif cne_code == COMPRAVENTA:
-            if self.has_enajenantes_inexistentes(form_data['enajenantes'], current_propietarios):
+            if self._has_enajenantes_inexistentes(form_data['enajenantes'], current_propietarios):
                 return self.enajenantes_inexistentes_algorithm.apply_algorithm_on(form_data, current_propietarios)
             else:
                 return self.compraventa_algorithm.apply_algorithm_on(form_data, current_propietarios)
         else:
             return False
 
-    def find_current_propietarios(self, form_data):
+    def _merge_repeated_propietarios(self, form_data):
+        adquirientes_storage = {}
+        enajenantes_storage = {}
+
+        for adquiriente in form_data['adquirientes']:
+            rut = adquiriente['rut']
+            if rut in adquirientes_storage:
+                adquirientes_storage[rut]['porcentaje_derecho'] += adquiriente['porcentaje_derecho']
+            else:
+                adquirientes_storage[rut] = adquiriente
+
+        for enajenante in form_data['enajenantes']:
+            rut = enajenante['rut']
+            if rut in enajenantes_storage:
+                enajenantes_storage[rut]['porcentaje_derecho'] += enajenante['porcentaje_derecho']
+            else:
+                enajenantes_storage[rut] = enajenante
+
+        form_data['adquirientes'] = list(adquirientes_storage.values())
+        form_data['enajenantes'] = list(enajenantes_storage.values())
+        return form_data
+    
+    def _find_current_propietarios(self, form_data):
         rol = form_data['rol']
         all_forms = self.multipropietario_handler.get_forms_by_rol(rol)
         previous_forms = [
@@ -53,12 +77,13 @@ class ExecuteAlgoritmoMultipropietario:
                     temp_storage.append(entry)
         return temp_storage
 
-    def has_enajenantes_inexistentes(self, enajenantes, current_propietarios):
+    def _has_enajenantes_inexistentes(self, enajenantes, current_propietarios):
         current_propietarios_ruts = {p['rut'] for p in current_propietarios}
         for enajenante in enajenantes:
             if enajenante['rut'] not in current_propietarios_ruts:
                 return True
         return False
+
 class HandleAlgoritmoMultipropietario:
     def __init__(self):
         self.algorithm_executor = ExecuteAlgoritmoMultipropietario()
