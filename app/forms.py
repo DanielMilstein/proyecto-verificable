@@ -7,6 +7,29 @@ from datetime import date
 import re
 
 
+
+def numero_verificador_validator(rut):
+    rut = rut.replace('.', '')
+    rut = rut.replace('-', '')
+    dv = rut[-1]
+    rut = rut[:-1]
+    rut = rut[::-1]
+    factor = 2
+    suma = 0
+    for i in rut:
+        suma += int(i) * factor
+        factor += 1
+        if factor == 8:
+            factor = 2
+    digito = 11 - (suma % 11)
+    if digito == 11:
+        digito = 0
+    if digito == 10:
+        digito = 'k'
+    if str(digito) != dv:
+        raise ValidationError('El RUT no es válido')
+
+
 def rol_validator(form, field):
 	triplet_regex = re.compile(r'^\d+-\d+-\d+$')
 	if not triplet_regex.match(field.data):
@@ -40,6 +63,7 @@ class MyForm(FlaskForm):
     fojas = IntegerField('Fojas', validators=[DataRequired(), positive_integer_validator])
     fecha_inscripcion = DateField('Fecha de Inscripción', format='%Y-%m-%d', validators=[DataRequired(), validate_past_date])
     numero_inscripcion = IntegerField('Número de Inscripción', validators=[DataRequired(), positive_integer_validator])
+    rut = StringField('RUT', validators=[DataRequired(), rut_validator, numero_verificador_validator])
     
     submit = SubmitField('Enviar')
 
