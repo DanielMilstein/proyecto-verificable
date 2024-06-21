@@ -14,9 +14,8 @@ class AlgoritmoEnajenantesInexistentes:
 
         if self.is_scenario_1(enajenantes, adquirientes):
             handler = HandleScenario1()
-        elif self.is_scenario_2(enajenantes):
-            pass
-            #handler = HandleScenario2()
+        elif self.is_scenario_2(adquirientes):
+            handler = HandleScenario2()
         else:
             pass
             #handler = HandleScenario3()
@@ -29,8 +28,8 @@ class AlgoritmoEnajenantesInexistentes:
     def is_scenario_1(self, enajenantes, adquirientes):
         return len(enajenantes) == 1 and len(adquirientes) == 1
 
-    def is_scenario_2(self, enajenantes):
-        return sum(enajenante['porcentaje_derecho'] for enajenante in enajenantes) == 100
+    def is_scenario_2(self, adquirientes):
+        return (sum(adquiriente['porcentaje_derecho'] for adquiriente in adquirientes) == 100 or sum(adquiriente['porcentaje_derecho'] for adquiriente in adquirientes) == 0)
 
     def group_entries(self, entries):
         grouped_entries = {}
