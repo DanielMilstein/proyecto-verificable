@@ -57,10 +57,6 @@ def get_or_create_persona(rut):
         db.session.commit()
     return persona
 
-from datetime import datetime
-
-from datetime import datetime
-
 def create_formulario_and_implicados(form_data, adquirientes, enajenantes):
     cne_code = form_data['cne']
     comuna_code = form_data['comuna']
