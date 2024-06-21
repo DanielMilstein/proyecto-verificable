@@ -24,6 +24,9 @@ class AlgoritmoCompraventa:
         
         temp_storage = handler.handle(form_data, current_propietarios)
 
+        temp_storage = self._merge_repeated_propietarios(temp_storage)
+
+
         grouped_entries = self.group_entries(temp_storage)
 
         for key, entries in grouped_entries.items():
@@ -37,6 +40,27 @@ class AlgoritmoCompraventa:
 
     def is_scenario_3(self, adquirientes, enajenantes):
         return 0 < sum(adquiriente['porcentaje_derecho'] for adquiriente in adquirientes) < 100 and len(adquirientes) == 1 and len(enajenantes) == 1
+
+    def _merge_repeated_propietarios(self, propietarios_storage):
+        propietarios_storage = sorted(propietarios_storage, key=lambda x: x['fecha_inscripcion'])
+        temp_storage = {}
+
+        for propietario in propietarios_storage:
+            rut = propietario['rut']
+            if rut in temp_storage:
+                temp_storage[rut]['porcentaje_derecho'] += propietario['porcentaje_derecho']
+            else:
+                temp_storage[rut] = propietario
+        temp_storage = list(temp_storage.values())
+        suma_porcentaje_derecho = 0
+        for propietario in temp_storage:
+            suma_porcentaje_derecho += propietario['porcentaje_derecho']
+        if suma_porcentaje_derecho > 100:
+            scale = 100 / suma_porcentaje_derecho
+            for propietario in temp_storage:
+                propietario['porcentaje_derecho'] *= scale
+                
+        return temp_storage
     
     def upload_entries(self, entries):
         multipropietario_id = self.upload_multipropietario(entries[0])
