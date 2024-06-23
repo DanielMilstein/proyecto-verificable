@@ -6,6 +6,30 @@ from app.models import CNE, Comuna
 from datetime import date
 import re
 
+def validate_rut(rut):
+    rut = rut.replace(".", "").replace("-", "")
+    rut_body = rut[:-1]
+    given_verifier = rut[-1].upper()
+
+    reversed_rut_body = rut_body[::-1]
+
+    series = [2, 3, 4, 5, 6, 7]
+
+    total_sum = 0
+    for i, digit in enumerate(reversed_rut_body):
+        total_sum += int(digit) * series[i % len(series)]
+
+    remainder = total_sum % 11
+
+    verifier_digit = 11 - remainder
+    if verifier_digit == 11:
+        computed_verifier = '0'
+    elif verifier_digit == 10:
+        computed_verifier = 'K'
+    else:
+        computed_verifier = str(verifier_digit)
+
+    return given_verifier == computed_verifier
 
 def rol_validator(field):
 	triplet_regex = re.compile(r'^\d+-\d+-\d+$')
