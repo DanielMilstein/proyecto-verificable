@@ -10,7 +10,7 @@
             padding: 20px;
             background-color: #f9f9f9;
         }
-        .goback-btn {
+        .go-back-btn {
             display: inline-block;
             padding: 10px 20px;
             background-color: #008CBA;
@@ -23,7 +23,7 @@
             transition: background-color 0.3s;
         }
 
-        .goback-btn:hover {
+        .go-back-btn:hover {
             background-color: #005f77;
         }
 
@@ -78,12 +78,12 @@
         button.remove-button:hover{
             background-color: #d32f2f;
         }
-        .subform {
+        .sub_form {
             display: flex;
             gap: 10px;
             align-items: center;
         }
-        .subform input[type="text"], .subform input[type="number"] {
+        .sub_form input[type="text"], .sub_form input[type="number"] {
             flex-grow: 1;
         }
         input[type="submit"] {
@@ -102,7 +102,7 @@
             color: red;
             margin-bottom: 10px;
         }
-        .subform-container {
+        .sub_form-container {
             margin-bottom: 20px;
         }
     </style>
@@ -139,7 +139,7 @@
         </p>
 
         <div class="flex-container">
-            <div class="subform-container">
+            <div class="sub_form-container">
                 <label>{{ form.comuna.label }}</label>
                 <select id="mySelect2" name="comuna"></select>
                 <script>
@@ -190,13 +190,13 @@
                 {{ form.numero_inscripcion(size=20) }} 
             </div>
         </div>
-        <div class="subform-container">
+        <div class="sub_form-container">
             <h2>Añadir adquiriente</h2>
             <div id="adquirienteContainer"></div>
             <button type="button" onclick="addAdquiriente()">Agregar adquiriente</button>
         </div>
 
-        <div class="subform-container">
+        <div class="sub_form-container">
             <h2>Añadir enajenante</h2>
             <div id="enajenanteContainer"></div>
             <button type="button" onclick="addEnajenante()">Agregar enajenante</button>
@@ -208,15 +208,15 @@
     <script>
         function addAdquiriente() {
             var container = document.getElementById('adquirienteContainer');
-            var subformDiv = document.createElement('div');
-            subformDiv.className = 'subform';
+            var sub_formDiv = document.createElement('div');
+            sub_formDiv.className = 'sub_form';
 
             var input = document.createElement('input');
             input.type = 'text';
             input.name = 'adquirientesRut[]';
             input.placeholder = 'RUT (Ej: 12345678-9)';
             input.maxLength = 10;
-            subformDiv.appendChild(input);
+            sub_formDiv.appendChild(input);
 
             var input2 = document.createElement('input');
             input2.type = 'number';
@@ -225,31 +225,31 @@
             input2.max = 100;  
             input2.required = true;  
             input2.placeholder = 'Porcentaje de derechos (Ej: 55)';
-            subformDiv.appendChild(input2);
+            sub_formDiv.appendChild(input2);
 
             var removeButton = document.createElement('button');
             removeButton.type = 'button';
             removeButton.className = 'remove-button';
             removeButton.textContent = 'Remove';
             removeButton.onclick = function() {
-                container.removeChild(subformDiv);
+                container.removeChild(sub_formDiv);
             };
-            subformDiv.appendChild(removeButton);
+            sub_formDiv.appendChild(removeButton);
 
-            container.appendChild(subformDiv);
+            container.appendChild(sub_formDiv);
         }
 
         function addEnajenante() {
             var container = document.getElementById('enajenanteContainer');
-            var subformDiv = document.createElement('div');
-            subformDiv.className = 'subform';
+            var sub_formDiv = document.createElement('div');
+            sub_formDiv.className = 'sub_form';
 
             var input = document.createElement('input');
             input.type = 'text';
             input.name = 'enajenantesRut[]';
             input.placeholder = 'RUT (Ej: 12345678-9)';
             input.maxLength = 10;
-            subformDiv.appendChild(input);
+            sub_formDiv.appendChild(input);
 
             var input2 = document.createElement('input');
             input2.type = 'number';
@@ -258,21 +258,21 @@
             input2.max = 100;  
             input2.required = true;  
             input2.placeholder = 'Porcentaje de derechos (Ej: 55)';
-            subformDiv.appendChild(input2);
+            sub_formDiv.appendChild(input2);
 
             var removeButton = document.createElement('button');
             removeButton.type = 'button';
             removeButton.className = 'remove-button';
             removeButton.textContent = 'Remove';
             removeButton.onclick = function() {
-                container.removeChild(subformDiv);
+                container.removeChild(sub_formDiv);
             };
-            subformDiv.appendChild(removeButton);
+            sub_formDiv.appendChild(removeButton);
 
-            container.appendChild(subformDiv);
+            container.appendChild(sub_formDiv);
         }
     </script>
 
-    <a class="goback-btn" href='/'>Volver al menú principal</button>   
+    <a class="go-back-btn" href='/'>Volver al menú principal</button>   
 </body>
 </html>
