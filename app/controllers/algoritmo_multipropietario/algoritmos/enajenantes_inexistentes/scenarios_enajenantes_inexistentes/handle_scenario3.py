@@ -6,19 +6,34 @@ class HandleScenario3:
 
     def handle(self, form_data, current_propietarios):
         self._update_previous_forms(current_propietarios, form_data)
+        temp_storage = self._prepare_temp_storage(form_data, current_propietarios)
+        temp_storage = self._adjust_percentages(temp_storage)
+        temp_storage = self._finalize_entries(temp_storage, form_data)
+        return temp_storage
+    
+    def _update_previous_forms(self, prev_storage, form_data):
+        for entry in prev_storage:
+            self.multipropietario_handler.update_form(entry['multipropietario_id'], form_data['fecha_inscripcion'].year - 1)
+
+    def _prepare_temp_storage(self, form_data, current_propietarios):
+        temp_storage = self._initialize_temp_storage(form_data, current_propietarios)
+        self._adjust_temp_storage(temp_storage, form_data, current_propietarios)
+        return temp_storage
+    
+    def _initialize_temp_storage(self, form_data, current_propietarios):
         temp_storage = []
-        adquirientes = form_data.get('adquirientes', [])
+
+        temp_storage.extend(self._initialize_enajenantes(form_data, current_propietarios))
+        temp_storage.extend(self._initialize_adquirientes(form_data, current_propietarios))
+        
+        return temp_storage
+
+    def _initialize_enajenantes(self, form_data, current_propietarios):
         enajenantes = form_data.get('enajenantes', [])
+        current_propietarios_ruts = [propietario['rut'] for propietario in current_propietarios]
 
-        current_propietarios_ruts = []
-        print('voy a entrar')
-        for propietario in current_propietarios:
-            current_propietarios_ruts.append(propietario['rut'])
-
-
-        enajenantes_ruts = []
+        temp_storage = []
         for enajenante in enajenantes:
-            enajenantes_ruts.append(enajenante['rut'])
             if enajenante['rut'] in current_propietarios_ruts:
                 for propietario in current_propietarios:
                     if enajenante['rut'] == propietario['rut']:
@@ -34,6 +49,7 @@ class HandleScenario3:
                             'ano_vigencia_inicial': propietario['fecha_inscripcion'].year,
                             'ano_vigencia_final': None
                         })
+                        break
             else:
                 temp_storage.append({
                     'rut': enajenante['rut'],
@@ -47,10 +63,15 @@ class HandleScenario3:
                     'ano_vigencia_inicial': form_data['fecha_inscripcion'].year,
                     'ano_vigencia_final': None
                 })
+        
+        return temp_storage
 
-        adquirientes_ruts = []
+    def _initialize_adquirientes(self, form_data, current_propietarios):
+        adquirientes = form_data.get('adquirientes', [])
+        current_propietarios_ruts = [propietario['rut'] for propietario in current_propietarios]
+
+        temp_storage = []
         for adquiriente in adquirientes:
-            adquirientes_ruts.append(adquiriente['rut'])
             if adquiriente['rut'] in current_propietarios_ruts:
                 for propietario in current_propietarios:
                     if adquiriente['rut'] == propietario['rut']:
@@ -66,6 +87,7 @@ class HandleScenario3:
                             'ano_vigencia_inicial': propietario['fecha_inscripcion'].year,
                             'ano_vigencia_final': None
                         })
+                        break
             else:
                 temp_storage.append({
                     'rut': adquiriente['rut'],
@@ -79,31 +101,29 @@ class HandleScenario3:
                     'ano_vigencia_inicial': form_data['fecha_inscripcion'].year,
                     'ano_vigencia_final': None
                 })
-                
-        current_propietarios_ruts = []
+        
+        return temp_storage
+
+    def _adjust_temp_storage(self, temp_storage, form_data, current_propietarios):
+        enajenantes_ruts = {enajenante['rut'] for enajenante in form_data.get('enajenantes', [])}
+        adquirientes_ruts = {adquiriente['rut'] for adquiriente in form_data.get('adquirientes', [])}
+        
         for propietario in current_propietarios:
-            current_propietarios_ruts.append(propietario['rut'])
-            if propietario['rut'] in enajenantes_ruts:
+            if propietario['rut'] in enajenantes_ruts or propietario['rut'] in adquirientes_ruts:
                 for entry in temp_storage:
-                    if entry['rut'] == propietario['rut']:
+                    if entry['rut'] == propietario['rut'] and propietario['rut'] in enajenantes_ruts:
                         entry['porcentaje_derecho'] -= propietario['porcentaje_derecho']
                         entry['porcentaje_derecho'] *= -1
-                        if entry['porcentaje_derecho'] < 0:
-                            entry['porcentaje_derecho'] = 0
+                        entry['porcentaje_derecho'] = max(entry['porcentaje_derecho'], 0)
                         break
-            elif propietario['rut'] in adquirientes_ruts:
-                for entry in temp_storage:
-                    if entry['rut'] == propietario['rut']:
+                    elif entry['rut'] == propietario['rut'] and propietario['rut'] in adquirientes_ruts:
                         entry['porcentaje_derecho'] += propietario['porcentaje_derecho']
                         break
             else: 
                 temp_storage.append(propietario)
-        
-        total_porcentaje_derecho = sum(entry['porcentaje_derecho'] for entry in temp_storage)
-        print(total_porcentaje_derecho)
-        for entry in temp_storage:
-            print(entry['rut'],entry['porcentaje_derecho'])
 
+    def _adjust_percentages(self, temp_storage):
+        total_porcentaje_derecho = sum(entry['porcentaje_derecho'] for entry in temp_storage)
 
         if total_porcentaje_derecho < 100:
             remaining_porcentaje = 100 - total_porcentaje_derecho
@@ -112,17 +132,13 @@ class HandleScenario3:
                 share = remaining_porcentaje / len(zero_porcentaje_entries)
                 for entry in zero_porcentaje_entries:
                     entry['porcentaje_derecho'] = share
+        
         elif total_porcentaje_derecho >= 100:
             scale_factor = 100 / total_porcentaje_derecho
             for entry in temp_storage:
                 entry['porcentaje_derecho'] *= scale_factor
-        temp_storage = self._finalize_entries(temp_storage, form_data)
+        
         return temp_storage
-    
-    def _update_previous_forms(self, prev_storage, form_data):
-        print('updating forms', form_data['fecha_inscripcion'].year - 1)
-        for entry in prev_storage:
-            self.multipropietario_handler.update_form(entry['multipropietario_id'], form_data['fecha_inscripcion'].year - 1)
 
     def _finalize_entries(self, temp_storage, form_data):
         temp_storage = [entry for entry in temp_storage if entry['porcentaje_derecho'] > 0]
@@ -133,5 +149,3 @@ class HandleScenario3:
             entry['ano_vigencia_final'] = None
             
         return temp_storage
-
-
