@@ -61,8 +61,8 @@ class HandleScenario3():
                 entry['porcentaje_derecho'] = final_porcentaje_derecho_enajenante
                 break
 
-        if not prev_porcentaje_derecho and self.multipropietario_handler.get_pctje_derecho_propietario(enajenante_rut, rol):
-            prev_porcentaje_derecho = self.multipropietario_handler.get_pctje_derecho_propietario(enajenante_rut, rol)
+        if not prev_porcentaje_derecho and self.multipropietario_handler.get_porcentaje_derecho_propietario(enajenante_rut, rol):
+            prev_porcentaje_derecho = self.multipropietario_handler.get_porcentaje_derecho_propietario(enajenante_rut, rol)
         
         return temp_storage, prev_porcentaje_derecho
     

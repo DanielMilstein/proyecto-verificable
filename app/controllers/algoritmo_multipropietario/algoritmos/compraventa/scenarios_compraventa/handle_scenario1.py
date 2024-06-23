@@ -22,7 +22,7 @@ class HandleScenario1:
         return [form for form in all_forms if form.fecha_inscripcion < form_data['fecha_inscripcion']]
 
     def _calculate_sum_porcentaje_enajenantes(self, enajenantes_ruts, rol):
-        return sum([self.multipropietario_handler.get_pctje_derecho_propietario(rut, rol) for rut in enajenantes_ruts])
+        return sum([self.multipropietario_handler.get_porcentaje_derecho_propietario(rut, rol) for rut in enajenantes_ruts])
 
     def _update_previous_forms(self, prev_storage, form_data):
         for entry in prev_storage:

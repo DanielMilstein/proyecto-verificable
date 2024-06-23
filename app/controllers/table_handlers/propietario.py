@@ -7,7 +7,7 @@ class PropietarioTableHandler:
         db.session.commit()
 
     def upload_adquirientes(self, adquirientes, multipropietario_id):
-        suma_porcentaje_derecho = self.check_valid_pctje_derecho(adquirientes)
+        suma_porcentaje_derecho = self.check_valid_porcentaje_derecho(adquirientes)
         if suma_porcentaje_derecho > 100:
             scale = 100 / suma_porcentaje_derecho
             for adquiriente in adquirientes:
@@ -18,7 +18,7 @@ class PropietarioTableHandler:
             db.session.add(propietario)
         db.session.commit()
     
-    def check_valid_pctje_derecho(self, adquirientes):
+    def check_valid_porcentaje_derecho(self, adquirientes):
         suma_porcentaje_derecho = 0
         for adquiriente in adquirientes:
             suma_porcentaje_derecho += adquiriente['porcentaje_derecho']

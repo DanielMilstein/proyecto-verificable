@@ -23,11 +23,11 @@ def process_form_submission(form):
         'nro_inscripcion': form.numero_inscripcion.data,
     }
 
-    adquirientes = [{'rut': rut, 'porcentaje_derecho': float(pctje)} for rut, pctje in zip(
+    adquirientes = [{'rut': rut, 'porcentaje_derecho': float(porcentaje)} for rut, porcentaje in zip(
         request.form.getlist('adquirientesRut[]'), 
         request.form.getlist('adquirientesPorcentaje[]')
     )]
-    enajenantes = [{'rut': rut, 'porcentaje_derecho': float(pctje)} for rut, pctje in zip(
+    enajenantes = [{'rut': rut, 'porcentaje_derecho': float(porcentaje)} for rut, porcentaje in zip(
         request.form.getlist('enajenantesRut[]'), 
         request.form.getlist('enajenantesPorcentaje[]')
     )]

@@ -1,13 +1,8 @@
 import unittest
-from app.models import Formulario, Implicados, Multipropietario, Propietario
+from app.models import Multipropietario
 from app import create_app, db
 from app.controllers.table_handlers.multipropietario import MultipropietarioTableHandler
-from app.controllers.table_handlers.propietario import PropietarioTableHandler
 from unittest.mock import patch, MagicMock
-from wtforms import Form, StringField, IntegerField, DateField
-from app.forms import rol_validator, rut_validator, porcentaje_validator, positive_integer_validator, validate_past_date
-from wtforms.validators import ValidationError
-import json
 from datetime import date
 
 from config.test_config import TestConfig  # Ensure this points to your test configuration
@@ -79,9 +74,9 @@ class TestMultipropietarioTableHandler(unittest.TestCase):
         result = self.handler.get_linked_propietarios(1)
         self.assertEqual(result, [])
 
-    def test_get_pctje_derecho_propietario(self):
+    def test_get_porcentaje_derecho_propietario(self):
         self.handler.propietario_handler.check_if_propietario_exists = MagicMock(return_value=[])
-        result = self.handler.get_pctje_derecho_propietario('test_rut', 'test_rol')
+        result = self.handler.get_porcentaje_derecho_propietario('test_rut', 'test_rol')
         self.assertEqual(result, 0)
 
     def test_get_posterior_forms(self):

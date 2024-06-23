@@ -1,5 +1,4 @@
 from flask import Blueprint
-from datetime import datetime
 from .algoritmo_multipropietario.insert_into_multipropietario import HandleAlgoritmoMultipropietario
 from .routes.show_home_page import render_home_page
 from .routes.create_form import handle_form_submission

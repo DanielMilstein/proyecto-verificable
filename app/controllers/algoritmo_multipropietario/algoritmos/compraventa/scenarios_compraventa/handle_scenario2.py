@@ -8,7 +8,7 @@ class HandleScenario2():
         prev_storage = current_propietarios
 
         enajenantes_ruts = [enajenante['rut'] for enajenante in form_data['enajenantes']]
-        sum_porcentaje_enajenantes = sum([self.multipropietario_handler.get_pctje_derecho_propietario(rut, rol) for rut in enajenantes_ruts])
+        sum_porcentaje_enajenantes = sum([self.multipropietario_handler.get_porcentaje_derecho_propietario(rut, rol) for rut in enajenantes_ruts])
         temp_storage = [entry for entry in prev_storage if entry['rut'] not in enajenantes_ruts]
         
         self._check_repeated_enajenantes(enajenantes_ruts, rol, form_data['fecha_inscripcion'].year)
