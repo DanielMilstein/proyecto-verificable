@@ -54,13 +54,20 @@ class MultipropietarioTableHandler:
     
     def get_linked_propietarios(self, multipropietario_id):
         propietarios = self.propietario_handler.get_by_multipropietario_id(multipropietario_id)
+        return self._extract_adquirientes(propietarios)
+
+    def _extract_adquirientes(self, propietarios):
         adquirientes = []
         for propietario in propietarios:
-            adquiriente = {}
-            adquiriente['rut'] = propietario.rut
-            adquiriente['porcentaje_derecho'] = propietario.porcentaje_derecho
+            adquiriente = self._create_adquiriente_entry(propietario)
             adquirientes.append(adquiriente)
         return adquirientes
+
+    def _create_adquiriente_entry(self, propietario):
+        return {
+            'rut': propietario.rut,
+            'porcentaje_derecho': propietario.porcentaje_derecho
+        }
     
     def get_porcentaje_derecho_propietario(self, rut, rol):
         max_fecha_inscripcion = 0
