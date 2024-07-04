@@ -1,5 +1,10 @@
 
-
+# Not necessary if running previously: docker compose up -build
 docker pull mysql
 docker run --name project -e MYSQL_ROOT_PASSWORD=verificables -e MYSQL_DATABASE=project_app_db -e MYSQL_USER=myuser -e MYSQL_PASSWORD=verificables -p 3306:3306 -d mysql
-# docker exec -it project mysql -umyuser -pverificables
+
+# For opening mysql interactive terminal
+# docker exec -it proyecto-verificable-sii-mysql-db-1 mysql -umyuser -pverificables
+
+# For clearing all multipropietario related tables
+# TRUNCATE TABLE implicados; SET foreign_key_checks = 0; TRUNCATE TABLE formulario; SET foreign_key_checks = 1; TRUNCATE TABLE propietario; SET foreign_key_checks = 0; TRUNCATE TABLE multipropietario; SET foreign_key_checks = 1;
