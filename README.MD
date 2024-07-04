@@ -9,7 +9,7 @@ Nuestra base de datos MySQL está contenerizada dentro de Docker. Para utilizarl
 2. Luego, crea y ejecuta el contenedor de MySQL con el siguiente comando:
 
 ```bash
-docker compose up
+docker compose up --build
 ```
 
 Este archivo `compose.yml` define dos servicios: `sii-mysql-db` y `sii-flask-app`. Aquí está la explicación de lo que hace cada uno de ellos:
@@ -89,4 +89,13 @@ Este comando ejecutará todos los tests unitarios definidos en el directorio `te
 ```bash
 coverage report
 ```
+
+## Notas
+
+### Análisis estático
+Dentro del archivo [Form_utils.py](app/controllers/routes/form_utils.py) existen los métodos create_implicados() y create_formulario_and_implicados(), los cuáles tienen 2 variables sin utilizar (en total ; estas son 'bien_raiz' y 'persona_obj'). Debido a la estructura del modelo relacional de nuestra base de datos, para subir filas a la tabla multipropietario es necesario crear (o revisar si existen previamente) filas en las tablas 'Rut' y 'Bien_Raiz'. Esto tiene relación con revisar si acaso existe la persona/comuna, para no crear duplicados de los mismos. Luego, estas variables sin utilizar llaman a las funciones que realizan estas operaciones en la base de datos, y luego toman el valor del resultado de la operación (que debiera ser el elemento creado en la base de datos). Esto es así, puesto que en futuras funcionalidades, es necesario recibir devuelta la fila correspondiente al rut/comunca en cuestión.
+
+Finalmente, para asegurar el correcto funcionamiento de los métodos create_implicados() y create_formulario_and_implicados(), es necesario crear una variable en donde se puedan almacenar los resultados de estas operaciones. Por esta razón, sumado a que estas variables añaden algo de información contextual, se decidió dejarlas variables a pesar de no tener un uso implícito en el resto del código.
+
+
 
