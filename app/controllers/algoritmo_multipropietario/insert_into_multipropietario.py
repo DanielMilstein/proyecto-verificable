@@ -52,30 +52,42 @@ class ExecuteAlgoritmoMultipropietario:
     def _find_current_propietarios(self, form_data):
         rol = form_data['rol']
         all_forms = self.multipropietario_handler.get_forms_by_rol(rol)
-        previous_forms = [
+        previous_forms = self._filter_previous_forms(all_forms, form_data['fecha_inscripcion'])
+        temp_storage = self._extract_propietarios_from_forms(previous_forms)
+        return temp_storage
+
+    def _filter_previous_forms(self, all_forms, current_fecha_inscripcion):
+        return [
             form for form in all_forms
-            if (form.fecha_inscripcion is None or form.fecha_inscripcion < form_data['fecha_inscripcion'])
+            if (form.fecha_inscripcion is None or form.fecha_inscripcion < current_fecha_inscripcion)
         ]
+
+    def _extract_propietarios_from_forms(self, previous_forms):
         temp_storage = []
         for previous_form in previous_forms:
             if not previous_form.ano_vigencia_final:
                 propietarios = self.multipropietario_handler.propietario_handler.get_by_multipropietario_id(previous_form.id)
-                for propietario in propietarios:
-                    entry = {
-                        'id': propietario.propietario_id,
-                        'multipropietario_id': previous_form.id,
-                        'rol': previous_form.rol,
-                        'fecha_inscripcion': previous_form.fecha_inscripcion,
-                        'fojas': previous_form.fojas,
-                        'nro_inscripcion': previous_form.numero_inscripcion,
-                        'rut': propietario.rut,
-                        'porcentaje_derecho': propietario.porcentaje_derecho,
-                        'ano_inscripcion': previous_form.ano_inscripcion,
-                        'ano_vigencia_inicial': previous_form.ano_vigencia_inicial,
-                        'ano_vigencia_final': previous_form.ano_vigencia_final
-                    }
-                    temp_storage.append(entry)
+                temp_storage.extend(self._create_propietario_entries(previous_form, propietarios))
         return temp_storage
+
+    def _create_propietario_entries(self, previous_form, propietarios):
+        entries = []
+        for propietario in propietarios:
+            entry = {
+                'id': propietario.propietario_id,
+                'multipropietario_id': previous_form.id,
+                'rol': previous_form.rol,
+                'fecha_inscripcion': previous_form.fecha_inscripcion,
+                'fojas': previous_form.fojas,
+                'nro_inscripcion': previous_form.numero_inscripcion,
+                'rut': propietario.rut,
+                'porcentaje_derecho': propietario.porcentaje_derecho,
+                'ano_inscripcion': previous_form.ano_inscripcion,
+                'ano_vigencia_inicial': previous_form.ano_vigencia_inicial,
+                'ano_vigencia_final': previous_form.ano_vigencia_final
+            }
+            entries.append(entry)
+        return entries
 
     def _has_enajenantes_inexistentes(self, enajenantes, current_propietarios):
         current_propietarios_ruts = {p['rut'] for p in current_propietarios}
