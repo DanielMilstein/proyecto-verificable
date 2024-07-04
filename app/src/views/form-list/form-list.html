@@ -95,7 +95,7 @@
                         <td>{{ form.fojas }}</td>
                         <td>{{ form.fecha_inscripcion.strftime("%d/%m/%Y") }}</td>
                         <td>{{ form.numero_inscripcion }}</td>
-                        <td><a href="{{ url_for('pages.form_detail', numero_atencion=form.numero_atencion) }}"> Ver detalle </a></td>
+                        <td><a href="{{ url_for('pages.view_form_detail', numero_atencion=form.numero_atencion) }}"> Ver detalle </a></td>
                     </tr>
                     {% endif %}
                 {% endfor %}

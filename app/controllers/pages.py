@@ -22,17 +22,17 @@ def show_home_page():
 
 
 @blueprint.route('/form-F2890', methods=['GET', 'POST'])
-def form():
+def register_new_form():
     return handle_form_submission()
 
 
 @blueprint.route('/form-list', methods=['GET', 'POST'])
-def form_list():
+def get_list_with_forms():
     return get_form_list()
 
 
 @blueprint.route('/form-F2890/<int:numero_atencion>')
-def form_detail(numero_atencion):
+def view_form_detail(numero_atencion):
     return get_form_detail(numero_atencion)
 
 
@@ -42,7 +42,7 @@ def search_multipropietarios():
 
 
 @blueprint.route('/json-interpreter', methods=['POST'])
-def json_interpreter():
+def register_forms_from_json():
     return handle_json_form_submission()
 
 @blueprint.route('/autocomplete')
